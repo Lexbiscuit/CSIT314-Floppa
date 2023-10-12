@@ -1,0 +1,67 @@
+/* reduces the content area on the inside instead of adding on to the outside */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+/* disables borders by default */
+* {
+  border: none;
+}
+
+/* img are in-line by default, but block is preferred 
+   max-width ensures the img stays within their parent containers */
+img {
+  display: block;
+  max-width: 100%;
+}
+
+/* other than on articles, remove list markers */
+menu:not(article menu),
+ol:not(article ol),
+ul:not(article ul) {
+  list-style: none;
+}
+
+/* removes the left padding */
+menu,
+ol,
+ul {
+  padding-left: 0;
+}
+
+/* reduces the content area on the inside instead of adding on to the outside */
+article ol,
+article ul {
+  list-style-position: inside;
+}
+
+/* disable mobile view text inflation */
+html {
+  -webkit-text-size-adjust: none; /* for iOS Safari */
+  text-size-adjust: none; /* for other mobile browsers */
+}
+
+/* enables smooth scrolling */
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+/* removes the outline on focus */
+:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* changes cursor to pointer when interacting when these elements */
+label,
+button,
+select,
+summary,
+[type="radio"],
+[type="submit"],
+[type="checkbox"] {
+  cursor: pointer;
+}
