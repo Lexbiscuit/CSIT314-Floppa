@@ -6,26 +6,36 @@ generator client {
 }
 
 datasource db {
-  provider     = "postgresql"
-  url          = env("DATABASE_URL")
-  relationMode = "prisma"
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
 
-model Accounts {
-  id                Int        @id @default(autoincrement())
-  name              String
-  password          String
-  DOB               DateTime
-  profile           Profiles    @relation(fields: [profileId], references: [id])
-  work_availability DateTime[]
-  profileId         Int
+model Bid {
+  bidId     Int @id @default(autoincrement())
+  accountId Int @db.Integer
+  profileId Int @db.Integer
 
-  @@index([profileId])
+  account Account @relation(fields: [accountId], references: [accountId])
+  profile Profile @relation(fields: [profileId], references: [profileId])
+
+  @@map("bids")
 }
 
-model Profiles {
-  id          Int       @id @default(autoincrement())
-  name        String
-  description String
-  Accounts     Accounts[]
+model Account {
+  accountId Int      @id @default(autoincrement()) @db.Integer
+  name      String   @db.Text
+  password  String   @db.Text
+  dob       DateTime @db.Date
+  bids      Bid[]
+
+  @@map("accounts")
+}
+
+model Profile {
+  profileId   Int    @id @default(autoincrement()) @db.Integer
+  name        String @db.Text
+  description String @db.Text
+  bids        Bid[]
+
+  @@map("profiles")
 }

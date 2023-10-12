@@ -1,22 +1,21 @@
 import express from "express";
-import { PrismaClient } from "@prisma/client";
-import cors from "cors";
-import CreateProfileController from "./Controllers/CreateProfileController.js";
+import accountRoutes from "./Routes/accountRoutes.js";
+import profileRoutes from "./Routes/profileRoutes.js";
 
-const prisma = new PrismaClient();
 const app = express();
 const port = 3000;
-app.use(express.json());
-app.use(cors());
 
-app.get("/", (req, res) => {
+// -- middleware --
+app.use(express.json()); // parses incoming requests with JSON payloads
+
+app.all("/", (req, res) => {
   res.send("Hello World!");
 });
 
-app.post("/users/create", async (req, res) => {
-  new CreateProfileController(prisma).create(req, res);
-});
+app.use("/account", accountRoutes);
+
+app.use("/profile", profileRoutes);
 
 app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`);
+  console.log(`CSIT314 "Team Floppa" Express.js app listening on port ${port}`);
 });
