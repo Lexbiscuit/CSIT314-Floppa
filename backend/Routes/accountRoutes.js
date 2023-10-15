@@ -10,7 +10,8 @@ import auth from "../auth.cjs";
 const accountRoutes = Router();
 const prisma = new PrismaClient();
 
-accountRoutes.post("/create", auth, async (req, res) => {
+// accountRoutes.post("/create", auth, async (req, res) => {
+accountRoutes.post("/create", async (req, res) => {
   const { accountId, name, email, password, dob } = req.body;
 
   const createAccountController = new CreateAccountController(prisma, req, res);
@@ -18,17 +19,19 @@ accountRoutes.post("/create", auth, async (req, res) => {
   await createAccountController.create(accountId, name, email, password, dob);
 });
 
-accountRoutes.get("/retrieve", auth, async (req, res) => {
+// accountRoutes.get("/retrieve", auth, async (req, res) => {
+accountRoutes.get("/retrieve", async (req, res) => {
   const retrieveAccountController = new RetrieveAccountController(
     prisma,
     req,
-    res
+    res,
   );
 
   await retrieveAccountController.retrieve();
 });
 
-accountRoutes.put("/update", auth, async (req, res) => {
+// accountRoutes.put("/update", auth, async (req, res) => {
+accountRoutes.put("/update", async (req, res) => {
   const { accountId, name, email, password, dob } = req.body;
 
   const updateAccountController = new UpdateAccountController(prisma, req, res);
@@ -36,7 +39,8 @@ accountRoutes.put("/update", auth, async (req, res) => {
   await updateAccountController.update(accountId, name, email, password, dob);
 });
 
-accountRoutes.delete("/delete", auth, async (req, res) => {
+// accountRoutes.delete("/delete", auth, async (req, res) => {
+accountRoutes.delete("/delete", async (req, res) => {
   const { accountId } = req.body;
 
   const deleteAccountController = new DeleteAccountController(prisma, req, res);
@@ -44,7 +48,8 @@ accountRoutes.delete("/delete", auth, async (req, res) => {
   await deleteAccountController.delete(accountId);
 });
 
-accountRoutes.get("/search/:userId", auth, async (req, res) => {
+// accountRoutes.get("/search/:userId", auth, async (req, res) => {
+accountRoutes.get("/search/:userId", async (req, res) => {
   const { userId } = req.params;
 
   const searchAccountController = new SearchAccountController(prisma, req, res);

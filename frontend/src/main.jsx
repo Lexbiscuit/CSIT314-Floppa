@@ -10,6 +10,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import ErrorBoundary from "./ErrorBoundary";
 import routes from "./routes/routes";
 import Layout from "./components/Layout";
+import { CookiesProvider } from "react-cookie";
 
 import "./index.css";
 
@@ -24,7 +25,9 @@ const router = createBrowserRouter([
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
     <MantineProvider>
-      <RouterProvider router={router} />
+      <CookiesProvider defaultSetOptions={{ path: "/" }}>
+        <RouterProvider router={router} />
+      </CookiesProvider>
     </MantineProvider>
-  </React.StrictMode>
+  </React.StrictMode>,
 );

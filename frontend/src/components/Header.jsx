@@ -3,6 +3,7 @@ import { Container, Group, Burger } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { MantineLogo } from "@mantine/ds";
 import classes from "../styles/Header.module.css";
+import { useCookies } from "react-cookie";
 
 const links = [
   { link: "/about", label: "Features" },
@@ -14,6 +15,7 @@ const links = [
 export default function Header() {
   const [opened, { toggle }] = useDisclosure(false);
   const [active, setActive] = useState(links[0].link);
+  const [cookies, setCookies, removeCookie] = useCookies(["name", "TOKEN"]);
 
   const items = links.map((link) => (
     <a
@@ -30,12 +32,30 @@ export default function Header() {
     </a>
   ));
 
+  const LogoutButton = () => (
+    <a
+      href={"/logout"}
+      className={classes.link}
+      onClick={(event) => {
+        event.preventDefault();
+        for (const property in cookies) {
+          removeCookie(property);
+        }
+
+        window.location.replace("/logout");
+      }}
+    >
+      Logout
+    </a>
+  );
+
   return (
     <header className={classes.header}>
       <Container size="md" className={classes.inner}>
         <MantineLogo size={28} />
         <Group gap={5} visibleFrom="xs">
           {items}
+          <LogoutButton />
         </Group>
 
         <Burger opened={opened} onClick={toggle} hiddenFrom="xs" size="sm" />

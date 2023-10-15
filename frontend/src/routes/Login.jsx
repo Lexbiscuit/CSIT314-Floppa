@@ -13,7 +13,13 @@ import {
 import { useForm, isNotEmpty, isEmail } from "@mantine/form";
 import classes from "../styles/AuthenticationImage.module.css";
 
+import { useCookies } from "react-cookie";
+
 export default function Login() {
+  const [cookies, setCookie] = useCookies(["name", "TOKEN"]);
+
+  if (cookies.name) window.location.replace("/dashboard");
+
   const form = useForm({
     initialValues: {
       email: "",
@@ -32,7 +38,34 @@ export default function Login() {
         <Title order={2} className={classes.title} ta="center" mt="md" mb={50}>
           Welcome back to Floppa!
         </Title>
-        <Box component="form" onSubmit={form.onSubmit(() => {})}>
+        <Box
+          component="form"
+          onSubmit={form.onSubmit(async () => {
+            await fetch("http://localhost:3000/login", {
+              method: "POST",
+              mode: "cors",
+              cache: "no-cache",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                email: form.values.email,
+                password: form.values.password,
+              }),
+            })
+              .then((res) => res.json())
+              .then(({ name, message, token }) => {
+                if (name && token) {
+                  const cookieOptions = {
+                    maxAge: 60 * 60,
+                  };
+                  setCookie("name", name, cookieOptions);
+                  setCookie("TOKEN", token, cookieOptions);
+                }
+                alert(message);
+              });
+          })}
+        >
           <TextInput
             label="Email address"
             placeholder="grumpy@floppa.com"
