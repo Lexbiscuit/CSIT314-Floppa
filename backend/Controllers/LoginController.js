@@ -20,7 +20,9 @@ export default class LoginController {
           .compare(password, account.password)
           .then((passwordCheck) => {
             if (!passwordCheck) {
-              return this.res.status(400).send("Incorrect password.");
+              return this.res
+                .status(400)
+                .send({ message: "Incorrect password." });
             }
 
             const token = jwt.sign(
@@ -30,24 +32,24 @@ export default class LoginController {
                 email: account.email,
               },
               "RANDOM-TOKEN",
-              { expiresIn: "24h" }
+              { expiresIn: "24h" },
             );
 
             this.res.status(200).send({
               message: "Login Successful.",
-              email: account.email,
+              name: account.name,
               token,
             });
           })
           .catch((error) => {
             this.res
               .status(400)
-              .send("An error occurred. Please try again later.");
+              .send({ message: "An error occurred. Please try again later." });
           });
       })
       .catch((err) => {
         console.error(err);
-        this.res.status(500).send("Email not found");
+        this.res.status(500).send({ message: "Email not found" });
       });
   };
 }
