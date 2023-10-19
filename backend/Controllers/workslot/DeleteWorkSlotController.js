@@ -9,7 +9,7 @@ export default class DeleteWorkslotController {
   
     async delete(workslotId) {
       try {
-        const deleteWorkslots = await this.prisma.workslots.delete({
+        const deleteWorkslots = await this.prisma.Workslots.delete({
           where: {
             workslotId: Number(workslotId),
           },
