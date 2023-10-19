@@ -8,8 +8,8 @@ export default class LoginController {
     this.res = res;
   }
 
-  login = async (email, password) => {
-    await this.prisma.account
+  loginAccount = async (email, password) => {
+    await this.prisma.accounts
       .findUnique({
         where: {
           email: email,
@@ -41,7 +41,7 @@ export default class LoginController {
               token,
             });
           })
-          .catch((error) => {
+          .catch(() => {
             this.res
               .status(400)
               .send({ message: "An error occurred. Please try again later." });
@@ -49,7 +49,7 @@ export default class LoginController {
       })
       .catch((err) => {
         console.error(err);
-        this.res.status(500).send({ message: "Email not found" });
+        this.res.status(500).send({ message: "Email not found." });
       });
   };
 }

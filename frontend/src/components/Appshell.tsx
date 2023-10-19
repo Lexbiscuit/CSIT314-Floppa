@@ -1,13 +1,14 @@
 import { AppShell } from "@mantine/core";
 import PropTypes from "prop-types";
+import React from "react";
 import Header from "./Header";
 
-export default function Appshell({ children }) {
+export default function Appshell(props: { children: React.ReactNode }) {
   return (
-    <AppShell header={{ height: 60 }} padding="md">
+    <AppShell padding="md">
       <Header />
 
-      <AppShell.Main>{children}</AppShell.Main>
+      <AppShell.Main>{props.children}</AppShell.Main>
     </AppShell>
   );
 }

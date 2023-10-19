@@ -12,11 +12,11 @@ const prisma = new PrismaClient();
 
 // accountRoutes.post("/create", auth, async (req, res) => {
 accountRoutes.post("/create", async (req, res) => {
-  const { accountId, name, email, password, dob } = req.body;
+  const { name, email, password, role, dob } = req.body;
 
   const createAccountController = new CreateAccountController(prisma, req, res);
 
-  await createAccountController.create(accountId, name, email, password, dob);
+  await createAccountController.createAccount(name, email, password, role, dob);
 });
 
 // accountRoutes.get("/retrieve", auth, async (req, res) => {
@@ -27,7 +27,7 @@ accountRoutes.get("/retrieve", async (req, res) => {
     res,
   );
 
-  await retrieveAccountController.retrieve();
+  await retrieveAccountController.retrieveAccounts();
 });
 
 // accountRoutes.put("/update", auth, async (req, res) => {
@@ -36,7 +36,13 @@ accountRoutes.put("/update", async (req, res) => {
 
   const updateAccountController = new UpdateAccountController(prisma, req, res);
 
-  await updateAccountController.update(accountId, name, email, password, dob);
+  await updateAccountController.updateAccount(
+    accountId,
+    name,
+    email,
+    password,
+    dob,
+  );
 });
 
 // accountRoutes.delete("/delete", auth, async (req, res) => {
@@ -45,7 +51,7 @@ accountRoutes.delete("/delete", async (req, res) => {
 
   const deleteAccountController = new DeleteAccountController(prisma, req, res);
 
-  await deleteAccountController.delete(accountId);
+  await deleteAccountController.deleteAccount(accountId);
 });
 
 // accountRoutes.get("/search/:userId", auth, async (req, res) => {
@@ -54,7 +60,7 @@ accountRoutes.get("/search/:userId", async (req, res) => {
 
   const searchAccountController = new SearchAccountController(prisma, req, res);
 
-  await searchAccountController.search(userId);
+  await searchAccountController.searchAccount(userId);
 });
 
 export default accountRoutes;

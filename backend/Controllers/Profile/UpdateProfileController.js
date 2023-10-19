@@ -9,7 +9,7 @@ export default class UpdateProfileController {
 
   async update(profileId, name, description) {
     try {
-      const updateProfile = await this.prisma.profile.update({
+      const updateProfile = await this.prisma.profiles.update({
         where: {
           profileId: Number(profileId),
         },

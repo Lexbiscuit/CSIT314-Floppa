@@ -17,11 +17,11 @@ app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader(
     "Access-Control-Allow-Headers",
-    "Origin, X-Requested-With, Content, Accept, Content-Type, Authorization"
+    "Origin, X-Requested-With, Content, Accept, Content-Type, Authorization",
   );
   res.setHeader(
     "Access-Control-Allow-Methods",
-    "GET, POST, PUT, DELETE, PATCH, OPTIONS"
+    "GET, POST, PUT, DELETE, PATCH, OPTIONS",
   );
   next();
 });
@@ -32,7 +32,7 @@ app.all("/", (req, res) => {
 
 app.post("/login", async (req, res) => {
   const { email, password } = req.body;
-  new LoginController(prisma, req, res).login(email, password);
+  new LoginController(prisma, req, res).loginAccount(email, password);
 });
 
 app.use("/account", accountRoutes);

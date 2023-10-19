@@ -1,32 +1,28 @@
-import { useState } from "react";
+import React from "react";
 import { Container, Group, Burger } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
-import { MantineLogo } from "@mantine/ds";
+import { useLocation } from "react-router-dom";
+
 import classes from "../styles/Header.module.css";
-import { useCookies } from "react-cookie";
+import FloppaLogo from "../assets/FloppaLogo.png";
 
 const links = [
-  { link: "/about", label: "Features" },
-  { link: "/pricing", label: "Pricing" },
-  { link: "/learn", label: "Learn" },
-  { link: "/community", label: "Community" },
+  { link: "/dashboard", label: "Dashboard" },
+  { link: "/accounts", label: "Accounts" },
+  { link: "/profiles", label: "Profiles" },
+  { link: "/workslots", label: "Work Slots" },
+  // { link: "/community", label: "Community" },
 ];
 
 export default function Header() {
   const [opened, { toggle }] = useDisclosure(false);
-  const [active, setActive] = useState(links[0].link);
-  const [cookies, setCookies, removeCookie] = useCookies(["name", "TOKEN"]);
-
+  const { pathname } = useLocation();
   const items = links.map((link) => (
     <a
       key={link.label}
       href={link.link}
       className={classes.link}
-      data-active={active === link.link || undefined}
-      onClick={(event) => {
-        event.preventDefault();
-        setActive(link.link);
-      }}
+      data-active={pathname === link.link || undefined}
     >
       {link.label}
     </a>
@@ -38,9 +34,6 @@ export default function Header() {
       className={classes.link}
       onClick={(event) => {
         event.preventDefault();
-        for (const property in cookies) {
-          removeCookie(property);
-        }
 
         window.location.replace("/logout");
       }}
@@ -52,7 +45,20 @@ export default function Header() {
   return (
     <header className={classes.header}>
       <Container size="md" className={classes.inner}>
-        <MantineLogo size={28} />
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <img
+            src={FloppaLogo}
+            alt="Team Floppa Logo"
+            style={{ height: "2.5rem" }}
+          />
+          <h3>Team Floppa</h3>
+        </div>
         <Group gap={5} visibleFrom="xs">
           {items}
           <LogoutButton />

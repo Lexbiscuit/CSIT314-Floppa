@@ -7,9 +7,9 @@ export default class UpdateAccountController {
     this.res = res;
   }
 
-  async update(accountId, name, email, password, dob) {
+  async updateAccount(accountId, name, email, password, dob) {
     try {
-      const updateAccount = await this.prisma.account.update({
+      const updateAccount = await this.prisma.accounts.update({
         where: {
           accountId: Number(accountId),
         },
