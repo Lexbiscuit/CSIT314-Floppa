@@ -9,7 +9,7 @@ export default class DeleteProfileController {
 
   async delete(profileId) {
     try {
-      const deleteProfile = await this.prisma.Profiles.delete({
+      const deleteProfile = await this.prisma.profiles.delete({
         where: {
           profileId: Number(profileId),
         },

@@ -7,7 +7,7 @@ export default class SearchProfileController {
 
   async search(profileId) {
     try {
-      const searchProfile = await this.prisma.Profiles.findUnique({
+      const searchProfile = await this.prisma.profiles.findUnique({
         where: {
           profileId: Number(profileId),
         },

@@ -13,13 +13,9 @@ import {
 import { useForm, isNotEmpty, isEmail } from "@mantine/form";
 import classes from "../styles/AuthenticationImage.module.css";
 
-import { useCookies } from "react-cookie";
+import React from "react";
 
 export default function Login() {
-  const [cookies, setCookie] = useCookies(["name", "TOKEN"]);
-
-  if (cookies.name) window.location.replace("/dashboard");
-
   const form = useForm({
     initialValues: {
       email: "",
@@ -54,14 +50,7 @@ export default function Login() {
               }),
             })
               .then((res) => res.json())
-              .then(({ name, message, token }) => {
-                if (name && token) {
-                  const cookieOptions = {
-                    maxAge: 60 * 60,
-                  };
-                  setCookie("name", name, cookieOptions);
-                  setCookie("TOKEN", token, cookieOptions);
-                }
+              .then(({ message }) => {
                 alert(message);
               });
           })}

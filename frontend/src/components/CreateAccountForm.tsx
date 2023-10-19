@@ -1,33 +1,24 @@
+import React from "react";
 import { useDisclosure } from "@mantine/hooks";
-import {
-  Modal,
-  Paper,
-  TextInput,
-  PasswordInput,
-  Checkbox,
-  Button,
-  Title,
-  Text,
-  Anchor,
-  Box,
-} from "@mantine/core";
+import { Modal, TextInput, Button, Box, Select } from "@mantine/core";
 import { useForm, isNotEmpty, isEmail } from "@mantine/form";
 
-export default function CreateUserAccountForm() {
+export default function CreateAccountForm() {
   const [opened, { open, close }] = useDisclosure(false);
 
   const form = useForm({
     initialValues: {
-      id: "",
       name: "",
       email: "",
       password: "",
+      role: "",
     },
 
     validate: {
       name: isNotEmpty("Name cannot be empty."),
       email: isEmail("Invalid email."),
       password: isNotEmpty("Password cannot be empty."),
+      role: isNotEmpty("Role cannot be empty."),
     },
   });
 
@@ -40,15 +31,6 @@ export default function CreateUserAccountForm() {
         centered
       >
         <Box component="form" onSubmit={form.onSubmit(() => {})}>
-          <TextInput
-            label="Account ID"
-            placeholder="1"
-            size="md"
-            type="number"
-            {...form.getInputProps("id")}
-            my="1rem"
-          />
-
           <TextInput
             label="Name"
             placeholder="Angsty Floppa"
@@ -72,6 +54,18 @@ export default function CreateUserAccountForm() {
             size="md"
             {...form.getInputProps("password")}
             my="1rem"
+          />
+
+          <Select
+            label="Role"
+            placeholder="Pick role"
+            data={[
+              "System Administrator",
+              "Cafe Owner",
+              "Cafe Manager",
+              "Cafe Staff",
+            ]}
+            {...form.getInputProps("role")}
           />
 
           <Button type="submit" my="1rem" w="100%">

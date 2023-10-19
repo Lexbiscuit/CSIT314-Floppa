@@ -7,7 +7,7 @@ export default class RetrieveProfileController {
 
   async retrieve() {
     try {
-      const retrieveProfile = await this.prisma.Profiles.findMany({
+      const retrieveProfiles = await this.prisma.profiles.findMany({
         orderBy: [
           {
             profileId: "asc",
@@ -16,7 +16,7 @@ export default class RetrieveProfileController {
       });
 
       // 200 OK
-      this.res.status(200).json(retrieveProfile);
+      this.res.status(200).json(retrieveProfiles);
     } catch (err) {
       console.error(err);
 

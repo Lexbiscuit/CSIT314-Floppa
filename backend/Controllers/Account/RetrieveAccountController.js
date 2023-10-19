@@ -5,9 +5,9 @@ export default class RetrieveAccountController {
     this.res = res;
   }
 
-  async retrieve() {
+  async retrieveAccounts() {
     try {
-      const retrieveAccount = await this.prisma.Accounts.findMany({
+      const retrieveAccounts = await this.prisma.accounts.findMany({
         orderBy: [
           {
             accountId: "asc",
@@ -16,7 +16,7 @@ export default class RetrieveAccountController {
       });
 
       // 200 OK
-      this.res.status(200).json(retrieveAccount);
+      this.res.status(200).json(retrieveAccounts);
     } catch (err) {
       console.error(err);
 
