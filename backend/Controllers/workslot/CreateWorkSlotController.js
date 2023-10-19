@@ -7,12 +7,15 @@ export default class CreateWorkslotController {
         this.res = res;
     }
 
-    async create(name, description) {
+    async createWorkslot(date, baristas_required, cashiers_required, chefs_required, waiters_required) {
         try {
             const createWorkslotController = await this.prisma.Workslots.create({
                 data: {
-                    name: name,
-                    description: description,
+                    date: date,
+                    baristas_required: baristas_required,
+                    cashiers_required: cashiers_required,
+                    chefs_required: chefs_required,
+                    waiters_required: waiters_required,
                 },
             })
             // 201 CREATED
@@ -22,6 +25,7 @@ export default class CreateWorkslotController {
                 if (err.code === "P2002") this.res.status(500).send(err.message);
             } else {
                 // 500 INTERNAL SERVER ERROR
+                console.log(err);
                 this.res.status(500).send("Internal Server Error.");
             }
         }

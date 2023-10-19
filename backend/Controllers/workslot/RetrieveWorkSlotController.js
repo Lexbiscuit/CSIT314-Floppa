@@ -7,7 +7,7 @@ export default class RetrieveWorkslotController {
         this.res = res;
     }
 
-    async retrieve() {
+    async retrieveWorkslots() {
         try {
             const retrieveWorkslot = await this.prisma.Workslots.findMany({
                 orderBy: [

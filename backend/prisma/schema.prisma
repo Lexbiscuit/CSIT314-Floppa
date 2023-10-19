@@ -44,10 +44,10 @@ model Profile {
 model Workslot {
   workslotId       Int      @id @default(autoincrement()) @db.Integer
   date             DateTime @db.Date
-  time             DateTime @db.Date
+  baristas_required Int      @db.Integer
+  cashiers_required Int      @db.Integer
   chefs_required   Int      @db.Integer
-  waiter_required  Int      @db.Integer
-  cashier_required Int      @db.Integer
+  waiters_required  Int      @db.Integer
 
   @@map("Workslots")
 }

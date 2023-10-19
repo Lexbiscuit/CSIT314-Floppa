@@ -1,8 +1,5 @@
 import { Prisma } from "@prisma/client";
 
-import { Prisma } from "@prisma/client";
-import { Prisma } from "@prisma/client";
-
 export default class DeleteWorkslotController {
     constructor(prisma, req, res) {
         this.prisma = prisma;
@@ -10,7 +7,7 @@ export default class DeleteWorkslotController {
         this.res = res;
     }
 
-    async delete(workslotId) {
+    async deleteWorkslot(workslotId) {
         try {
             const deleteWorkslots = await this.prisma.Workslots.delete({
                 where: {
@@ -19,7 +16,7 @@ export default class DeleteWorkslotController {
             });
 
             // 200 OK
-            this.res.status(200).send("Workslot deleted successfuly.");
+            this.res.status(200).send("Workslot deleted successfully.");
         } catch (err) {
             if (err instanceof Prisma.PrismaClientKnownRequestError) {
                 if (err.code === "P2025") {

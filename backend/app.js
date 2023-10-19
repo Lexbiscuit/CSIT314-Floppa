@@ -1,6 +1,7 @@
 import express from "express";
 import accountRoutes from "./Routes/accountRoutes.js";
 import profileRoutes from "./Routes/profileRoutes.js";
+import workslotRoutes from "./Routes/workslotRoutes.js";
 import { PrismaClient } from "@prisma/client";
 import LoginController from "./Controllers/LoginController.js";
 import auth from "./auth.cjs";
@@ -38,6 +39,8 @@ app.post("/login", async (req, res) => {
 app.use("/account", accountRoutes);
 
 app.use("/profile", profileRoutes);
+
+app.use("/workslot", workslotRoutes);
 
 app.listen(port, () => {
   console.log(`CSIT314 "Team Floppa" Express.js app listening on port ${port}`);

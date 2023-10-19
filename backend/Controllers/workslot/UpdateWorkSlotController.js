@@ -7,7 +7,7 @@ export default class UpdateWorkslotController {
         this.res = res;
     }
 
-    async update(workslotId, date, time, rolesAvalible) {
+    async updateWorkslot(workslotId, date, baristas_required, cashiers_required, chefs_required, waiters_required ) {
         try {
             const updateWorkslot = await this.prisma.Workslots.update({
                 where: {
@@ -15,13 +15,15 @@ export default class UpdateWorkslotController {
                 },
                 data: {
                     date: date,
-                    time: time,
-                    //rolesAvalible: rolesAvalible,     *Need to check on this
+                    chefs_required : chefs_required,
+                    waiters_required : waiters_required,
+                    cashiers_required : cashiers_required,
+                    baristas_required : baristas_required,
                 },
             });
 
             // 200 OK
-            this.res.status(200).send("Workslot updated successfuly.");
+            this.res.status(200).send("Workslot updated successfully.");
         } catch (err) {
             if (err instanceof Prisma.PrismaClientKnownRequestError) {
                 if (err.code === "P2025")
