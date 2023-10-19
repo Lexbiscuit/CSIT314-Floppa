@@ -36,11 +36,11 @@ app.post("/login", async (req, res) => {
   new LoginController(prisma, req, res).login(email, password);
 });
 
-app.use("/account", accountRoutes);
+app.use("/accounts", accountRoutes);
 
-app.use("/profile", profileRoutes);
+app.use("/profiles", profileRoutes);
 
-app.use("/workslot", workslotRoutes);
+app.use("/workslots", workslotRoutes);
 
 app.listen(port, () => {
   console.log(`CSIT314 "Team Floppa" Express.js app listening on port ${port}`);

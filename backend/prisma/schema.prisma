@@ -10,38 +10,38 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Bid {
+model Bids {
   bidId     Int @id @default(autoincrement())
   accountId Int @db.Integer
   profileId Int @db.Integer
 
-  account Account @relation(fields: [accountId], references: [accountId])
-  profile Profile @relation(fields: [profileId], references: [profileId])
+  account Accounts @relation(fields: [accountId], references: [accountId])
+  profile Profiles @relation(fields: [profileId], references: [profileId])
 
   @@map("Bids")
 }
 
-model Account {
+model Accounts {
   accountId Int      @id @default(autoincrement()) @db.Integer
   name      String   @db.Text
   email     String   @unique @db.Text
   password  String   @db.Text
   dob       DateTime @db.Date
-  bids      Bid[]
+  bids      Bids[]
 
   @@map("Accounts")
 }
 
-model Profile {
+model Profiles {
   profileId   Int    @id @default(autoincrement()) @db.Integer
   name        String @db.Text
   description String @db.Text
-  bids        Bid[]
+  bids        Bids[]
 
   @@map("Profiles")
 }
 
-model Workslot {
+model Workslots {
   workslotId       Int      @id @default(autoincrement()) @db.Integer
   date             DateTime @db.Date
   baristas_required Int      @db.Integer
@@ -49,5 +49,4 @@ model Workslot {
   chefs_required   Int      @db.Integer
   waiters_required  Int      @db.Integer
 
-  @@map("Workslots")
 }

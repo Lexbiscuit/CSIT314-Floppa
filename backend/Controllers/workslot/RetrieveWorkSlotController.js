@@ -12,7 +12,7 @@ export default class RetrieveWorkslotController {
             const retrieveWorkslot = await this.prisma.Workslots.findMany({
                 orderBy: [
                     {
-                        WorkslotId: "asc",
+                        workslotId: "asc",
                     },
                 ],
             });
