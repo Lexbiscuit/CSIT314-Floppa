@@ -9,7 +9,7 @@ export default class DeleteAccountController {
 
   async delete(accountId) {
     try {
-      const deleteAccount = await this.prisma.account.delete({
+      const deleteAccount = await this.prisma.Accounts.delete({
         where: {
           accountId: Number(accountId),
         },

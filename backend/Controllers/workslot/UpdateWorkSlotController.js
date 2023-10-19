@@ -2,14 +2,14 @@ import { Prisma } from "@prisma/client";
 
 export default class UpdateWorkslotController {
     constructor(prisma, req, res) {
-      this.prisma = prisma;
-      this.req = req;
-      this.res = res;
+        this.prisma = prisma;
+        this.req = req;
+        this.res = res;
     }
-  
+
     async update(workslotId, date, time, rolesAvalible) {
       try {
-        const updateWorkslot = await this.prisma.Workslots.update({
+        const updateWorkslot = await this.prisma.workslots.update({
           where: {
             workslotId: Number(workslotId),
           },
@@ -32,5 +32,4 @@ export default class UpdateWorkslotController {
         }
       }
     }
-  }
-  
+}

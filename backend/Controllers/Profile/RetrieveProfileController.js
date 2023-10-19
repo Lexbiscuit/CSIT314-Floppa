@@ -7,7 +7,7 @@ export default class RetrieveProfileController {
 
   async retrieve() {
     try {
-      const retrieveProfile = await this.prisma.profile.findMany({
+      const retrieveProfile = await this.prisma.Profiles.findMany({
         orderBy: [
           {
             profileId: "asc",

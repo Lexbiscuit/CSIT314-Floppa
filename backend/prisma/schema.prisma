@@ -18,7 +18,7 @@ model Bid {
   account Account @relation(fields: [accountId], references: [accountId])
   profile Profile @relation(fields: [profileId], references: [profileId])
 
-  @@map("bids")
+  @@map("Bids")
 }
 
 model Account {
@@ -29,7 +29,7 @@ model Account {
   dob       DateTime @db.Date
   bids      Bid[]
 
-  @@map("accounts")
+  @@map("Accounts")
 }
 
 model Profile {
@@ -38,6 +38,16 @@ model Profile {
   description String @db.Text
   bids        Bid[]
 
-  @@map("profiles")
+  @@map("Profiles")
 }
 
+model Workslot {
+  workslotId       Int      @id @default(autoincrement()) @db.Integer
+  date             DateTime @db.Date
+  time             DateTime @db.Date
+  chefs_required   Int      @db.Integer
+  waiter_required  Int      @db.Integer
+  cashier_required Int      @db.Integer
+
+  @@map("Workslots")
+}
