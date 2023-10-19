@@ -7,7 +7,7 @@ export default class RetrieveAccountController {
 
   async retrieve() {
     try {
-      const retrieveAccount = await this.prisma.account.findMany({
+      const retrieveAccount = await this.prisma.Accounts.findMany({
         orderBy: [
           {
             accountId: "asc",

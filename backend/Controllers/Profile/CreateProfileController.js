@@ -9,7 +9,7 @@ export default class CreateProfileController {
 
   async create(name, description) {
     try {
-      const createProfile = await this.prisma.profile.create({
+      const createProfile = await this.prisma.Profiles.create({
         data: {
           name: name,
           description: description,

@@ -9,14 +9,14 @@ export default class SearchWorkSlotController {
 
     async search(WorkSlotId) {
         try {
-            const searchWorkSlot = await this.prisma.WorkSlot.findUnique({
+            const searchWorkslot = await this.prisma.Workslots.findUnique({
                 where: {
                     WorkSlotId: Number(WorkSlotId),
                 },
             });
 
             // 200 OK
-            this.res.status(200).json(searchWorkSlot);
+            this.res.status(200).json(searchWorkslot);
         } catch (err) {
             console.error(err);
 

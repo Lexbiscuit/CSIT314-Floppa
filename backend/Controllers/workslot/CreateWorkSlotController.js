@@ -1,6 +1,6 @@
 import { Prisma } from "@prisma/client";
 
-export default class CreateWorkSlotController {
+export default class CreateWorkslotController {
     constructor(prisma, req, res) {
         this.prisma = prisma;
         this.req = req;
@@ -9,7 +9,7 @@ export default class CreateWorkSlotController {
 
     async create(name, description) {
         try {
-            const createWorkSlot = await this.prisma.WorkSlot.create({
+            const createWorkslotController = await this.prisma.Workslots.create({
                 data: {
                     name: name,
                     description: description,

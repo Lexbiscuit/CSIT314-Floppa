@@ -14,7 +14,7 @@ export default class CreateAccountController {
 
       let createAccount;
       if (!accountId) {
-        createAccount = await this.prisma.account.create({
+        createAccount = await this.prisma.Accounts.create({
           data: {
             name: name,
             email: email,
@@ -23,7 +23,7 @@ export default class CreateAccountController {
           },
         });
       } else {
-        createAccount = await this.prisma.account.create({
+        createAccount = await this.prisma.Accounts.create({
           data: {
             accountId: Number(accountId),
             name: name,

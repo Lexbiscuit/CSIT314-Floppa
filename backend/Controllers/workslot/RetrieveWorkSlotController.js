@@ -1,6 +1,6 @@
 import { Prisma } from "@prisma/client";
 
-export default class RetrieveWorkSlotController {
+export default class RetrieveWorkslotController {
     constructor(prisma, req, res) {
         this.prisma = prisma;
         this.req = req;
@@ -9,16 +9,16 @@ export default class RetrieveWorkSlotController {
 
     async retrieve() {
         try {
-            const retrieveWorkSlot = await this.prisma.WorkSlot.findMany({
+            const retrieveWorkslot = await this.prisma.Workslots.findMany({
                 orderBy: [
                     {
-                        WorkSlotId: "asc",
+                        WorkslotId: "asc",
                     },
                 ],
             });
 
             // 200 OK
-            this.res.status(200).json(retrieveWorkSlot);
+            this.res.status(200).json(retrieveWorkslot);
         } catch (err) {
             console.error(err);
 

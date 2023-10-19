@@ -7,3 +7,6 @@ import SearchWorkSlotController from "../Controllers/Profile/SearchWorkSlotContr
 import UpdateWorkSLotController from "../Controllers/Profile/UpdateWorkSLotController.js";
 import auth from "../auth.cjs";
 
+const WorkSlotRoutes = Router();
+const prisma = new PrismaClient();
+

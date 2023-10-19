@@ -7,7 +7,7 @@ export default class SearchAccountController {
 
   async search(accountId) {
     try {
-      const searchAccount = await this.prisma.account.findUnique({
+      const searchAccount = await this.prisma.Accounts.findUnique({
         where: {
           accountId: Number(accountId),
         },
