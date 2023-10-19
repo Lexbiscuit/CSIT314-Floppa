@@ -11,24 +11,24 @@ export default class DeleteWorkslotController {
     }
 
     async delete(workslotId) {
-      try {
-        const deleteWorkslots = await this.prisma.workslots.delete({
-          where: {
-            workslotId: Number(workslotId),
-          },
-        });
-  
-        // 200 OK
-        this.res.status(200).send("Workslot deleted successfully.");
-      } catch (err) {
-        if (err instanceof Prisma.PrismaClientKnownRequestError) {
-          if (err.code === "P2025") {
-            this.res.status(500).send("Record to delete does not exist.");
-          }
-        } else {
-          // 500 INTERNAL SERVER ERROR
-          this.res.status(500).send("Internal Server Error.");
+        try {
+            const deleteWorkslots = await this.prisma.Workslots.delete({
+                where: {
+                    workslotId: Number(workslotId),
+                },
+            });
+
+            // 200 OK
+            this.res.status(200).send("Workslot deleted successfuly.");
+        } catch (err) {
+            if (err instanceof Prisma.PrismaClientKnownRequestError) {
+                if (err.code === "P2025") {
+                    this.res.status(500).send("Record to delete does not exist.");
+                }
+            } else {
+                // 500 INTERNAL SERVER ERROR
+                this.res.status(500).send("Internal Server Error.");
+            }
         }
-      }
     }
 }
