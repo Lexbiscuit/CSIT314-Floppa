@@ -21,7 +21,7 @@ export default class UpdateWorkSlotController {
             });
 
             // 200 OK
-            this.res.status(200).send("Workslot updated successfully.");
+            this.res.status(200).send("Workslot updated successfuly.");
         } catch (err) {
             if (err instanceof Prisma.PrismaClientKnownRequestError) {
                 if (err.code === "P2025")
