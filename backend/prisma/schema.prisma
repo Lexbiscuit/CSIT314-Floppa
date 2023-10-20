@@ -40,3 +40,12 @@ model Profile {
 
   @@map("profiles")
 }
+
+model WorkSlot {
+  workslotId      Int       @id @default(autoincrement()) @db.Integer
+  date            DateTime  @db.Text
+  time            DateTime  @db.Text
+  rolesAvailable  Json[]    @db.Text
+
+  @@map("workslots")
+}
