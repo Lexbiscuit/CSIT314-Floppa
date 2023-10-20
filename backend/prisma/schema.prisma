@@ -18,7 +18,7 @@ model Bids {
   account Accounts @relation(fields: [accountId], references: [accountId])
   profile Profiles @relation(fields: [profileId], references: [profileId])
 
-  @@map("bids")
+  @@map("Bids")
 }
 
 model Accounts {
@@ -30,14 +30,25 @@ model Accounts {
   role      String   @db.Text
   bids      Bids[]
 
-  @@map("accounts")
+  @@map("Accounts")
 }
 
 model Profiles {
   profileId   Int    @id @default(autoincrement()) @db.Integer
-  name        String @db.Text @unique
+  name        String @unique @db.Text
   description String @db.Text
   bids        Bids[]
 
-  @@map("profiles")
+  @@map("Profiles")
+}
+
+model Workslots {
+  workslotId        Int      @id @default(autoincrement()) @db.Integer
+  date              DateTime @db.Date
+  baristas_required Int      @db.Integer
+  cashiers_required Int      @db.Integer
+  chefs_required    Int      @db.Integer
+  waiters_required  Int      @db.Integer
+
+  @@map("Workslots")
 }

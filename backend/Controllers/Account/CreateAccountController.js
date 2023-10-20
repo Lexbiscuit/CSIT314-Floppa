@@ -11,7 +11,6 @@ export default class CreateAccountController {
   async createAccount(name, email, password, role, dob) {
     try {
       const hashedPassword = await bcrypt.hash(password, 10);
-
       const createAccount = await this.prisma.accounts.create({
         data: {
           name: name,
@@ -21,7 +20,6 @@ export default class CreateAccountController {
           dob: dob,
         },
       });
-
       // 201 CREATED
       this.res.status(201).send({ message: "Account created successfully." });
     } catch (err) {
