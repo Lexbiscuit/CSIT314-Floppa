@@ -12,8 +12,6 @@ export default class CreateAccountController {
     try {
       const hashedPassword = await bcrypt.hash(password, 10);
 
-      // let createAccount;
-      // if (!accountId) {
       const createAccount = await this.prisma.accounts.create({
         data: {
           name: name,
@@ -23,28 +21,16 @@ export default class CreateAccountController {
           dob: dob,
         },
       });
-      // } else {
-      //   createAccount = await this.prisma.account.create({
-      //     data: {
-      //       accountId: Number(accountId),
-      //       name: name,
-      //       email: email,
-      //       password: hashedPassword,
-      //       dob: dob,
-      //     },
-      //   });
-      // }
-      //
 
       // 201 CREATED
-      this.res.status(201).send("Account created successfully.");
+      this.res.status(201).send({ message: "Account created successfully." });
     } catch (err) {
       if (err instanceof Prisma.PrismaClientKnownRequestError) {
-        if (err.code === "P2002") this.res.status(500).send(err.message);
+        if (err.code === "P2002")
+          this.res.status(500).send({ message: err.message });
       } else {
-        console.log(err);
         // 500 INTERNAL SERVER ERROR
-        this.res.status(500).send(err);
+        this.res.status(500).send({ message: "Internal System Error" });
       }
     }
   }

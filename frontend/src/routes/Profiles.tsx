@@ -1,19 +1,20 @@
 import React, { useState, useEffect } from "react";
 import Appshell from "../components/Appshell";
-import CreateAccountForm from "../components/Accounts/CreateAccountForm";
-import UpdateAccountForm from "../components/Accounts/UpdateAccountForm";
+import CreateProfileForm from "../components/Profiles/CreateProfileForm";
+import UpdateProfileForm from "../components/Profiles/UpdateProfileForm";
 import TanstackTable from "../components/TanstackTable";
+
 import { Modal, Button, Group, Text, Container } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 
-const DeleteAccountButton = (props: { data: any }) => {
+const DeleteProfileButton = (props: { data: any }) => {
   const [opened, { close, open }] = useDisclosure(false);
-  const { accountId } = props.data;
+  const { profileId: profileId } = props.data;
 
   return (
     <>
-      <Modal opened={opened} onClose={close} size="auto" title="Delete Account">
-        <Text>Are you sure you want to delete this account?</Text>
+      <Modal opened={opened} onClose={close} size="auto" title="Delete Profile">
+        <Text>Are you sure you want to delete this profile?</Text>
 
         <Group
           mt="xl"
@@ -26,15 +27,16 @@ const DeleteAccountButton = (props: { data: any }) => {
           <Button variant="outline" onClick={close}>
             Cancel
           </Button>
+
           <Button
             variant="filled"
             bg="red"
             onClick={() => {
-              async function deleteAccount() {
-                await fetch("http://localhost:3000/account/delete", {
+              async function deleteProfile() {
+                await fetch("http://localhost:3000/profile/delete", {
                   method: "DELETE",
                   headers: { "Content-Type": "application/json" },
-                  body: JSON.stringify({ accountId: Number(accountId) }),
+                  body: JSON.stringify({ profileId: Number(profileId) }),
                 })
                   .then((res) => res.json())
                   .then((res) => {
@@ -44,7 +46,7 @@ const DeleteAccountButton = (props: { data: any }) => {
                   .catch(() => alert("Internal System Error."));
               }
 
-              deleteAccount();
+              deleteProfile();
               close();
             }}
           >
@@ -65,8 +67,8 @@ const Options = (props: { row: any }) => {
 
   return (
     <div style={{ display: "flex" }}>
-      <UpdateAccountForm data={row} />
-      <DeleteAccountButton data={row} />
+      <UpdateProfileForm data={row} />
+      <DeleteProfileButton data={row} />
     </div>
   );
 };
@@ -78,8 +80,8 @@ interface Info {
 
 const columns = [
   {
-    accessorKey: "accountId",
-    header: "Account ID",
+    accessorKey: "profileId",
+    header: "Profile ID",
     cell: (info: Info) => String(info.getValue()),
     footer: (props: any) => props.column.id,
   },
@@ -90,14 +92,8 @@ const columns = [
     footer: (props: any) => props.column.id,
   },
   {
-    accessorKey: "email",
-    header: "Email",
-    cell: (info: Info) => info.getValue(),
-    footer: (props: any) => props.column.id,
-  },
-  {
-    accessorKey: "role",
-    header: "Role",
+    accessorKey: "description",
+    header: "Description",
     cell: (info: Info) => info.getValue(),
     footer: (props: any) => props.column.id,
   },
@@ -106,24 +102,25 @@ const columns = [
     cell: (info: Info) => <Options row={info.row.original} />,
   },
 ];
-export default function Accounts() {
+
+export default function Profile() {
   const [data, setData] = useState([]);
 
   useEffect(() => {
-    async function fetchAccounts() {
-      await fetch("http://localhost:3000/account/retrieve")
+    async function fetchProfile() {
+      await fetch("http://localhost:3000/profile/retrieve")
         .then((res) => res.json())
         .then((res) => setData(res))
         .catch((err) => console.error(err));
     }
 
-    fetchAccounts();
+    fetchProfile();
   }, []);
 
   return (
     <Appshell>
       <h1>Accounts</h1>
-      <CreateAccountForm />
+      <CreateProfileForm />
       <Container size="lg" my="1rem">
         {data.length > 0 ? (
           <TanstackTable columns={columns} data={data} />
