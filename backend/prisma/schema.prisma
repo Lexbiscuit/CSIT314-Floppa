@@ -23,31 +23,38 @@ model Bids {
 
 model Accounts {
   accountId Int      @id @default(autoincrement()) @db.Integer
+  profileId Int      @db.Integer
   name      String   @db.Text
   email     String   @unique @db.Text
   password  String   @db.Text
   dob       DateTime @db.Date
+  role      String   @db.Text
+
+  profile Profiles @relation(fields: [profileId], references: [profileId])
   bids      Bids[]
+
 
   @@map("Accounts")
 }
 
 model Profiles {
   profileId   Int    @id @default(autoincrement()) @db.Integer
-  name        String @db.Text
+  name        String @unique @db.Text
   description String @db.Text
+
   bids        Bids[]
+  accounts    Accounts[]
 
   @@map("Profiles")
 }
 
 model Workslots {
-  workslotId       Int      @id @default(autoincrement()) @db.Integer
-  date             DateTime @db.Date
+  workslotId        Int      @id @default(autoincrement()) @db.Integer
+  date              DateTime @db.Date
   baristas_required Int      @db.Integer
   cashiers_required Int      @db.Integer
-  chefs_required   Int      @db.Integer
+  chefs_required    Int      @db.Integer
   waiters_required  Int      @db.Integer
 
+  @@map("Workslots")
 }
-

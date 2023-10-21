@@ -5,9 +5,9 @@ export default class RetrieveProfileController {
     this.res = res;
   }
 
-  async retrieve() {
+  async retrieveProfiles() {
     try {
-      const retrieveProfiles = await this.prisma.profiles.findMany({
+      const retrieveProfiles = await this.prisma.Profiles.findMany({
         orderBy: [
           {
             profileId: "asc",
@@ -21,7 +21,7 @@ export default class RetrieveProfileController {
       console.error(err);
 
       // 500 INTERNAL SERVER ERROR
-      this.res.status(500).send("Internal Server Error.");
+      this.res.status(500).send({ message: "Internal Server Error." });
     }
   }
 }

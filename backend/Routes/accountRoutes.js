@@ -32,7 +32,7 @@ accountRoutes.get("/retrieve", async (req, res) => {
 
 // accountRoutes.put("/update", auth, async (req, res) => {
 accountRoutes.put("/update", async (req, res) => {
-  const { accountId, name, email, password, dob } = req.body;
+  const { accountId, name, email, password, role, dob } = req.body;
 
   const updateAccountController = new UpdateAccountController(prisma, req, res);
 
@@ -41,6 +41,7 @@ accountRoutes.put("/update", async (req, res) => {
     name,
     email,
     password,
+    role,
     dob,
   );
 });

@@ -12,6 +12,7 @@ export default function UpdateAccountForm(props: { data: any }) {
       accountId: accountId,
       name: name,
       email: email,
+      password: "",
       role: role,
     },
 
@@ -30,7 +31,32 @@ export default function UpdateAccountForm(props: { data: any }) {
         title="Update User Account"
         centered
       >
-        <Box component="form" onSubmit={form.onSubmit(() => {})}>
+        <Box
+          component="form"
+          onSubmit={form.onSubmit(() => {
+            async function updateAccount() {
+              try {
+                await fetch("http://localhost:3000/accounts/update", {
+                  method: "PUT",
+                  headers: { "Content-Type": "application/json" },
+                  body: JSON.stringify({
+                    accountId: form.values.accountId,
+                    name: form.values.name,
+                    email: form.values.email,
+                    password: form.values.password,
+                    role: form.values.role,
+                  }),
+                })
+                  .then((res) => res.json())
+                  .then((res) => alert(res.message));
+                location.reload();
+              } catch (err) {
+                alert("Internal System Error.");
+              }
+            }
+            updateAccount();
+          })}
+        >
           <TextInput
             label="Account ID"
             size="md"
@@ -55,6 +81,13 @@ export default function UpdateAccountForm(props: { data: any }) {
             my="1rem"
           />
 
+          <TextInput
+            label="Password"
+            size="md"
+            {...form.getInputProps("password")}
+            my="1rem"
+          />
+
           <Select
             label="Role"
             placeholder="Pick role"
@@ -65,6 +98,7 @@ export default function UpdateAccountForm(props: { data: any }) {
               "Cafe Staff",
             ]}
             {...form.getInputProps("role")}
+            my="1rem"
           />
 
           <Button type="submit" my="1rem" w="100%">

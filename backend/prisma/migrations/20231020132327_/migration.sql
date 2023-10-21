@@ -10,10 +10,12 @@ CREATE TABLE "Bids" (
 -- CreateTable
 CREATE TABLE "Accounts" (
     "accountId" SERIAL NOT NULL,
+    "profileId" INTEGER NOT NULL,
     "name" TEXT NOT NULL,
     "email" TEXT NOT NULL,
     "password" TEXT NOT NULL,
     "dob" DATE NOT NULL,
+    "role" TEXT NOT NULL,
 
     CONSTRAINT "Accounts_pkey" PRIMARY KEY ("accountId")
 );
@@ -42,8 +44,14 @@ CREATE TABLE "Workslots" (
 -- CreateIndex
 CREATE UNIQUE INDEX "Accounts_email_key" ON "Accounts"("email");
 
+-- CreateIndex
+CREATE UNIQUE INDEX "Profiles_name_key" ON "Profiles"("name");
+
 -- AddForeignKey
 ALTER TABLE "Bids" ADD CONSTRAINT "Bids_accountId_fkey" FOREIGN KEY ("accountId") REFERENCES "Accounts"("accountId") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Bids" ADD CONSTRAINT "Bids_profileId_fkey" FOREIGN KEY ("profileId") REFERENCES "Profiles"("profileId") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Accounts" ADD CONSTRAINT "Accounts_profileId_fkey" FOREIGN KEY ("profileId") REFERENCES "Profiles"("profileId") ON DELETE RESTRICT ON UPDATE CASCADE;

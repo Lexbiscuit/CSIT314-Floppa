@@ -12,6 +12,7 @@ export default function CreateAccountForm() {
       email: "",
       password: "",
       role: "",
+      dob: "",
     },
 
     validate: {
@@ -19,6 +20,8 @@ export default function CreateAccountForm() {
       email: isEmail("Invalid email."),
       password: isNotEmpty("Password cannot be empty."),
       role: isNotEmpty("Role cannot be empty."),
+      dob: (value) =>
+        /^\d{2}-\d{2}-\d{4}$/.test(value) ? null : "Invalid date of birth.",
     },
   });
 
@@ -30,7 +33,33 @@ export default function CreateAccountForm() {
         title="Create User Account"
         centered
       >
-        <Box component="form" onSubmit={form.onSubmit(() => {})}>
+        <Box
+          component="form"
+          onSubmit={form.onSubmit(() => {
+            async function createAccount() {
+              try {
+                await fetch("http://localhost:3000/accounts/create", {
+                  method: "POST",
+                  headers: { "Content-Type": "application/json" },
+                  body: JSON.stringify({
+                    name: form.values.name,
+                    email: form.values.email,
+                    password: form.values.password,
+                    role: form.values.role,
+                    dob: new Date(form.values.dob).toISOString(),
+                  }),
+                })
+                  .then((res) => res.json())
+                  .then((res) => alert(res.message));
+                location.reload();
+              } catch (err) {
+                console.log(err);
+                alert("Internal System Error.");
+              }
+            }
+            createAccount();
+          })}
+        >
           <TextInput
             label="Name"
             placeholder="Angsty Floppa"
@@ -66,6 +95,15 @@ export default function CreateAccountForm() {
               "Cafe Staff",
             ]}
             {...form.getInputProps("role")}
+            my="1rem"
+          />
+
+          <TextInput
+            label="Date of Birth"
+            placeholder="dd-mm-yyyy (eg. 01-01-1999)"
+            size="md"
+            {...form.getInputProps("dob")}
+            my="1rem"
           />
 
           <Button type="submit" my="1rem" w="100%">

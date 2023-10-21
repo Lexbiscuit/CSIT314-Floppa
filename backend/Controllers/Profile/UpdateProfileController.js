@@ -7,9 +7,9 @@ export default class UpdateProfileController {
     this.res = res;
   }
 
-  async update(profileId, name, description) {
+  async updateProfile(profileId, name, description) {
     try {
-      const updateProfile = await this.prisma.profiles.update({
+      const updateProfile = await this.prisma.Profiles.update({
         where: {
           profileId: Number(profileId),
         },
@@ -20,14 +20,14 @@ export default class UpdateProfileController {
       });
 
       // 200 OK
-      this.res.status(200).send("Profile updated successfully.");
+      this.res.status(200).send({ message: "Profile updated successfully." });
     } catch (err) {
       if (err instanceof Prisma.PrismaClientKnownRequestError) {
         if (err.code === "P2025")
-          this.res.status(500).send("Record to update not found.");
+          this.res.status(500).send({ message: "Record to update not found." });
       } else {
         // 500 INTERNAL SERVER ERROR
-        this.res.status(500).send("Internal Server Error.");
+        this.res.status(500).send({ message: "Internal Server Error." });
       }
     }
   }

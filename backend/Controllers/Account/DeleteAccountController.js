@@ -9,22 +9,24 @@ export default class DeleteAccountController {
 
   async deleteAccount(accountId) {
     try {
-      const deleteAccount = await this.prisma.accounts.delete({
+      const deleteAccount = await this.prisma.Accounts.delete({
         where: {
           accountId: Number(accountId),
         },
       });
 
       // 200 OK
-      this.res.status(200).send("Account deleted successfully.");
+      this.res.status(200).send({ message: "Account deleted successfully." });
     } catch (err) {
       if (err instanceof Prisma.PrismaClientKnownRequestError) {
         if (err.code === "P2025") {
-          this.res.status(500).send("Record to delete does not exist.");
+          this.res
+            .status(500)
+            .send({ message: "Record to delete does not exist." });
         }
       } else {
         // 500 INTERNAL SERVER ERROR
-        this.res.status(500).send("Internal Server Error.");
+        this.res.status(500).send({ message: "Internal Server Error." });
       }
     }
   }
