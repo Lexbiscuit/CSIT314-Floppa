@@ -5,9 +5,9 @@ export default class SearchProfileController {
     this.res = res;
   }
 
-  async search(profileId) {
+  async searchProfile(profileId) {
     try {
-      const searchProfile = await this.prisma.profiles.findUnique({
+      const searchProfile = await this.prisma.Profiles.findUnique({
         where: {
           profileId: Number(profileId),
         },
@@ -19,7 +19,7 @@ export default class SearchProfileController {
       console.error(err);
 
       // 500 INTERNAL SERVER ERROR
-      this.res.status(500).send("Internal Server Error.");
+      this.res.status(500).send({ message: "Internal Server Error." });
     }
   }
 }

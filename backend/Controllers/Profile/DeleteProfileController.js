@@ -7,24 +7,26 @@ export default class DeleteProfileController {
     this.res = res;
   }
 
-  async delete(profileId) {
+  async deleteProfile(profileId) {
     try {
-      const deleteProfile = await this.prisma.profiles.delete({
+      const deleteProfile = await this.prisma.Profiles.delete({
         where: {
           profileId: Number(profileId),
         },
       });
 
       // 200 OK
-      this.res.status(200).send("Profile deleted successfully.");
+      this.res.status(200).send({ message: "Profile deleted successfully." });
     } catch (err) {
       if (err instanceof Prisma.PrismaClientKnownRequestError) {
         if (err.code === "P2025") {
-          this.res.status(500).send("Record to delete does not exist.");
+          this.res
+            .status(500)
+            .send({ message: "Record to delete does not exist." });
         }
       } else {
         // 500 INTERNAL SERVER ERROR
-        this.res.status(500).send("Internal Server Error.");
+        this.res.status(500).send({ message: "Internal Server Error." });
       }
     }
   }

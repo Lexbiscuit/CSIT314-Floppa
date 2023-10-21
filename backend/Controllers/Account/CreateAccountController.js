@@ -11,7 +11,7 @@ export default class CreateAccountController {
   async createAccount(name, email, password, role, dob) {
     try {
       const hashedPassword = await bcrypt.hash(password, 10);
-      const createAccount = await this.prisma.accounts.create({
+      const createAccount = await this.prisma.Accounts.create({
         data: {
           name: name,
           email: email,
@@ -28,6 +28,7 @@ export default class CreateAccountController {
           this.res.status(500).send({ message: err.message });
       } else {
         // 500 INTERNAL SERVER ERROR
+        console.log(err);
         this.res.status(500).send({ message: "Internal System Error" });
       }
     }

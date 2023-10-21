@@ -36,7 +36,7 @@ export default function UpdateAccountForm(props: { data: any }) {
           onSubmit={form.onSubmit(() => {
             async function updateAccount() {
               try {
-                await fetch("http://localhost:3000/account/update", {
+                await fetch("http://localhost:3000/accounts/update", {
                   method: "PUT",
                   headers: { "Content-Type": "application/json" },
                   body: JSON.stringify({

@@ -12,7 +12,7 @@ export default class UpdateAccountController {
     try {
       if (password != "") {
         const hashedPassword = await bcrypt.hash(password, 10);
-        const updateAccount = await this.prisma.accounts.update({
+        const updateAccount = await this.prisma.Accounts.update({
           where: {
             accountId: Number(accountId),
           },

@@ -23,12 +23,16 @@ model Bids {
 
 model Accounts {
   accountId Int      @id @default(autoincrement()) @db.Integer
+  profileId Int      @db.Integer
   name      String   @db.Text
   email     String   @unique @db.Text
   password  String   @db.Text
   dob       DateTime @db.Date
   role      String   @db.Text
+
+  profile Profiles @relation(fields: [profileId], references: [profileId])
   bids      Bids[]
+
 
   @@map("Accounts")
 }
@@ -37,7 +41,9 @@ model Profiles {
   profileId   Int    @id @default(autoincrement()) @db.Integer
   name        String @unique @db.Text
   description String @db.Text
+
   bids        Bids[]
+  accounts    Accounts[]
 
   @@map("Profiles")
 }

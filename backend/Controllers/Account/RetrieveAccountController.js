@@ -7,7 +7,7 @@ export default class RetrieveAccountController {
 
   async retrieveAccounts() {
     try {
-      const retrieveAccounts = await this.prisma.accounts.findMany({
+      const retrieveAccounts = await this.prisma.Accounts.findMany({
         orderBy: [
           {
             accountId: "asc",
@@ -21,7 +21,7 @@ export default class RetrieveAccountController {
       console.error(err);
 
       // 500 INTERNAL SERVER ERROR
-      this.res.status(500).send("Internal Server Error.");
+      this.res.status(500).send({ message: "Internal Server Error." });
     }
   }
 }

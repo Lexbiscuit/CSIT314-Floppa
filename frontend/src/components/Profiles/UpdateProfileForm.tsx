@@ -33,7 +33,7 @@ export default function UpdateProfileForm(props: { data: any }) {
           onSubmit={form.onSubmit(() => {
             async function updateProfile() {
               try {
-                await fetch("http://localhost:3000/profile/update", {
+                await fetch("http://localhost:3000/profiles/update", {
                   method: "PUT",
                   headers: { "Content-Type": "application/json" },
                   body: JSON.stringify({

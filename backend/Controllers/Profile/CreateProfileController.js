@@ -9,7 +9,7 @@ export default class CreateProfileController {
 
   async createProfile(name, description) {
     try {
-      const createProfile = await this.prisma.profiles.create({
+      const createProfile = await this.prisma.Profiles.create({
         data: {
           name: name,
           description: description,
@@ -17,13 +17,14 @@ export default class CreateProfileController {
       });
 
       // 201 CREATED
-      this.res.status(201).send("Profile created successfully.");
+      this.res.status(201).send({ message: "Profile created successfully." });
     } catch (err) {
       if (err instanceof Prisma.PrismaClientKnownRequestError) {
-        if (err.code === "P2002") this.res.status(500).send(err.message);
+        if (err.code === "P2002")
+          this.res.status(500).send({ message: err.message });
       } else {
         // 500 INTERNAL SERVER ERROR
-        this.res.status(500).send("Internal Server Error.");
+        this.res.status(500).send({ message: "Internal Server Error." });
       }
     }
   }

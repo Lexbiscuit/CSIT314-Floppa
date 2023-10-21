@@ -31,7 +31,7 @@ const DeleteAccountButton = (props: { data: any }) => {
             bg="red"
             onClick={() => {
               async function deleteAccount() {
-                await fetch("http://localhost:3000/account/delete", {
+                await fetch("http://localhost:3000/accounts/delete", {
                   method: "DELETE",
                   headers: { "Content-Type": "application/json" },
                   body: JSON.stringify({ accountId: Number(accountId) }),
@@ -111,7 +111,7 @@ export default function Accounts() {
 
   useEffect(() => {
     async function fetchAccounts() {
-      await fetch("http://localhost:3000/account/retrieve")
+      await fetch("http://localhost:3000/accounts/retrieve")
         .then((res) => res.json())
         .then((res) => setData(res))
         .catch((err) => console.error(err));

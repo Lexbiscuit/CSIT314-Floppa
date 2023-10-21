@@ -33,7 +33,7 @@ const DeleteProfileButton = (props: { data: any }) => {
             bg="red"
             onClick={() => {
               async function deleteProfile() {
-                await fetch("http://localhost:3000/profile/delete", {
+                await fetch("http://localhost:3000/profiles/delete", {
                   method: "DELETE",
                   headers: { "Content-Type": "application/json" },
                   body: JSON.stringify({ profileId: Number(profileId) }),
@@ -108,7 +108,7 @@ export default function Profile() {
 
   useEffect(() => {
     async function fetchProfile() {
-      await fetch("http://localhost:3000/profile/retrieve")
+      await fetch("http://localhost:3000/profiles/retrieve")
         .then((res) => res.json())
         .then((res) => setData(res))
         .catch((err) => console.error(err));
@@ -119,7 +119,7 @@ export default function Profile() {
 
   return (
     <Appshell>
-      <h1>Accounts</h1>
+      <h1>Profiles</h1>
       <CreateProfileForm />
       <Container size="lg" my="1rem">
         {data.length > 0 ? (

@@ -31,7 +31,7 @@ export default function CreateProfileForm() {
           onSubmit={form.onSubmit(() => {
             async function createProfile() {
               try {
-                await fetch("http://localhost:3000/profile/create", {
+                await fetch("http://localhost:3000/profiles/create", {
                   method: "POST",
                   headers: { "Content-Type": "application/json" },
                   body: JSON.stringify({

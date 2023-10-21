@@ -7,7 +7,7 @@ export default class SearchAccountController {
 
   async searchAccount(accountId) {
     try {
-      const searchAccount = await this.prisma.accounts.findUnique({
+      const searchAccount = await this.prisma.Accounts.findUnique({
         where: {
           accountId: Number(accountId),
         },
@@ -19,7 +19,7 @@ export default class SearchAccountController {
       console.error(err);
 
       // 500 INTERNAL SERVER ERROR
-      this.res.status(500).send("Internal Server Error.");
+      this.res.status(500).send({ message: "Internal Server Error." });
     }
   }
 }
