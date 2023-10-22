@@ -24,7 +24,7 @@ export default class Profiles {
   }
 
   async retrieveProfile() {
-    const retrieveProfiles = await this.prisma.Profiles.findMany({
+    const response = await this.prisma.Profiles.findMany({
         orderBy: [
           {
             profileId: "asc",
