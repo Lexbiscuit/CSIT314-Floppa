@@ -50,4 +50,37 @@ export default class Accounts {
 inner join "Profiles" as pro on acc."profileId"=pro."profileId"`;
     return response;
   }
+
+  async updateAccount(accountId, name, description) {
+    const response = await this.prisma.Accounts.update({
+      where: {
+        accountId: Number(accountId),
+      },
+      data: {
+        name: name,
+        description: description,
+      },
+    });
+    return response;
+  }
+
+  async deleteAccount(accountId) {
+    const response = await this.prisma.Accounts.delete({
+      where: {
+        accountId: Number(accountId),
+      },
+    });
+    return response;
+  }
+
+  async searchAccount(accountId) {
+    const response = await this.prisma.Accounts.findUnique({
+      where: {
+        accountId: Number(accountId),
+      },
+    });
+    return response;
+  }
 }
+
+

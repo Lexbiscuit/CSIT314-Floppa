@@ -58,3 +58,16 @@ model Workslots {
 
   @@map("Workslots")
 }
+
+// model Suspendedaccounts {
+// suspendedaccountId  Int @id @default(autoincrement()) @db.Integer
+// accountId Int @db.Integer
+
+
+// }
+
+// model Suspendedprofiles {
+// suspendedprofileId  Int @id @default(autoincrement()) @db.Integer
+
+
+// }

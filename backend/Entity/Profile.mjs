@@ -25,43 +25,43 @@ export default class Profiles {
 
   async retrieveProfile() {
     const response = await this.prisma.Profiles.findMany({
-        orderBy: [
-          {
-            profileId: "asc",
-          },
-        ],
-      });
+      orderBy: [
+        {
+          profileId: "asc",
+        },
+      ],
+    });
     return response;
   }
 
-  async updateProfile(profileId, name, description){
+  async updateProfile(profileId, name, description) {
     const response = await this.prisma.Profiles.update({
-        where: {
-          profileId: Number(profileId),
-        },
-        data: {
-          name: name,
-          description: description,
-        },
+      where: {
+        profileId: Number(profileId),
+      },
+      data: {
+        name: name,
+        description: description,
+      },
     });
     return response;
   }
 
-  async deleteProfile(profileId){
+  async deleteProfile(profileId) {
     const response = await this.prisma.Profiles.delete({
-        where: {
-          profileId: Number(profileId),
-        },
+      where: {
+        profileId: Number(profileId),
+      },
     });
     return response;
   }
 
-  async searchProfile(profileId){
+  async searchProfile(profileId) {
     const response = await this.prisma.Profiles.findUnique({
-        where: {
-          profileId: Number(profileId),
-        },
-      });
-      return response;
+      where: {
+        profileId: Number(profileId),
+      },
+    });
+    return response;
   }
 }
