@@ -21,6 +21,7 @@ export default class SearchWorkSlotController {
       console.error(err);
 
       // 500 INTERNAL SERVER ERROR
+      console.log(err);
       this.res.status(500).send({ message: "Internal Server Error." });
     }
   }
