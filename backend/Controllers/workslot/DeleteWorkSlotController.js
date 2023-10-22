@@ -16,7 +16,7 @@ export default class DeleteWorkslotController {
       });
 
       // 200 OK
-      this.res.status(200).send("Workslot deleted successfully.");
+      this.res.status(200).send({message:"Workslot deleted successfully."});
     } catch (err) {
       if (err instanceof Prisma.PrismaClientKnownRequestError) {
         if (err.code === "P2025") {
