@@ -11,12 +11,14 @@ datasource db {
 }
 
 model Bids {
-  bidId     Int @id @default(autoincrement())
-  accountId Int @db.Integer
-  profileId Int @db.Integer
+  bidId      Int     @id @default(autoincrement())
+  accountId  Int     @db.Integer
+  workslotId Int     @db.Integer
+  status     String  @db.Text
+  reason     String? @db.Text
 
-  account Accounts @relation(fields: [accountId], references: [accountId])
-  profile Profiles @relation(fields: [profileId], references: [profileId])
+  account  Accounts  @relation(fields: [accountId], references: [accountId])
+  workslot Workslots @relation(fields: [workslotId], references: [workslotId])
 
   @@map("Bids")
 }
@@ -31,8 +33,7 @@ model Accounts {
   role      String   @db.Text
 
   profile Profiles @relation(fields: [profileId], references: [profileId])
-  bids      Bids[]
-
+  bids    Bids[]
 
   @@map("Accounts")
 }
@@ -42,8 +43,7 @@ model Profiles {
   name        String @unique @db.Text
   description String @db.Text
 
-  bids        Bids[]
-  accounts    Accounts[]
+  accounts Accounts[]
 
   @@map("Profiles")
 }
@@ -56,6 +56,8 @@ model Workslots {
   chefs_required    Int      @db.Integer
   waiters_required  Int      @db.Integer
 
+  Bids Bids[]
+
   @@map("Workslots")
 }
 
@@ -63,11 +65,9 @@ model Workslots {
 // suspendedaccountId  Int @id @default(autoincrement()) @db.Integer
 // accountId Int @db.Integer
 
-
 // }
 
 // model Suspendedprofiles {
 // suspendedprofileId  Int @id @default(autoincrement()) @db.Integer
-
 
 // }
