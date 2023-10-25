@@ -7,7 +7,7 @@ import RetrieveBidController from "../Controllers/Bid/RetrieveBidController";
 const bidRoutes = Router();
 const prisma = new PrismaClient();
 
-bidRoutes.get("/retrieve", async (req, res) =>{
+bidRoutes.get("/retrieve", async (req, res) => {
     const RetrieveBidController = new RetrieveBidController(
         prisma,
         req,
@@ -17,3 +17,4 @@ bidRoutes.get("/retrieve", async (req, res) =>{
 });
 
 export default bidRoutes;
+// aa

@@ -5,6 +5,7 @@ import workslotRoutes from "./Routes/workslotRoutes.js";
 import { PrismaClient } from "@prisma/client";
 import LoginController from "./Controllers/LoginController.js";
 import auth from "./auth.cjs";
+import bidRoutes from "./Routes/BidRoutes.js";
 
 const app = express();
 const port = 3000;
@@ -41,6 +42,8 @@ app.use("/accounts", accountRoutes);
 app.use("/profiles", profileRoutes);
 
 app.use("/workslots", workslotRoutes);
+
+app.use("/bids", bidRoutes);
 
 app.listen(port, () => {
   console.log(`CSIT314 "Team Floppa" Express.js app listening on port ${port}`);
