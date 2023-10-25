@@ -27,7 +27,7 @@ export default class Accounts {
 
     if (!tempProfile)
       throw new InvalidProfileError(
-        `'${profile}' is not a valid profile name.`,
+        `'${profile}' is not a valid profile name.`
       );
 
     const response = await this.prisma.Accounts.create({
@@ -46,8 +46,9 @@ export default class Accounts {
 
   async retrieveAccounts() {
     const response = await this.prisma
-      .$queryRaw`select "accountId", pro.name as profile, acc.name, acc.email, acc.password, acc.role, acc.dob from "Accounts" as acc
-inner join "Profiles" as pro on acc."profileId"=pro."profileId"`;
+      .$queryRaw`select "accountId", pro.name as profile, acc.name, acc.email, acc.password, acc.role, acc.dob 
+      from "Accounts" as acc
+      inner join "Profiles" as pro on acc."profileId"=pro."profileId"`;
     return response;
   }
 
@@ -82,5 +83,3 @@ inner join "Profiles" as pro on acc."profileId"=pro."profileId"`;
     return response;
   }
 }
-
-

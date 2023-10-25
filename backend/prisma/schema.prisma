@@ -30,7 +30,7 @@ model Accounts {
   email     String   @unique @db.Text
   password  String   @db.Text
   dob       DateTime @db.Date
-  role      String   @db.Text
+  role      String?  @db.Text
 
   profile Profiles @relation(fields: [profileId], references: [profileId])
   bids    Bids[]
@@ -49,16 +49,25 @@ model Profiles {
 }
 
 model Workslots {
-  workslotId        Int      @id @default(autoincrement()) @db.Integer
-  date              DateTime @db.Date
-  baristas_required Int      @db.Integer
-  cashiers_required Int      @db.Integer
-  chefs_required    Int      @db.Integer
-  waiters_required  Int      @db.Integer
+  workslotId Int      @id @default(autoincrement()) @db.Integer
+  startTime  DateTime @db.Timestamp
+  endTime    DateTime @db.Timestamp
 
-  Bids Bids[]
+  Bids            Bids[]
+  Workslots_Roles Workslots_Roles[]
 
   @@map("Workslots")
+}
+
+model Workslots_Roles {
+  workslotRoleId Int    @id @default(autoincrement()) @db.Integer
+  workslotId     Int    @db.Integer
+  role           String @db.Text
+  count          Int    @db.Integer
+
+  workslot Workslots @relation(fields: [workslotId], references: [workslotId])
+
+  @@map("Workslots_Roles")
 }
 
 // model Suspendedaccounts {
