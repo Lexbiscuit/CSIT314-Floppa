@@ -15,7 +15,7 @@ export default class CreateWorkslotController {
     waiters_required,
   ) {
     try {
-      const createWorkslotController = await this.prisma.Workslots.create({
+      const createWorkslot = await this.prisma.Workslots.create({
         data: {
           date: date,
           baristas_required: baristas_required,

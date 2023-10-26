@@ -1,6 +1,6 @@
 import { Prisma } from "@prisma/client";
 
-export default class RetrieveBidController {
+export default class MngrRtrvBidCtrl {
   constructor(prisma, req, res) {
     this.prisma = prisma;
     this.req = req;
@@ -9,7 +9,8 @@ export default class RetrieveBidController {
 
   async retrieveBids() {
     try {
-      const retrieveBid = await this.prisma.Bids.findMany({
+      const countBids = await this.prisma.Bids.count()
+      const retrieveBids = await this.prisma.Bids.findMany({
         orderBy: [
           {
             BidId: "asc",
@@ -17,8 +18,11 @@ export default class RetrieveBidController {
         ],
       });
 
-      // 200 OK
-      this.res.status(200).json(retrieveBid);
+      // 200 OK.
+      this.res.status(200).json({
+        message: `There are currently ${countBids} bids present`,
+        bids: retrieveBids
+      },);
     } catch (err) {
       console.error(err);
 
