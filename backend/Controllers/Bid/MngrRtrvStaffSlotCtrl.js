@@ -9,7 +9,6 @@ export default class MngrRtrvStaffSlotCtrl {
 
   async viewStaffWithSlot() {
     try {
-      // Step 2: Retrieve all records of staff that have work slots assigned to them.
       const staffWithAssignedWorkSlots = await this.prisma.Staff.findMany({
         where: {
           // Modify the condition to filter staff with assigned work slots.
@@ -26,8 +25,6 @@ export default class MngrRtrvStaffSlotCtrl {
           },
         },
       });
-
-      // Step 3: Display all records of staff with assigned work slots.
       this.res.status(200).json(staffWithAssignedWorkSlots);
     } catch (err) {
       console.error(err);

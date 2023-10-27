@@ -4,8 +4,9 @@ import profileRoutes from "./Routes/profileRoutes.js";
 import workslotRoutes from "./Routes/workslotRoutes.js";
 import { PrismaClient } from "@prisma/client";
 import LoginController from "./Controllers/LoginController.js";
-import auth from "./auth.cjs";
 import bidRoutes from "./Routes/BidRoutes.js";
+import auth from "./auth.cjs";
+
 
 const app = express();
 const port = 3000;

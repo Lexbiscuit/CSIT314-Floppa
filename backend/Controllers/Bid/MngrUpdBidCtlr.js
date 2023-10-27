@@ -1,6 +1,6 @@
 import { Prisma } from "@prisma/client";
 
-export default class MngrUpdBidController {
+export default class MngrUpdBidCtlr {
     constructor(prisma, req, res) {
         this.prisma = prisma;
         this.req = req;

@@ -1,6 +1,6 @@
 import { Prisma } from "@prisma/client";
 
-export default class MngrRtrvBidCtrl {
+export default class MngrRtrvBidCtlr {
   constructor(prisma, req, res) {
     this.prisma = prisma;
     this.req = req;

@@ -1,6 +1,6 @@
 import { Prisma } from "@prisma/client";
 
-export default class MngrRtrvStaff {
+export default class MngrRtrvStaffCtlr {
     constructor(prisma, req, res) {
         this.prisma = prisma;
         this.req = req;
@@ -11,9 +11,7 @@ export default class MngrRtrvStaff {
         try {
             const accountId = parseInt(this.req.params.accountId); 
 
-            
-            const accountCount = await this.prisma.Accounts.count();
-
+            const accountCount = await this.prisma.Accounts.count()
             
             const staff = await this.prisma.Bids.findMany({
                 where: {
