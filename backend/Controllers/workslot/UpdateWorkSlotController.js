@@ -37,6 +37,7 @@ export default class UpdateWorkslotController {
           this.res.status(500).send({ message: "Record to update not found." });
       } else {
         // 500 INTERNAL SERVER ERROR
+        console.log(err);
         this.res.status(500).send({ message: "Internal Server Error." });
       }
     }

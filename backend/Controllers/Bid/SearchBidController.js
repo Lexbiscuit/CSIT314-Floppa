@@ -1,22 +1,25 @@
 import { Prisma } from "@prisma/client";
 
-export default class SearchWorkSlotController {
+export default class SearchBidController {
   constructor(prisma, req, res) {
     this.prisma = prisma;
     this.req = req;
     this.res = res;
   }
 
-  async searchWorkslot(workslotId) {
+  async searchBid(bidId, accountId, workslotId, status) {
     try {
-      const searchWorkslot = await this.prisma.workslots.findUnique({
+      const searchBid = await this.prisma.workslots.findUnique({
         where: {
+          bidId: Number(bidId),
+          accountId: Number(accountId),
           workslotId: Number(workslotId),
+          status: status,
         },
       });
 
       // 200 OK
-      this.res.status(200).json(searchWorkslot);
+      this.res.status(200).json(searchBid);
     } catch (err) {
       console.error(err);
 

@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { PrismaClient } from "@prisma/client";
-import CreateWorkslotController from "../Controllers/Workslot/CreateWorkslotController.js";
+import CreateWorkslotController from "../Controllers/workslot/CreateWorkSlotController.js";
 import DeleteWorkslotController from "../Controllers/Workslot/DeleteWorkslotController.js";
 import RetrieveWorkslotController from "../Controllers/Workslot/RetrieveWorkslotController.js";
 import SearchWorkslotController from "../Controllers/Workslot/SearchWorkslotController.js";

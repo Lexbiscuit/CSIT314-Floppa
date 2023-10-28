@@ -11,12 +11,14 @@ datasource db {
 }
 
 model Bids {
-  bidId     Int @id @default(autoincrement())
-  accountId Int @db.Integer
-  profileId Int @db.Integer
+  bidId      Int     @id @default(autoincrement())
+  accountId  Int     @db.Integer
+  workslotId Int     @db.Integer
+  status     String  @db.Text
+  reason     String? @db.Text
 
-  account Accounts @relation(fields: [accountId], references: [accountId])
-  profile Profiles @relation(fields: [profileId], references: [profileId])
+  account  Accounts  @relation(fields: [accountId], references: [accountId])
+  workslot Workslots @relation(fields: [workslotId], references: [workslotId])
 
   @@map("Bids")
 }
@@ -28,11 +30,10 @@ model Accounts {
   email     String   @unique @db.Text
   password  String   @db.Text
   dob       DateTime @db.Date
-  role      String   @db.Text
+  role      String?  @db.Text
 
   profile Profiles @relation(fields: [profileId], references: [profileId])
-  bids      Bids[]
-
+  bids    Bids[]
 
   @@map("Accounts")
 }
@@ -42,19 +43,40 @@ model Profiles {
   name        String @unique @db.Text
   description String @db.Text
 
-  bids        Bids[]
-  accounts    Accounts[]
+  accounts Accounts[]
 
   @@map("Profiles")
 }
 
 model Workslots {
-  workslotId        Int      @id @default(autoincrement()) @db.Integer
-  date              DateTime @db.Date
-  baristas_required Int      @db.Integer
-  cashiers_required Int      @db.Integer
-  chefs_required    Int      @db.Integer
-  waiters_required  Int      @db.Integer
+  workslotId Int      @id @default(autoincrement()) @db.Integer
+  startTime  DateTime @db.Timestamp
+  endTime    DateTime @db.Timestamp
+
+  Bids            Bids[]
+  Workslots_Roles Workslots_Roles[]
 
   @@map("Workslots")
 }
+
+model Workslots_Roles {
+  workslotRoleId Int    @id @default(autoincrement()) @db.Integer
+  workslotId     Int    @db.Integer
+  role           String @db.Text
+  count          Int    @db.Integer
+
+  workslot Workslots @relation(fields: [workslotId], references: [workslotId])
+
+  @@map("Workslots_Roles")
+}
+
+// model Suspendedaccounts {
+// suspendedaccountId  Int @id @default(autoincrement()) @db.Integer
+// accountId Int @db.Integer
+
+// }
+
+// model Suspendedprofiles {
+// suspendedprofileId  Int @id @default(autoincrement()) @db.Integer
+
+// }

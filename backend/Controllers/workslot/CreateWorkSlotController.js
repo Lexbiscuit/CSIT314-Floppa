@@ -15,7 +15,7 @@ export default class CreateWorkslotController {
     waiters_required,
   ) {
     try {
-      const createWorkslotController = await this.prisma.Workslots.create({
+      const createWorkslot = await this.prisma.Workslots.create({
         data: {
           date: date,
           baristas_required: baristas_required,
@@ -25,7 +25,7 @@ export default class CreateWorkslotController {
         },
       });
       // 201 CREATED
-      this.res.status(201).send({ message: "Work Slot created successfully." });
+      this.res.status(201).send({ message: "Work Slot created successfullly." });
     } catch (err) {
       if (err instanceof Prisma.PrismaClientKnownRequestError) {
         if (err.code === "P2002")

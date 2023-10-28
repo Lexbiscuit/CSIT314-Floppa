@@ -12,11 +12,18 @@ const prisma = new PrismaClient();
 
 // accountRoutes.post("/create", auth, async (req, res) => {
 accountRoutes.post("/create", async (req, res) => {
-  const { name, email, password, role, dob } = req.body;
+  const { name, profile, email, password, role, dob } = req.body;
 
   const createAccountController = new CreateAccountController(prisma, req, res);
 
-  await createAccountController.createAccount(name, email, password, role, dob);
+  await createAccountController.createAccount(
+    name,
+    profile,
+    email,
+    password,
+    role,
+    dob,
+  );
 });
 
 // accountRoutes.get("/retrieve", auth, async (req, res) => {
@@ -55,13 +62,13 @@ accountRoutes.delete("/delete", async (req, res) => {
   await deleteAccountController.deleteAccount(accountId);
 });
 
-// accountRoutes.get("/search/:userId", auth, async (req, res) => {
-accountRoutes.get("/search/:userId", async (req, res) => {
-  const { userId } = req.params;
+// accountRoutes.get("/search/:accountId", auth, async (req, res) => {
+accountRoutes.get("/search/:accountId", async (req, res) => {
+  const { accountId } = req.params;
 
   const searchAccountController = new SearchAccountController(prisma, req, res);
 
-  await searchAccountController.searchAccount(userId);
+  await searchAccountController.searchAccount(accountId);
 });
 
 export default accountRoutes;
