@@ -19,7 +19,7 @@ export default class CreateAccountController {
         email,
         password,
         role,
-        dob,
+        dob
       );
 
       // 201 CREATED

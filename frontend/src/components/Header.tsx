@@ -2,6 +2,7 @@ import React from "react";
 import { Container, Group, Burger } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { useLocation } from "react-router-dom";
+import AuthService from "../services/auth.service";
 
 import classes from "../styles/Header.module.css";
 import FloppaLogo from "../assets/FloppaLogo.png";
@@ -11,7 +12,6 @@ const links = [
   { link: "/accounts", label: "Accounts" },
   { link: "/profiles", label: "Profiles" },
   { link: "/workslots", label: "Work Slots" },
-  // { link: "/community", label: "Community" },
 ];
 
 export default function Header() {
@@ -34,7 +34,7 @@ export default function Header() {
       className={classes.link}
       onClick={(event) => {
         event.preventDefault();
-
+        AuthService.logout();
         window.location.replace("/logout");
       }}
     >

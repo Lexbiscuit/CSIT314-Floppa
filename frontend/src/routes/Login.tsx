@@ -1,3 +1,4 @@
+import React, { useState, useRef } from "react";
 import {
   Paper,
   TextInput,
@@ -9,13 +10,16 @@ import {
   Anchor,
   Box,
 } from "@mantine/core";
-
 import { useForm, isNotEmpty, isEmail } from "@mantine/form";
 import classes from "../styles/AuthenticationImage.module.css";
-
-import React from "react";
+import { useNavigate } from "react-router-dom";
+import AuthService from "../services/auth.service";
 
 export default function Login() {
+  const navigate = useNavigate();
+  const formRef = useRef();
+  const [loading, setLoading] = useState(false);
+
   const form = useForm({
     initialValues: {
       email: "",
@@ -28,6 +32,30 @@ export default function Login() {
     },
   });
 
+  const handleLogin = async (values: { email: string; password: string }) => {
+    setLoading(true);
+
+    if (values.email.length > 0 && values.password.length > 0) {
+      AuthService.login(values.email, values.password).then(
+        () => {
+          navigate("/dashboard");
+          window.location.reload();
+        },
+        (error: any) => {
+          const resMessage =
+            (error.response &&
+              error.response.data &&
+              error.response.data.message) ||
+            error.message ||
+            error.toString();
+          alert(resMessage);
+        }
+      );
+    } else {
+      setLoading(false);
+    }
+  };
+
   return (
     <div className={classes.wrapper}>
       <Paper className={classes.form} radius={0} p={30}>
@@ -36,24 +64,7 @@ export default function Login() {
         </Title>
         <Box
           component="form"
-          onSubmit={form.onSubmit(async () => {
-            await fetch("http://localhost:3000/login", {
-              method: "POST",
-              mode: "cors",
-              cache: "no-cache",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify({
-                email: form.values.email,
-                password: form.values.password,
-              }),
-            })
-              .then((res) => res.json())
-              .then(({ message }) => {
-                alert(message);
-              });
-          })}
+          onSubmit={form.onSubmit((values) => handleLogin(values))}
         >
           <TextInput
             label="Email address"

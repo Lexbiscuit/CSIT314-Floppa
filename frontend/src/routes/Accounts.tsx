@@ -5,6 +5,9 @@ import UpdateAccountForm from "../components/Accounts/UpdateAccountForm";
 import TanstackTable from "../components/TanstackTable";
 import { Modal, Button, Group, Text, Container } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
+import axios from "axios";
+import AuthService from "../services/auth.service";
+import authHeader from "../services/auth-header";
 
 const DeleteAccountButton = (props: { data: any }) => {
   const [opened, { close, open }] = useDisclosure(false);
@@ -31,14 +34,15 @@ const DeleteAccountButton = (props: { data: any }) => {
             bg="red"
             onClick={() => {
               async function deleteAccount() {
-                await fetch("http://localhost:3000/accounts/delete", {
-                  method: "DELETE",
-                  headers: { "Content-Type": "application/json" },
-                  body: JSON.stringify({ accountId: Number(accountId) }),
-                })
-                  .then((res) => res.json())
+                await axios
+                  .delete("http://localhost:3000/accounts/delete", {
+                    headers: authHeader(),
+                    data: {
+                      accountId: Number(accountId),
+                    },
+                  })
                   .then((res) => {
-                    alert(res.message);
+                    alert(res.data.message);
                     location.reload();
                   })
                   .catch(() => alert("Internal System Error."));
@@ -80,12 +84,18 @@ const columns = [
   {
     accessorKey: "accountId",
     header: "Account ID",
-    cell: (info: Info) => String(info.getValue()),
+    cell: (info: Info) => info.getValue(),
     footer: (props: any) => props.column.id,
   },
   {
     accessorKey: "name",
     header: "Name",
+    cell: (info: Info) => info.getValue(),
+    footer: (props: any) => props.column.id,
+  },
+  {
+    accessorKey: "profile",
+    header: "Profile",
     cell: (info: Info) => info.getValue(),
     footer: (props: any) => props.column.id,
   },
@@ -102,43 +112,60 @@ const columns = [
     footer: (props: any) => props.column.id,
   },
   {
+    accessorKey: "dob",
+    header: "Date of Birth",
+    cell: (info: Info) => new Date(info.getValue()).toDateString(),
+    footer: (props: any) => props.column.id,
+  },
+  {
     id: "menu",
     cell: (info: Info) => <Options row={info.row.original} />,
   },
 ];
+
 export default function Accounts() {
   const [data, setData] = useState([]);
 
-  useEffect(() => {
-    async function fetchAccounts() {
-      await fetch("http://localhost:3000/accounts/retrieve")
-        .then((res) => res.json())
-        .then((res) => setData(res))
-        .catch((err) => console.error(err));
-    }
+  if (AuthService.getCurrentUser()) {
+    useEffect(() => {
+      async function fetchAccounts() {
+        await axios
+          .get("http://localhost:3000/accounts/retrieve", {
+            headers: authHeader(),
+          })
+          .then((res) => {
+            const transformId = res.data.map((account: any) => {
+              account.accountId = account.accountId.toString();
+              return account;
+            });
+            setData(transformId);
+          })
+          .catch(() => alert("Internal System Error."));
+      }
 
-    fetchAccounts();
-  }, []);
+      fetchAccounts();
+    }, []);
 
-  return (
-    <Appshell>
-      <h1>Accounts</h1>
-      <CreateAccountForm />
-      <Container size="lg" my="1rem">
-        {data.length > 0 ? (
-          <TanstackTable columns={columns} data={data} />
-        ) : (
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          >
-            <h1>Table is empty!</h1>
-          </div>
-        )}
-      </Container>
-    </Appshell>
-  );
+    return (
+      <Appshell>
+        <h1>Accounts</h1>
+        <CreateAccountForm />
+        <Container size="lg" my="1rem">
+          {data.length > 0 ? (
+            <TanstackTable columns={columns} data={data} />
+          ) : (
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <h1>Table is empty!</h1>
+            </div>
+          )}
+        </Container>
+      </Appshell>
+    );
+  }
 }

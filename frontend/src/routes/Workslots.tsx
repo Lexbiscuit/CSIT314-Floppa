@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Appshell from "../components/Appshell";
-import CreateProfileForm from "../components/Profiles/CreateProfileForm";
-import UpdateProfileForm from "../components/Profiles/UpdateProfileForm";
+import CreateWorkslotForm from "../components/Workslots/CreateWorkslotForm";
+import UpdateWorkslotForm from "../components/Workslots/UpdateWorkslotForm";
 import TanstackTable from "../components/TanstackTable";
 import axios from "axios";
 import authHeader from "../services/auth-header";
@@ -9,14 +9,19 @@ import authHeader from "../services/auth-header";
 import { Modal, Button, Group, Text, Container } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 
-const DeleteProfileButton = (props: { data: any }) => {
+const DeleteWorkslotButton = (props: { data: any }) => {
   const [opened, { close, open }] = useDisclosure(false);
-  const { profileId: profileId } = props.data;
+  const { workslotId: workslotId } = props.data;
 
   return (
     <>
-      <Modal opened={opened} onClose={close} size="auto" title="Delete Profile">
-        <Text>Are you sure you want to delete this profile?</Text>
+      <Modal
+        opened={opened}
+        onClose={close}
+        size="auto"
+        title="Delete Workslot"
+      >
+        <Text>Are you sure you want to delete this work slot?</Text>
 
         <Group
           mt="xl"
@@ -34,25 +39,21 @@ const DeleteProfileButton = (props: { data: any }) => {
             variant="filled"
             bg="red"
             onClick={() => {
-              async function deleteProfile() {
+              async function deleteWorkslot() {
                 await axios
                   .post(
-                    "http://localhost:3000/profiles/delete",
+                    "http://localhost:3000/workslots/delete",
                     {
-                      profileId: Number(profileId),
+                      workslotId: Number(workslotId),
                     },
                     {
                       headers: authHeader(),
                     }
                   )
-                  .then((res) => {
-                    alert(res.data.message);
-                    location.reload();
-                  })
                   .catch(() => alert("Internal System Error."));
               }
 
-              deleteProfile();
+              deleteWorkslot();
               close();
             }}
           >
@@ -73,8 +74,8 @@ const Options = (props: { row: any }) => {
 
   return (
     <div style={{ display: "flex" }}>
-      <UpdateProfileForm data={row} />
-      <DeleteProfileButton data={row} />
+      <UpdateWorkslotForm data={row} />
+      <DeleteWorkslotButton data={row} />
     </div>
   );
 };
@@ -86,20 +87,38 @@ interface Info {
 
 const columns = [
   {
-    accessorKey: "profileId",
-    header: "Profile ID",
+    accessorKey: "workslotId",
+    header: "Work Slot ID",
     cell: (info: Info) => String(info.getValue()),
     footer: (props: any) => props.column.id,
   },
   {
-    accessorKey: "name",
-    header: "Name",
+    accessorKey: "date",
+    header: "date of work slot",
+    cell: (info: Info) => new Date(info.getValue()).toLocaleDateString("en-SG"),
+    footer: (props: any) => props.column.id,
+  },
+  {
+    accessorKey: "baristas_required",
+    header: "barista",
     cell: (info: Info) => info.getValue(),
     footer: (props: any) => props.column.id,
   },
   {
-    accessorKey: "description",
-    header: "Description",
+    accessorKey: "chefs_required",
+    header: "chef",
+    cell: (info: Info) => info.getValue(),
+    footer: (props: any) => props.column.id,
+  },
+  {
+    accessorKey: "cashiers_required",
+    header: "cashier",
+    cell: (info: Info) => info.getValue(),
+    footer: (props: any) => props.column.id,
+  },
+  {
+    accessorKey: "waiters_required",
+    header: "waiter",
     cell: (info: Info) => info.getValue(),
     footer: (props: any) => props.column.id,
   },
@@ -109,32 +128,33 @@ const columns = [
   },
 ];
 
-export default function Profile() {
+export default function Workslots() {
   const [data, setData] = useState([]);
 
   useEffect(() => {
-    async function fetchProfile() {
+    async function fetchWorkslot() {
       await axios
-        .get("http://localhost:3000/profiles/retrieve", {
+        .get("http://localhost:3000/workslots/retrieve", {
           headers: authHeader(),
         })
         .then((res) => {
-          const transformId = res.data.map((profile: any) => {
-            profile.profileId = profile.profileId.toString();
-            return profile;
+          const transformId = res.data.map((workslot: any) => {
+            workslot.workslotId = workslot.workslotId.toString();
+            return workslot;
           });
+
           setData(transformId);
         })
         .catch(() => alert("Internal System Error."));
     }
 
-    fetchProfile();
+    fetchWorkslot();
   }, []);
 
   return (
     <Appshell>
-      <h1>Profiles</h1>
-      <CreateProfileForm />
+      <h1>Work Slots</h1>
+      <CreateWorkslotForm />
       <Container size="lg" my="1rem">
         {data.length > 0 ? (
           <TanstackTable columns={columns} data={data} />

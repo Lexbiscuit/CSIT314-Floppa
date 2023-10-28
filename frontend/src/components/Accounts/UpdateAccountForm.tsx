@@ -2,24 +2,32 @@ import React from "react";
 import { useDisclosure } from "@mantine/hooks";
 import { Modal, TextInput, Button, Box, Select } from "@mantine/core";
 import { useForm, isNotEmpty, isEmail } from "@mantine/form";
+import axios from "axios";
+import authHeader from "../../services/auth-header";
 
 export default function UpdateAccountForm(props: { data: any }) {
   const [opened, { open, close }] = useDisclosure(false);
-  const { accountId, name, email, role } = props.data;
+  const { accountId, name, profile, email, role, dob } = props.data;
 
   const form = useForm({
     initialValues: {
       accountId: accountId,
       name: name,
+      profile: profile,
       email: email,
       password: "",
       role: role,
+      dob: dob,
     },
 
     validate: {
       name: isNotEmpty("Name cannot be empty."),
+      profile: isNotEmpty("Profile cannot be empty."),
       email: isEmail("Invalid email."),
+      password: isNotEmpty("Password cannot be empty."),
       role: isNotEmpty("Role cannot be empty."),
+      dob: (value) =>
+        /^\d{2}-\d{2}-\d{4}$/.test(value) ? null : "Invalid date of birth.",
     },
   });
 
@@ -36,20 +44,25 @@ export default function UpdateAccountForm(props: { data: any }) {
           onSubmit={form.onSubmit(() => {
             async function updateAccount() {
               try {
-                await fetch("http://localhost:3000/accounts/update", {
-                  method: "PUT",
-                  headers: { "Content-Type": "application/json" },
-                  body: JSON.stringify({
-                    accountId: form.values.accountId,
-                    name: form.values.name,
-                    email: form.values.email,
-                    password: form.values.password,
-                    role: form.values.role,
-                  }),
-                })
-                  .then((res) => res.json())
-                  .then((res) => alert(res.message));
-                location.reload();
+                await axios
+                  .put(
+                    "http://localhost:3000/accounts/update",
+                    {
+                      accountId: Number(form.values.accountId),
+                      name: form.values.name,
+                      profile: form.values.profile,
+                      email: form.values.email,
+                      password: form.values.password,
+                      role: form.values.role,
+                      dob: new Date(form.values.dob).toISOString(),
+                    },
+                    {
+                      headers: authHeader(),
+                    }
+                  )
+                  .then((res) => {
+                    alert(res.data.message);
+                  });
               } catch (err) {
                 alert("Internal System Error.");
               }
@@ -73,6 +86,19 @@ export default function UpdateAccountForm(props: { data: any }) {
             my="1rem"
           />
 
+          <Select
+            label="Profile"
+            placeholder="Pick profile"
+            data={[
+              "System Administrator",
+              "Cafe Owner",
+              "Cafe Manager",
+              "Cafe Staff",
+            ]}
+            {...form.getInputProps("profile")}
+            my="1rem"
+          />
+
           <TextInput
             label="Email address"
             placeholder="grumpy@floppa.com"
@@ -88,16 +114,22 @@ export default function UpdateAccountForm(props: { data: any }) {
             my="1rem"
           />
 
-          <Select
-            label="Role"
-            placeholder="Pick role"
-            data={[
-              "System Administrator",
-              "Cafe Owner",
-              "Cafe Manager",
-              "Cafe Staff",
-            ]}
-            {...form.getInputProps("role")}
+          {form.values.profile == "Cafe Staff" && (
+            <Select
+              label="Role"
+              placeholder="Pick role"
+              data={["Cashier", "Waiter", "Chef", "Barista"]}
+              {...form.getInputProps("role")}
+              my="1rem"
+            />
+          )}
+
+          <TextInput
+            label="Date of Birth"
+            type="date"
+            placeholder="dd-mm-yyyy (eg. 01-01-1999)"
+            size="md"
+            {...form.getInputProps("dob")}
             my="1rem"
           />
 

@@ -2,6 +2,8 @@ import React from "react";
 import { useDisclosure } from "@mantine/hooks";
 import { Modal, TextInput, Button, Box } from "@mantine/core";
 import { useForm, isNotEmpty } from "@mantine/form";
+import axios from "axios";
+import authHeader from "../../services/auth-header";
 
 export default function UpdateProfileForm(props: { data: any }) {
   const [opened, { open, close }] = useDisclosure(false);
@@ -33,17 +35,20 @@ export default function UpdateProfileForm(props: { data: any }) {
           onSubmit={form.onSubmit(() => {
             async function updateProfile() {
               try {
-                await fetch("http://localhost:3000/profiles/update", {
-                  method: "PUT",
-                  headers: { "Content-Type": "application/json" },
-                  body: JSON.stringify({
-                    profileId: form.values.profileId,
-                    name: form.values.name,
-                    description: form.values.description,
-                  }),
-                })
-                  .then((res) => res.json())
-                  .then((res) => alert(res.message));
+                axios
+                  .put(
+                    "http://localhost:3000/profiles/update",
+                    {
+                      profileId: Number(form.values.profileId),
+                      name: form.values.name,
+                      description: form.values.description,
+                    },
+                    {
+                      headers: authHeader(),
+                    }
+                  )
+                  .then((res) => alert(res.data.message));
+
                 location.reload();
               } catch (err) {
                 alert("Internal System Error.");
