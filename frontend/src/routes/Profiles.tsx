@@ -3,6 +3,8 @@ import Appshell from "../components/Appshell";
 import CreateProfileForm from "../components/Profiles/CreateProfileForm";
 import UpdateProfileForm from "../components/Profiles/UpdateProfileForm";
 import TanstackTable from "../components/TanstackTable";
+import axios from "axios";
+import authHeader from "../services/auth-header";
 
 import { Modal, Button, Group, Text, Container } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
@@ -33,14 +35,18 @@ const DeleteProfileButton = (props: { data: any }) => {
             bg="red"
             onClick={() => {
               async function deleteProfile() {
-                await fetch("http://localhost:3000/profiles/delete", {
-                  method: "DELETE",
-                  headers: { "Content-Type": "application/json" },
-                  body: JSON.stringify({ profileId: Number(profileId) }),
-                })
-                  .then((res) => res.json())
+                await axios
+                  .post(
+                    "http://localhost:3000/profiles/delete",
+                    {
+                      profileId: Number(profileId),
+                    },
+                    {
+                      headers: authHeader(),
+                    }
+                  )
                   .then((res) => {
-                    alert(res.message);
+                    alert(res.data.message);
                     location.reload();
                   })
                   .catch(() => alert("Internal System Error."));
@@ -108,10 +114,18 @@ export default function Profile() {
 
   useEffect(() => {
     async function fetchProfile() {
-      await fetch("http://localhost:3000/profiles/retrieve")
-        .then((res) => res.json())
-        .then((res) => setData(res))
-        .catch((err) => console.error(err));
+      await axios
+        .get("http://localhost:3000/profiles/retrieve", {
+          headers: authHeader(),
+        })
+        .then((res) => {
+          const transformId = res.data.map((profile: any) => {
+            profile.profileId = profile.profileId.toString();
+            return profile;
+          });
+          setData(transformId);
+        })
+        .catch(() => alert("Internal System Error."));
     }
 
     fetchProfile();

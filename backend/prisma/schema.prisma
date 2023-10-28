@@ -11,7 +11,7 @@ datasource db {
 }
 
 model Bids {
-  bidId      Int     @id @default(autoincrement())
+  bidId      Int     @id @default(autoincrement()) @db.Integer
   accountId  Int     @db.Integer
   workslotId Int     @db.Integer
   status     String  @db.Text

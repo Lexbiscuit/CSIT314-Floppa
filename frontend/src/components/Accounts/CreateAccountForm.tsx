@@ -2,6 +2,8 @@ import React from "react";
 import { useDisclosure } from "@mantine/hooks";
 import { Modal, TextInput, Button, Box, Select } from "@mantine/core";
 import { useForm, isNotEmpty, isEmail } from "@mantine/form";
+import axios from "axios";
+import authHeader from "../../services/auth-header";
 
 export default function CreateAccountForm() {
   const [opened, { open, close }] = useDisclosure(false);
@@ -9,6 +11,7 @@ export default function CreateAccountForm() {
   const form = useForm({
     initialValues: {
       name: "",
+      profile: "",
       email: "",
       password: "",
       role: "",
@@ -17,6 +20,7 @@ export default function CreateAccountForm() {
 
     validate: {
       name: isNotEmpty("Name cannot be empty."),
+      profile: isNotEmpty("Profile cannot be empty."),
       email: isEmail("Invalid email."),
       password: isNotEmpty("Password cannot be empty."),
       role: isNotEmpty("Role cannot be empty."),
@@ -38,20 +42,28 @@ export default function CreateAccountForm() {
           onSubmit={form.onSubmit(() => {
             async function createAccount() {
               try {
-                await fetch("http://localhost:3000/accounts/create", {
-                  method: "POST",
-                  headers: { "Content-Type": "application/json" },
-                  body: JSON.stringify({
-                    name: form.values.name,
-                    email: form.values.email,
-                    password: form.values.password,
-                    role: form.values.role,
-                    dob: new Date(form.values.dob).toISOString(),
-                  }),
-                })
-                  .then((res) => res.json())
-                  .then((res) => alert(res.message));
-                location.reload();
+                axios
+                  .post(
+                    "http://localhost:3000/accounts/create",
+                    {
+                      name: form.values.name,
+                      profile: form.values.profile,
+                      email: form.values.email,
+                      password: form.values.password,
+                      role:
+                        form.values.profile != "Cafe Staff"
+                          ? "NIL"
+                          : form.values.role,
+                      dob: new Date(form.values.dob).toISOString(),
+                    },
+                    {
+                      headers: authHeader(),
+                    }
+                  )
+                  .then((res) => {
+                    alert(res.data.message);
+                    location.reload();
+                  });
               } catch (err) {
                 console.log(err);
                 alert("Internal System Error.");
@@ -65,6 +77,19 @@ export default function CreateAccountForm() {
             placeholder="Angsty Floppa"
             size="md"
             {...form.getInputProps("name")}
+            my="1rem"
+          />
+
+          <Select
+            label="Profile"
+            placeholder="Pick profile"
+            data={[
+              "System Administrator",
+              "Cafe Owner",
+              "Cafe Manager",
+              "Cafe Staff",
+            ]}
+            {...form.getInputProps("profile")}
             my="1rem"
           />
 
@@ -85,21 +110,19 @@ export default function CreateAccountForm() {
             my="1rem"
           />
 
-          <Select
-            label="Role"
-            placeholder="Pick role"
-            data={[
-              "System Administrator",
-              "Cafe Owner",
-              "Cafe Manager",
-              "Cafe Staff",
-            ]}
-            {...form.getInputProps("role")}
-            my="1rem"
-          />
+          {form.values.profile == "Cafe Staff" && (
+            <Select
+              label="Role"
+              placeholder="Pick role"
+              data={["Cashier", "Waiter", "Chef", "Barista"]}
+              {...form.getInputProps("role")}
+              my="1rem"
+            />
+          )}
 
           <TextInput
             label="Date of Birth"
+            type="date"
             placeholder="dd-mm-yyyy (eg. 01-01-1999)"
             size="md"
             {...form.getInputProps("dob")}

@@ -12,7 +12,7 @@ const routes = [
   { path: "/dashboard", element: <Dashboard /> },
   { path: "/accounts", element: <Accounts /> },
   { path: "/profiles", element: <Profiles /> },
-  { path: "/workslots", element: <Workslots /> }
+  { path: "/workslots", element: <Workslots /> },
 ];
 
 export default routes;

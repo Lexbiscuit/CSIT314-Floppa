@@ -3,6 +3,8 @@ import Appshell from "../components/Appshell";
 import CreateWorkslotForm from "../components/Workslots/CreateWorkslotForm";
 import UpdateWorkslotForm from "../components/Workslots/UpdateWorkslotForm";
 import TanstackTable from "../components/TanstackTable";
+import axios from "axios";
+import authHeader from "../services/auth-header";
 
 import { Modal, Button, Group, Text, Container } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
@@ -13,7 +15,12 @@ const DeleteWorkslotButton = (props: { data: any }) => {
 
   return (
     <>
-      <Modal opened={opened} onClose={close} size="auto" title="Delete Workslot">
+      <Modal
+        opened={opened}
+        onClose={close}
+        size="auto"
+        title="Delete Workslot"
+      >
         <Text>Are you sure you want to delete this work slot?</Text>
 
         <Group
@@ -33,16 +40,16 @@ const DeleteWorkslotButton = (props: { data: any }) => {
             bg="red"
             onClick={() => {
               async function deleteWorkslot() {
-                await fetch("http://localhost:3000/workslots/delete", {
-                  method: "DELETE",
-                  headers: { "Content-Type": "application/json" },
-                  body: JSON.stringify({ workslotId: Number(workslotId) }),
-                })
-                  .then((res) => res.json())
-                  .then((res) => {
-                    alert(res.message);
-                    location.reload();
-                  })
+                await axios
+                  .post(
+                    "http://localhost:3000/workslots/delete",
+                    {
+                      workslotId: Number(workslotId),
+                    },
+                    {
+                      headers: authHeader(),
+                    }
+                  )
                   .catch(() => alert("Internal System Error."));
               }
 
@@ -88,7 +95,7 @@ const columns = [
   {
     accessorKey: "date",
     header: "date of work slot",
-    cell: (info: Info) =>new Date( info.getValue()).toLocaleDateString("en-SG"),
+    cell: (info: Info) => new Date(info.getValue()).toLocaleDateString("en-SG"),
     footer: (props: any) => props.column.id,
   },
   {
@@ -126,10 +133,19 @@ export default function Workslots() {
 
   useEffect(() => {
     async function fetchWorkslot() {
-      await fetch("http://localhost:3000/workslots/retrieve")
-        .then((res) => res.json())
-        .then((res) => setData(res))
-        .catch((err) => console.error(err));
+      await axios
+        .get("http://localhost:3000/workslots/retrieve", {
+          headers: authHeader(),
+        })
+        .then((res) => {
+          const transformId = res.data.map((workslot: any) => {
+            workslot.workslotId = workslot.workslotId.toString();
+            return workslot;
+          });
+
+          setData(transformId);
+        })
+        .catch(() => alert("Internal System Error."));
     }
 
     fetchWorkslot();

@@ -2,6 +2,8 @@ import React from "react";
 import { useDisclosure } from "@mantine/hooks";
 import { Modal, TextInput, Button, Box, Select } from "@mantine/core";
 import { useForm, isNotEmpty } from "@mantine/form";
+import axios from "axios";
+import authHeader from "../../services/auth-header";
 
 export default function CreateProfileForm() {
   const [opened, { open, close }] = useDisclosure(false);
@@ -31,16 +33,18 @@ export default function CreateProfileForm() {
           onSubmit={form.onSubmit(() => {
             async function createProfile() {
               try {
-                await fetch("http://localhost:3000/profiles/create", {
-                  method: "POST",
-                  headers: { "Content-Type": "application/json" },
-                  body: JSON.stringify({
-                    name: form.values.name,
-                    description: form.values.description,
-                  }),
-                })
-                  .then((res) => res.json())
-                  .then((res) => alert(res.message));
+                axios
+                  .post(
+                    "http://localhost:3000/profiles/create",
+                    {
+                      name: form.values.name,
+                      description: form.values.description,
+                    },
+                    {
+                      headers: authHeader(),
+                    }
+                  )
+                  .then((res) => alert(res.data.message));
 
                 location.reload();
               } catch (err) {

@@ -11,12 +11,12 @@ export default function CreateWorkslotForm() {
       date: "",
       baristas_required: "",
       cashiers_required: "",
-      chefs_required:"",
-      waiters_required:""
+      chefs_required: "",
+      waiters_required: "",
     },
 
     validate: {
-      date:isNotEmpty("Date is not empty"),
+      date: isNotEmpty("Date is not empty"),
       baristas_required: isNotEmpty("barista cannot be empty."),
       cashiers_required: isNotEmpty("cashier cannot be empty."),
       chefs_required: isNotEmpty("chef cannot be empty."),
@@ -26,12 +26,7 @@ export default function CreateWorkslotForm() {
 
   return (
     <>
-      <Modal
-        opened={opened}
-        onClose={close}
-        title="Create Work slot"
-        centered
-      >
+      <Modal opened={opened} onClose={close} title="Create Work slot" centered>
         <Box
           component="form"
           onSubmit={form.onSubmit(() => {
@@ -69,7 +64,6 @@ export default function CreateWorkslotForm() {
             my="1rem"
           />
 
-
           <TextInput
             label="Barista"
             placeholder="number of barista"
@@ -104,9 +98,7 @@ export default function CreateWorkslotForm() {
             {...form.getInputProps("waiters_required")}
             my="1rem"
             type="number"
-          />          
-
-
+          />
 
           <Button type="submit" my="1rem" w="100%">
             Create
@@ -114,7 +106,7 @@ export default function CreateWorkslotForm() {
         </Box>
       </Modal>
 
-      <Button onClick={open}>Create Work</Button>
+      <Button onClick={open}>Create Work Slot</Button>
     </>
   );
 }

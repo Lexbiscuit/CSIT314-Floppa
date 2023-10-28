@@ -1,42 +1,40 @@
 import express from "express";
+import cors from "cors";
 import accountRoutes from "./Routes/accountRoutes.js";
 import profileRoutes from "./Routes/profileRoutes.js";
 import workslotRoutes from "./Routes/workslotRoutes.js";
-import { PrismaClient } from "@prisma/client";
-import LoginController from "./Controllers/LoginController.js";
 import bidRoutes from "./Routes/BidRoutes.js";
-import auth from "./auth.cjs";
-
+import authRoutes from "./Routes/authRoutes.js";
 
 const app = express();
 const port = 3000;
-const prisma = new PrismaClient();
 
 // -- middleware --
 app.use(express.json()); // parses incoming requests with JSON payloads
 
 // -- CORS --
-app.use((req, res, next) => {
-  res.setHeader("Access-Control-Allow-Origin", "*");
-  res.setHeader(
+var corsOptions = {
+  origin: "http://localhost:5173",
+};
+app.use(cors(corsOptions));
+
+app.use(function (req, res, next) {
+  res.header(
     "Access-Control-Allow-Headers",
-    "Origin, X-Requested-With, Content, Accept, Content-Type, Authorization",
-  );
-  res.setHeader(
-    "Access-Control-Allow-Methods",
-    "GET, POST, PUT, DELETE, PATCH, OPTIONS",
+    "x-access-token, Origin, Content-Type, Accept"
   );
   next();
 });
 
+// parse requests of content-type - application/x-www-form-urlencoded
+app.use(express.urlencoded({ extended: true }));
+
+// -- routes --
 app.all("/", (req, res) => {
   res.send("Hello World!");
 });
 
-app.post("/login", async (req, res) => {
-  const { email, password } = req.body;
-  new LoginController(prisma, req, res).loginAccount(email, password);
-});
+app.use("/auth", authRoutes);
 
 app.use("/accounts", accountRoutes);
 

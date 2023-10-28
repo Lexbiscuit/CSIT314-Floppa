@@ -5,13 +5,13 @@ import RetrieveAccountController from "../Controllers/Account/RetrieveAccountCon
 import UpdateAccountController from "../Controllers/Account/UpdateAccountController.js";
 import DeleteAccountController from "../Controllers/Account/DeleteAccountController.js";
 import SearchAccountController from "../Controllers/Account/SearchAccountController.js";
-import auth from "../auth.cjs";
+import { authJwt } from "../Middleware/authJwt.js";
 
 const accountRoutes = Router();
 const prisma = new PrismaClient();
 
 // accountRoutes.post("/create", auth, async (req, res) => {
-accountRoutes.post("/create", async (req, res) => {
+accountRoutes.post("/create", [authJwt.verifyToken], async (req, res) => {
   const { name, profile, email, password, role, dob } = req.body;
 
   const createAccountController = new CreateAccountController(prisma, req, res);
@@ -22,23 +22,23 @@ accountRoutes.post("/create", async (req, res) => {
     email,
     password,
     role,
-    dob,
+    dob
   );
 });
 
 // accountRoutes.get("/retrieve", auth, async (req, res) => {
-accountRoutes.get("/retrieve", async (req, res) => {
+accountRoutes.get("/retrieve", [authJwt.verifyToken], async (req, res) => {
   const retrieveAccountController = new RetrieveAccountController(
     prisma,
     req,
-    res,
+    res
   );
 
   await retrieveAccountController.retrieveAccounts();
 });
 
 // accountRoutes.put("/update", auth, async (req, res) => {
-accountRoutes.put("/update", async (req, res) => {
+accountRoutes.put("/update", [authJwt.verifyToken], async (req, res) => {
   const { accountId, name, email, password, role, dob } = req.body;
 
   const updateAccountController = new UpdateAccountController(prisma, req, res);
@@ -49,12 +49,12 @@ accountRoutes.put("/update", async (req, res) => {
     email,
     password,
     role,
-    dob,
+    dob
   );
 });
 
 // accountRoutes.delete("/delete", auth, async (req, res) => {
-accountRoutes.delete("/delete", async (req, res) => {
+accountRoutes.delete("/delete", [authJwt.verifyToken], async (req, res) => {
   const { accountId } = req.body;
 
   const deleteAccountController = new DeleteAccountController(prisma, req, res);
@@ -63,12 +63,20 @@ accountRoutes.delete("/delete", async (req, res) => {
 });
 
 // accountRoutes.get("/search/:accountId", auth, async (req, res) => {
-accountRoutes.get("/search/:accountId", async (req, res) => {
-  const { accountId } = req.params;
+accountRoutes.get(
+  "/search/:accountId",
+  [authJwt.verifyToken],
+  async (req, res) => {
+    const { accountId } = req.params;
 
-  const searchAccountController = new SearchAccountController(prisma, req, res);
+    const searchAccountController = new SearchAccountController(
+      prisma,
+      req,
+      res
+    );
 
-  await searchAccountController.searchAccount(accountId);
-});
+    await searchAccountController.searchAccount(accountId);
+  }
+);
 
 export default accountRoutes;
