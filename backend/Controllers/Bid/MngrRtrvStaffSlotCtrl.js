@@ -18,7 +18,7 @@ export default class MngrRtrvStaffSlotCtrl {
       // Step 2: Retrieve all work slots associated with the account.
       const workSlotsForAccount = await this.prisma.Workslots.findMany({
         where: {
-          bids: {
+          Bids: {
             some: {
               accountId: accountId,
             },
