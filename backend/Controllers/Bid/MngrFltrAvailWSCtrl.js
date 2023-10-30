@@ -18,7 +18,7 @@ export default class MngrFltrAvailWSCtrl {
       const availableWorkslots = await this.prisma.Workslots.findMany({
         
         where: {
-           bids: null,
+           Bids: null,
         },
         
         orderBy: [
