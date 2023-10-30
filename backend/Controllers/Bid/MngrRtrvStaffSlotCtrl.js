@@ -7,25 +7,27 @@ export default class MngrRtrvStaffSlotCtrl {
     this.res = res;
   }
 
-  async viewStaffWithSlot() {
+  /**
+   * Retrieves all work slots associated with a given account.
+   *
+   * @param {int} accountId - The account ID for which to retrieve work slots.
+   * @returns {Workslots[]} - An array of work slots associated with the account.
+   */
+  async viewWorkSlotsForAccount(accountId) {
     try {
-      const staffWithAssignedWorkSlots = await this.prisma.Staff.findMany({
+      // Step 2: Retrieve all work slots associated with the account.
+      const workSlotsForAccount = await this.prisma.Workslots.findMany({
         where: {
-          // Modify the condition to filter staff with assigned work slots.
-          // You need to have a relation between staff and work slots in your database.
-          workslots: {
+          Bids: {
             some: {
-              // Define the condition that indicates a work slot is assigned to the staff.
-              // For example, you might check if a staff ID is associated with a work slot.
-              // Adjust this condition to match your schema.
-              staffId: {
-                not: null,
-              },
+              accountId: accountId,
             },
           },
         },
       });
-      this.res.status(200).json(staffWithAssignedWorkSlots);
+
+      // Step 3: Display all records.
+      this.res.status(200).json(workSlotsForAccount);
     } catch (err) {
       console.error(err);
 

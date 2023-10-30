@@ -59,7 +59,9 @@ export default class Accounts {
       },
       data: {
         name: name,
-        description: description,
+        email: email,
+        role: role,
+        dob: dob,
       },
     });
     return response;
