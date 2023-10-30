@@ -30,10 +30,11 @@ model Accounts {
   email     String   @unique @db.Text
   password  String   @db.Text
   dob       DateTime @db.Date
-  role      String?  @db.Text
+  roleId    Int?     @db.Integer
 
   profile Profiles @relation(fields: [profileId], references: [profileId])
   bids    Bids[]
+  role    Roles?   @relation(fields: [roleId], references: [roleId])
 
   @@map("Accounts")
 }
@@ -53,21 +54,32 @@ model Workslots {
   startTime  DateTime @db.Timestamp
   endTime    DateTime @db.Timestamp
 
-  Bids            Bids[]
-  Workslots_Roles Workslots_Roles[]
+  bids            Bids[]
+  workslots_roles Workslots_Roles[]
 
   @@map("Workslots")
 }
 
 model Workslots_Roles {
-  workslotRoleId Int    @id @default(autoincrement()) @db.Integer
-  workslotId     Int    @db.Integer
-  role           String @db.Text
-  count          Int    @db.Integer
+  workslotRoleId Int @id @default(autoincrement()) @db.Integer
+  workslotId     Int @db.Integer
+  roleId         Int @db.Integer
+  count          Int @db.Integer
 
   workslot Workslots @relation(fields: [workslotId], references: [workslotId])
+  role     Roles     @relation(fields: [roleId], references: [roleId])
 
   @@map("Workslots_Roles")
+}
+
+model Roles {
+  roleId   Int    @id @default(autoincrement()) @db.Integer
+  roleName String @db.Text
+
+  workslots_roles Workslots_Roles[]
+  Accounts        Accounts[]
+
+  @@map("Roles")
 }
 
 // model Suspendedaccounts {
