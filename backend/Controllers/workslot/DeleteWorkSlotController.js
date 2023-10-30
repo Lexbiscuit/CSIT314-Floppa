@@ -1,4 +1,5 @@
 import { Prisma } from "@prisma/client";
+import Workslots from "../../Entity/Workslots.mjs";
 
 export default class DeleteWorkslotController {
   constructor(prisma, req, res) {
@@ -9,11 +10,15 @@ export default class DeleteWorkslotController {
 
   async deleteWorkslot(workslotId) {
     try {
-      const deleteWorkslots = await this.prisma.Workslots.delete({
+      /* const deleteWorkslots = await this.prisma.Workslots.delete({
         where: {
           workslotId: Number(workslotId),
         },
-      });
+      }); */
+
+      const workslot = new Workslots();
+      const deleteWorkslot = await workslot.deleteWorkslot(workslotId);
+      
 
       // 200 OK
       this.res.status(200).send({message:"Workslot deleted successfully."});

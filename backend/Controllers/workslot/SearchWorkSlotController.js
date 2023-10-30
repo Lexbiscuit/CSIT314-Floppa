@@ -1,4 +1,5 @@
 import { Prisma } from "@prisma/client";
+import Workslots from "../../Entity/Workslots.mjs";
 
 export default class SearchWorkSlotController {
   constructor(prisma, req, res) {
@@ -9,11 +10,14 @@ export default class SearchWorkSlotController {
 
   async searchWorkslot(workslotId) {
     try {
-      const searchWorkslot = await this.prisma.workslots.findUnique({
+      /* const searchWorkslot = await this.prisma.workslots.findUnique({
         where: {
           workslotId: Number(workslotId),
         },
-      });
+      }); */
+
+      const workslot = new Workslots();
+      const searchWorkslot = workslot.search(workslotId);
 
       // 200 OK
       this.res.status(200).json(searchWorkslot);
