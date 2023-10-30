@@ -52,14 +52,16 @@ export default class Accounts {
     return response;
   }
 
-  async updateAccount(accountId, name, description) {
+  async updateAccount(accountId, name, profile, email, hashedPassword, role, dob) {
     const response = await this.prisma.Accounts.update({
       where: {
         accountId: Number(accountId),
       },
       data: {
         name: name,
+        profile: profile,
         email: email,
+        password: hashedPassword,
         role: role,
         dob: dob,
       },

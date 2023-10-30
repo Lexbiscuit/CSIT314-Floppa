@@ -16,8 +16,8 @@ export default class DeleteWorkslotController {
         },
       }); */
 
-      const workslot = new Workslots();
-      const deleteWorkslot = await workslot.deleteWorkslot(workslotId);
+      const workslot = new Workslots(); //instantiates workslot object
+      const deleteWorkslot = await workslot.deleteWorkslot(workslotId); // called the workslot delete function present in the Workslot entity.
       
 
       // 200 OK
