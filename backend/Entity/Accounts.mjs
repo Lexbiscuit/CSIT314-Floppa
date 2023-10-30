@@ -1,88 +1,74 @@
 import * as bcrypt from "bcrypt";
 
-export class InvalidProfileError extends Error {
-  constructor(message) {
-    super(message);
-    this.name = "InvalidProfileError";
-  }
-}
-
 export default class Accounts {
   constructor(prisma) {
     this.prisma = prisma;
   }
 
-  async createAccount(name, profile, email, password, role, dob) {
+  async createAccount(name, profileId, email, password, roleId, dob) {
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    const tempProfile = await this.prisma.Profiles.findFirst({
-      where: {
-        name: profile,
-      },
-
-      select: {
-        profileId: true,
-      },
-    });
-
-    if (!tempProfile)
-      throw new InvalidProfileError(
-        `'${profile}' is not a valid profile name.`
-      );
-
-    const response = await this.prisma.Accounts.create({
+    await this.prisma.Accounts.create({
       data: {
         name: name,
-        profileId: tempProfile.profileId,
+        profileId: Number(profileId),
         email: email,
         password: hashedPassword,
-        role: role,
+        roleId: Number(roleId),
         dob: dob,
       },
     });
 
-    return response;
+    return { message: "Account created successfully" };
   }
 
   async retrieveAccounts() {
     const response = await this.prisma
-      .$queryRaw`select "accountId", pro.name as profile, acc.name, acc.email, acc.password, acc.role, acc.dob 
+      .$queryRaw`select "accountId", pro.name as profile, acc.name, acc.email, acc.password, acc.roleId, acc.dob 
       from "Accounts" as acc
       inner join "Profiles" as pro on acc."profileId"=pro."profileId"`;
     return response;
   }
 
-  async updateAccount(accountId, name, profile, email, hashedPassword, role, dob) {
-    const response = await this.prisma.Accounts.update({
+  async updateAccount(
+    accountId,
+    name,
+    profileId,
+    email,
+    password,
+    roleId,
+    dob
+  ) {
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    await this.prisma.Accounts.update({
       where: {
         accountId: Number(accountId),
       },
       data: {
         name: name,
-        profile: profile,
+        profileId: Number(profileId),
         email: email,
         password: hashedPassword,
-        role: role,
+        roleId: Number(roleId),
         dob: dob,
       },
     });
-    return response;
+    return { message: "Account updated successfully" };
   }
 
   async deleteAccount(accountId) {
-    const response = await this.prisma.Accounts.delete({
+    await this.prisma.Accounts.delete({
       where: {
         accountId: Number(accountId),
       },
     });
-    return response;
+    return { message: "Account deleted successfully" };
   }
 
-  async searchAccount(accountId) {
-    const response = await this.prisma.Accounts.findUnique({
-      where: {
-        accountId: Number(accountId),
-      },
+  async searchAccount(accountFilter) {
+    const response = await this.prisma.Accounts.findMany({
+      where: accountFilter,
     });
     return response;
   }

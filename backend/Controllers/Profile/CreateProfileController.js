@@ -1,4 +1,5 @@
 import { Prisma } from "@prisma/client";
+import Profiles from "../../Entity/Profiles.mjs";
 
 export default class CreateProfileController {
   constructor(prisma, req, res) {
@@ -9,22 +10,17 @@ export default class CreateProfileController {
 
   async createProfile(name, description) {
     try {
-      const createProfile = await this.prisma.Profiles.create({
-        data: {
-          name: name,
-          description: description,
-        },
-      });
+      const profile = new Profiles(this.prisma);
+      const response = await profile.createProfile(name, description);
 
       // 201 CREATED
-      this.res.status(201).send({ message: "Profile created successfully." });
+      this.res.status(201).json(response);
     } catch (err) {
       if (err instanceof Prisma.PrismaClientKnownRequestError) {
-        if (err.code === "P2002")
-          this.res.status(500).send({ message: err.message });
+        this.res.status(500).send({ message: err.message });
       } else {
         // 500 INTERNAL SERVER ERROR
-        this.res.status(500).send({ message: "Internal Server Error." });
+        this.res.status(500).send({ message: err });
       }
     }
   }

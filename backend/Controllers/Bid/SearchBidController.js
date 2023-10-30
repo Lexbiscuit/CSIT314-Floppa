@@ -7,25 +7,17 @@ export default class SearchBidController {
     this.res = res;
   }
 
-  async searchBid(bidId, accountId, workslotId, status) {
+  async searchBid(bidFilter) {
     try {
-      const searchBid = await this.prisma.workslots.findUnique({
-        where: {
-          bidId: Number(bidId),
-          accountId: Number(accountId),
-          workslotId: Number(workslotId),
-          status: status,
-        },
+      const searchBid = await this.prisma.workslots.findMany({
+        where: bidFilter,
       });
 
       // 200 OK
       this.res.status(200).json(searchBid);
     } catch (err) {
-      console.error(err);
-
       // 500 INTERNAL SERVER ERROR
-      console.log(err);
-      this.res.status(500).send({ message: "Internal Server Error." });
+      this.res.status(500).send({ message: err });
     }
   }
 }

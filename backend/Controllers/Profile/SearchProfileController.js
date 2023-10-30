@@ -1,3 +1,5 @@
+import Profiles from "../../Entity/Profile.mjs";
+
 export default class SearchProfileController {
   constructor(prisma, req, res) {
     this.prisma = prisma;
@@ -5,21 +7,16 @@ export default class SearchProfileController {
     this.res = res;
   }
 
-  async searchProfile(profileId) {
+  async searchProfile(profileFilter) {
     try {
-      const searchProfile = await this.prisma.Profiles.findUnique({
-        where: {
-          profileId: Number(profileId),
-        },
-      });
+      const profile = new Profiles(this.prisma);
+      const response = await profile.searchProfile(profileFilter);
 
       // 200 OK
-      this.res.status(200).json(searchProfile);
+      this.res.status(200).json(response);
     } catch (err) {
-      console.error(err);
-
       // 500 INTERNAL SERVER ERROR
-      this.res.status(500).send({ message: "Internal Server Error." });
+      this.res.status(500).send({ message: err });
     }
   }
 }

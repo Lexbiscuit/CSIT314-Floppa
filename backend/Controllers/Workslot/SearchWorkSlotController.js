@@ -1,4 +1,3 @@
-import { Prisma } from "@prisma/client";
 import Workslots from "../../Entity/Workslots.mjs";
 
 export default class SearchWorkSlotController {
@@ -8,25 +7,16 @@ export default class SearchWorkSlotController {
     this.res = res;
   }
 
-  async searchWorkslot(workslotId) {
+  async searchWorkslot(workslotFilter) {
     try {
-      /* const searchWorkslot = await this.prisma.workslots.findUnique({
-        where: {
-          workslotId: Number(workslotId),
-        },
-      }); */
-
       const workslot = new Workslots();
-      const searchWorkslot = workslot.search(workslotId);
+      const response = workslot.searchWorkslot(workslotFilter);
 
       // 200 OK
-      this.res.status(200).json(searchWorkslot);
+      this.res.status(200).json(response);
     } catch (err) {
-      console.error(err);
-
       // 500 INTERNAL SERVER ERROR
-      console.log(err);
-      this.res.status(500).send({ message: "Internal Server Error." });
+      this.res.status(500).send({ message: err });
     }
   }
 }

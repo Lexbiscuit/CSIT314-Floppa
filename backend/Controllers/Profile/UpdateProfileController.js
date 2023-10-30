@@ -1,4 +1,5 @@
 import { Prisma } from "@prisma/client";
+import Profiles from "../../Entity/Profiles.mjs";
 
 export default class UpdateProfileController {
   constructor(prisma, req, res) {
@@ -9,25 +10,21 @@ export default class UpdateProfileController {
 
   async updateProfile(profileId, name, description) {
     try {
-      const updateProfile = await this.prisma.Profiles.update({
-        where: {
-          profileId: Number(profileId),
-        },
-        data: {
-          name: name,
-          description: description,
-        },
-      });
+      const profile = new Profiles(this.prisma);
+      const response = await profile.updateProfile(
+        profileId,
+        name,
+        description
+      );
 
       // 200 OK
-      this.res.status(200).send({ message: "Profile updated successfully." });
+      this.res.status(200).json(response);
     } catch (err) {
       if (err instanceof Prisma.PrismaClientKnownRequestError) {
-        if (err.code === "P2025")
-          this.res.status(500).send({ message: "Record to update not found." });
+        this.res.status(500).send({ message: err.message });
       } else {
         // 500 INTERNAL SERVER ERROR
-        this.res.status(500).send({ message: "Internal Server Error." });
+        this.res.status(500).send({ message: err });
       }
     }
   }

@@ -1,4 +1,4 @@
-import { Prisma } from "@prisma/client";
+import Workslots from "../../Entity/Workslots.mjs";
 
 export default class RetrieveWorkslotController {
   constructor(prisma, req, res) {
@@ -9,22 +9,14 @@ export default class RetrieveWorkslotController {
 
   async retrieveWorkslots() {
     try {
-      const retrieveWorkslot = await this.prisma.Workslots.findMany({
-        orderBy: [
-          {
-            workslotId: "asc",
-          },
-        ],
-      });
+      const workslot = new Workslots();
+      const response = await workslot.retrieveWorkslots();
 
       // 200 OK
-      this.res.status(200).json(retrieveWorkslot);
+      this.res.status(200).json(response);
     } catch (err) {
-      console.error(err);
-
       // 500 INTERNAL SERVER ERROR
-      console.log(err);
-      this.res.status(500).send({ message: "Internal Server Error." });
+      this.res.status(500).send({ message: err });
     }
   }
 }

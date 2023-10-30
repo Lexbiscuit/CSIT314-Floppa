@@ -9,7 +9,6 @@ export default class CreateBidController {
 
   async createBid(accountId, workslotId, status, reason) {
     try {
-
       const newBid = await this.prisma.Bids.create({
         data: {
           accountId: accountId,
@@ -31,5 +30,4 @@ export default class CreateBidController {
       }
     }
   }
-
 }

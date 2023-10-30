@@ -10,39 +10,46 @@ import { authJwt } from "../middleware/authJwt.js";
 const profileRoutes = Router();
 const prisma = new PrismaClient();
 
-profileRoutes.post("/create", [authJwt.verifyToken], async (req, res) => {
+// profileRoutes.post("/create", [authJwt.verifyToken], async (req, res) => {
+profileRoutes.post("/create", async (req, res) => {
   const { name, description } = req.body;
-  new CreateProfileController(prisma, req, res).createProfile(
-    name,
-    description
+
+  const createProfileController = new CreateProfileController(prisma, req, res);
+  await createProfileController.createProfile(name, description);
+});
+
+// profileRoutes.get("/retrieve", [authJwt.verifyToken], async (req, res) => {
+profileRoutes.get("/retrieve", async (req, res) => {
+  const retrieveProfileController = new RetrieveProfileController(
+    prisma,
+    req,
+    res
   );
+  await retrieveProfileController.retrieveProfiles();
 });
 
-profileRoutes.get("/retrieve", [authJwt.verifyToken], async (req, res) => {
-  new RetrieveProfileController(prisma, req, res).retrieveProfiles();
-});
-
-profileRoutes.put("/update", [authJwt.verifyToken], async (req, res) => {
+// profileRoutes.put("/update", [authJwt.verifyToken], async (req, res) => {
+profileRoutes.put("/update", async (req, res) => {
   const { profileId, name, description } = req.body;
-  new UpdateProfileController(prisma, req, res).updateProfile(
-    profileId,
-    name,
-    description
-  );
+
+  const updateProfileController = new UpdateProfileController(prisma, req, res);
+  await updateProfileController.updateProfile(profileId, name, description);
 });
 
-profileRoutes.delete("/delete", [authJwt.verifyToken], async (req, res) => {
+// profileRoutes.delete("/delete", [authJwt.verifyToken], async (req, res) => {
+profileRoutes.delete("/delete", async (req, res) => {
   const { profileId } = req.body;
-  new DeleteProfileController(prisma, req, res).deleteProfile(profileId);
+
+  const deleteProfileController = new DeleteProfileController(prisma, req, res);
+  await deleteProfileController.deleteProfile(profileId);
 });
 
-profileRoutes.get(
-  "/search/:profileId",
-  [authJwt.verifyToken],
-  async (req, res) => {
-    const { profileId } = req.params;
-    new SearchProfileController(prisma, req, res).searchProfile(profileId);
-  }
-);
+// profileRoutes.get("/search", [authJwt.verifyToken], async (req, res) => {
+profileRoutes.get("/search", async (req, res) => {
+  const profileFilter = req.query;
+
+  const searchProfileController = new SearchProfileController(prisma, req, res);
+  await searchProfileController.searchProfile(profileFilter);
+});
 
 export default profileRoutes;

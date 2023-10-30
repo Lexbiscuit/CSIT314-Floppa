@@ -7,17 +7,12 @@ const prisma = new PrismaClient();
 
 authRoutes.post("/login", async (req, res) => {
   const { email, password } = req.body;
-
-  const loginController = new LoginController(prisma, req, res);
-
   try {
+    const loginController = new LoginController(prisma, req, res);
     await loginController.loginAccount(email, password);
   } catch (err) {
-    console.log(err);
-    return res.status(500).json({ message: "Internal server error" });
+    return res.status(500).json({ message: err });
   }
-
-  //   return res.status(200).json({ user: user, message: "Login Successful." });
 });
 
 export default authRoutes;

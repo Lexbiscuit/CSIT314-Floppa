@@ -1,6 +1,5 @@
 import { Prisma } from "@prisma/client";
 import Accounts from "../../Entity/Accounts.mjs";
-import { InvalidProfileError } from "../../Entity/Accounts.mjs";
 
 export default class CreateAccountController {
   constructor(prisma, req, res) {
@@ -9,31 +8,27 @@ export default class CreateAccountController {
     this.res = res;
   }
 
-  async createAccount(name, profile, email, password, role, dob) {
+  async createAccount(name, profileId, email, password, roleId, dob) {
     try {
       const accounts = new Accounts(this.prisma);
 
-      const createAccount = await accounts.createAccount(
+      const response = await accounts.createAccount(
         name,
-        profile,
+        profileId,
         email,
         password,
-        role,
+        roleId,
         dob
       );
 
       // 201 CREATED
-      this.res.status(201).send({ message: "Account created successfully." });
+      this.res.status(201).json(response);
     } catch (err) {
       if (err instanceof Prisma.PrismaClientKnownRequestError) {
-        if (err.code === "P2002")
-          this.res.status(500).send({ message: err.message });
-      } else if (err instanceof InvalidProfileError) {
         this.res.status(500).send({ message: err.message });
       } else {
         // 500 INTERNAL SERVER ERROR
-        console.log(err);
-        this.res.status(500).send({ message: "Internal System Error" });
+        this.res.status(500).send({ message: err });
       }
     }
   }

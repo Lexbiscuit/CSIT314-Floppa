@@ -1,4 +1,5 @@
 import { Prisma } from "@prisma/client";
+import Profiles from "../../Entity/Profile.mjs";
 
 export default class DeleteProfileController {
   constructor(prisma, req, res) {
@@ -9,24 +10,17 @@ export default class DeleteProfileController {
 
   async deleteProfile(profileId) {
     try {
-      const deleteProfile = await this.prisma.Profiles.delete({
-        where: {
-          profileId: Number(profileId),
-        },
-      });
+      const profile = new Profiles(this.prisma);
+      const response = await profile.deleteProfile(profileId);
 
       // 200 OK
-      this.res.status(200).send({ message: "Profile deleted successfully." });
+      this.res.status(200).json(response);
     } catch (err) {
       if (err instanceof Prisma.PrismaClientKnownRequestError) {
-        if (err.code === "P2025") {
-          this.res
-            .status(500)
-            .send({ message: "Record to delete does not exist." });
-        }
+        this.res.status(500).send({ message: err.message });
       } else {
         // 500 INTERNAL SERVER ERROR
-        this.res.status(500).send({ message: "Internal Server Error." });
+        this.res.status(500).send({ message: err });
       }
     }
   }

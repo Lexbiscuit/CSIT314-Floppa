@@ -1,3 +1,5 @@
+import Profiles from "../../Entity/Profile.mjs";
+
 export default class RetrieveProfileController {
   constructor(prisma, req, res) {
     this.prisma = prisma;
@@ -7,21 +9,14 @@ export default class RetrieveProfileController {
 
   async retrieveProfiles() {
     try {
-      const retrieveProfiles = await this.prisma.Profiles.findMany({
-        orderBy: [
-          {
-            profileId: "asc",
-          },
-        ],
-      });
+      const profile = new Profiles(this.prisma);
+      const response = await profile.retrieveProfiles();
 
       // 200 OK
-      this.res.status(200).json(retrieveProfiles);
+      this.res.status(200).json(response);
     } catch (err) {
-      console.error(err);
-
       // 500 INTERNAL SERVER ERROR
-      this.res.status(500).send({ message: "Internal Server Error." });
+      this.res.status(500).send({ message: err });
     }
   }
 }

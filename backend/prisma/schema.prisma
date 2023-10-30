@@ -17,8 +17,8 @@ model Bids {
   status     String  @db.Text
   reason     String? @db.Text
 
-  account  Accounts  @relation(fields: [accountId], references: [accountId])
-  workslot Workslots @relation(fields: [workslotId], references: [workslotId])
+  accounts  Accounts  @relation(fields: [accountId], references: [accountId])
+  workslots Workslots @relation(fields: [workslotId], references: [workslotId])
 
   @@map("Bids")
 }
@@ -32,9 +32,9 @@ model Accounts {
   dob       DateTime @db.Date
   roleId    Int?     @db.Integer
 
-  profile Profiles @relation(fields: [profileId], references: [profileId])
-  bids    Bids[]
-  role    Roles?   @relation(fields: [roleId], references: [roleId])
+  profiles Profiles @relation(fields: [profileId], references: [profileId])
+  bids     Bids[]
+  roles    Roles?   @relation(fields: [roleId], references: [roleId])
 
   @@map("Accounts")
 }
@@ -66,8 +66,8 @@ model Workslots_Roles {
   roleId         Int @db.Integer
   count          Int @db.Integer
 
-  workslot Workslots @relation(fields: [workslotId], references: [workslotId])
-  role     Roles     @relation(fields: [roleId], references: [roleId])
+  workslots Workslots @relation(fields: [workslotId], references: [workslotId])
+  roles     Roles     @relation(fields: [roleId], references: [roleId])
 
   @@map("Workslots_Roles")
 }
@@ -77,18 +77,7 @@ model Roles {
   roleName String @db.Text
 
   workslots_roles Workslots_Roles[]
-  Accounts        Accounts[]
+  accounts        Accounts[]
 
   @@map("Roles")
 }
-
-// model Suspendedaccounts {
-// suspendedaccountId  Int @id @default(autoincrement()) @db.Integer
-// accountId Int @db.Integer
-
-// }
-
-// model Suspendedprofiles {
-// suspendedprofileId  Int @id @default(autoincrement()) @db.Integer
-
-// }

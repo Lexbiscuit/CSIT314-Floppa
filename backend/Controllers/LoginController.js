@@ -9,7 +9,7 @@ export default class LoginController {
   }
 
   loginAccount = async (email, password) => {
-    await this.prisma.Accounts.findFirst({
+    await this.prisma.Accounts.findUnique({
       where: {
         email: email,
       },
@@ -21,25 +21,15 @@ export default class LoginController {
             .send({ message: "Incorrect email or password." });
         }
 
-        const token = jwt.sign(
-          {
-            name: account.name,
-            email: account.email,
-            profileId: account.profileId,
-            role: account.role,
-          },
-          process.env.JWT_SECRET,
-          {
-            algorithm: "HS256",
-            allowInsecureKeySizes: true,
-            expiresIn: 60 * 60 * 2, // 2 hours
-          }
-        );
+        const token = jwt.sign(account, process.env.JWT_SECRET, {
+          algorithm: "HS256",
+          allowInsecureKeySizes: true,
+          expiresIn: 60 * 60 * 2, // 2 hours
+        });
 
         this.res.status(200).send({
           message: "Login Successful.",
           name: account.name,
-          email: account.email,
           profileId: account.profileId,
           role: account.role,
           accessToken: token,

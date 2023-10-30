@@ -8,17 +8,15 @@ export default class RetrieveAccountController {
   }
 
   async retrieveAccounts() {
-    const accounts = new Accounts(this.prisma);
-    const retrieveAccounts = await accounts.retrieveAccounts();
+    try {
+      const accounts = new Accounts(this.prisma);
+      const response = await accounts.retrieveAccounts();
 
-    console.log(retrieveAccounts);
-    // 200 OK
-    this.res.status(200).json(retrieveAccounts);
-  }
-  catch(err) {
-    console.error(err);
-
-    // 500 INTERNAL SERVER ERROR
-    this.res.status(500).send({ message: "Internal Server Error." });
+      // 200 OK
+      this.res.status(200).json(response);
+    } catch (err) {
+      // 500 INTERNAL SERVER ERROR
+      this.res.status(500).send({ message: err });
+    }
   }
 }

@@ -1,5 +1,5 @@
 import { Prisma } from "@prisma/client";
-import * as bcrypt from "bcrypt";
+import Accounts from "../../Entity/Accounts.mjs";
 
 export default class UpdateAccountController {
   constructor(prisma, req, res) {
@@ -8,48 +8,35 @@ export default class UpdateAccountController {
     this.res = res;
   }
 
-  async updateAccount(accountId, name, email, password, role, dob) {
+  async updateAccount(
+    accountId,
+    name,
+    profileId,
+    email,
+    password,
+    roleId,
+    dob
+  ) {
     try {
-      if (password != "") {
-        const hashedPassword = await bcrypt.hash(password, 10);
-        const updateAccount = await this.prisma.Accounts.update({
-          where: {
-            accountId: Number(accountId),
-          },
-          data: {
-            name: name,
-            email: email,
-            password: hashedPassword,
-            role: role,
-            dob: dob,
-          },
-        });
-      } else {
-        const updateAccount = await this.prisma.accounts.update({
-          where: {
-            accountId: Number(accountId),
-          },
-          data: {
-            name: name,
-            email: email,
-            role: role,
-            dob: dob,
-          },
-        });
-      }
+      const accounts = new Accounts(this.prisma);
+      const response = await accounts.updateAccount(
+        accountId,
+        name,
+        profileId,
+        email,
+        password,
+        roleId,
+        dob
+      );
 
       // 200 OK
-      this.res.status(200).send({ message: "Account updated successfully." });
+      this.res.status(200).json(response);
     } catch (err) {
       if (err instanceof Prisma.PrismaClientKnownRequestError) {
-        if (err.code === "P2025")
-          this.res.status(500).send({ message: err.message });
-        else if (err.code === "P2002")
-          this.res.status(500).send({ message: err.message });
+        this.res.status(500).send({ message: err.message });
       } else {
         // 500 INTERNAL SERVER ERROR
-        console.log(err);
-        this.res.status(500).send({ message: "Internal Server Error." });
+        this.res.status(500).send({ message: err });
       }
     }
   }

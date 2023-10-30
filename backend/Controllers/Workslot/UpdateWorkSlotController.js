@@ -1,4 +1,5 @@
 import { Prisma } from "@prisma/client";
+import Workslots from "../../Entity/Workslots.mjs";
 
 export default class UpdateWorkslotController {
   constructor(prisma, req, res) {
@@ -7,38 +8,23 @@ export default class UpdateWorkslotController {
     this.res = res;
   }
 
-  async updateWorkslot(
-    workslotId,
-    date,
-    baristas_required,
-    cashiers_required,
-    chefs_required,
-    waiters_required,
-  ) {
+  async updateWorkslot(workslotId, startTime, endTime) {
     try {
-      const updateWorkslot = await this.prisma.Workslots.update({
-        where: {
-          workslotId: Number(workslotId),
-        },
-        data: {
-          date: date,
-          chefs_required: chefs_required,
-          waiters_required: waiters_required,
-          cashiers_required: cashiers_required,
-          baristas_required: baristas_required,
-        },
-      });
+      const workslot = new Workslots();
+      const response = await workslot.updateWorkslot(
+        workslotId,
+        startTime,
+        endTime
+      );
 
       // 200 OK
-      this.res.status(200).send({ message: "Workslot updated successfully." });
+      this.res.status(200).json(response);
     } catch (err) {
       if (err instanceof Prisma.PrismaClientKnownRequestError) {
-        if (err.code === "P2025")
-          this.res.status(500).send({ message: "Record to update not found." });
+        this.res.status(500).send({ message: err.message });
       } else {
         // 500 INTERNAL SERVER ERROR
-        console.log(err);
-        this.res.status(500).send({ message: "Internal Server Error." });
+        this.res.status(500).send({ message: err });
       }
     }
   }
