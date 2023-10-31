@@ -1,5 +1,5 @@
 import { Prisma } from "@prisma/client";
-import Profiles from "../../Entity/Profile.mjs";
+import Profiles from "../../Entity/Profiles.mjs";
 
 export default class DeleteProfileController {
   constructor(prisma, req, res) {

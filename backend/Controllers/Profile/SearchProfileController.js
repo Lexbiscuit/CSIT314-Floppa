@@ -1,4 +1,4 @@
-import Profiles from "../../Entity/Profile.mjs";
+import Profiles from "../../Entity/Profiles.mjs";
 
 export default class SearchProfileController {
   constructor(prisma, req, res) {
