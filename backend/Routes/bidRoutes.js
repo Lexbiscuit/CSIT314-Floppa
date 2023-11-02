@@ -67,7 +67,7 @@ bidRoutes.put("/approve", async (req, res) => {
 
 // bidRoutes.put("/reject", [authJwt.verifyToken], async (req, res) => {
 bidRoutes.put("/reject", async (req, res) => {
-  const { bidId, reason } = req.body;
+  const { bidId, accountId, workslotId, reason } = req.body;
 
   const rejectBidController = new RejectBidController(prisma, req, res);
   await rejectBidController.rejectBid(bidId, accountId, workslotId, reason);
