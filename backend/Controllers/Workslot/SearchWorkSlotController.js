@@ -9,8 +9,8 @@ export default class SearchWorkSlotController {
 
   async searchWorkslot(workslotFilter) {
     try {
-      const workslot = new Workslots();
-      const response = workslot.searchWorkslot(workslotFilter);
+      const workslots = new Workslots();
+      const response = workslots.searchWorkslot(workslotFilter);
 
       // 200 OK
       this.res.status(200).json(response);

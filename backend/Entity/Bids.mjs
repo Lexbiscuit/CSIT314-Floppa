@@ -4,10 +4,10 @@ export default class Bids {
   }
 
   async retrieveBids() {
-    const response = await this.prisma.Profiles.findMany({
+    const response = await this.prisma.Bids.findMany({
       orderBy: [
         {
-          profileId: "asc",
+          bidId: "asc",
         },
       ],
     });
@@ -95,14 +95,14 @@ export default class Bids {
   }
 
   async viewStaffBid(accountId) {
-          const response = await this.prisma.Bids.findMany({
-        where: {
-          accountId: accountId,
-        },
-        include: {
-          accounts: true,
-        },
-      });
+    const response = await this.prisma.Bids.findMany({
+      where: {
+        accountId: accountId,
+      },
+      include: {
+        accounts: true,
+      },
+    });
     return response;
   }
 

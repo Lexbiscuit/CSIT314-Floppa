@@ -30,10 +30,10 @@ profileRoutes.get("/retrieve", async (req, res) => {
 
 // profileRoutes.put("/update", [authJwt.verifyToken], async (req, res) => {
 profileRoutes.put("/update", async (req, res) => {
-  const { profileId, name, description } = req.body;
+  const profile = req.body;
 
   const updateProfileController = new UpdateProfileController(prisma, req, res);
-  await updateProfileController.updateProfile(profileId, name, description);
+  await updateProfileController.updateProfile(profile);
 });
 
 // profileRoutes.delete("/delete", [authJwt.verifyToken], async (req, res) => {
@@ -45,8 +45,8 @@ profileRoutes.delete("/delete", async (req, res) => {
 });
 
 // profileRoutes.get("/search", [authJwt.verifyToken], async (req, res) => {
-profileRoutes.get("/search", async (req, res) => {
-  const profileFilter = req.query;
+profileRoutes.post("/search", async (req, res) => {
+  const profileFilter = req.body;
 
   const searchProfileController = new SearchProfileController(prisma, req, res);
   await searchProfileController.searchProfile(profileFilter);

@@ -8,10 +8,10 @@ export default class CreateWorkslotController {
     this.res = res;
   }
 
-  async createWorkslot(startTime, endTime) {
+  async createWorkslot(workslot) {
     try {
       const workslot = new Workslots();
-      const response = await workslot.createWorkslot(startTime, endTime);
+      const response = await workslot.createWorkslot(workslot);
 
       // 201 CREATED
       this.res.status(201).json(response);

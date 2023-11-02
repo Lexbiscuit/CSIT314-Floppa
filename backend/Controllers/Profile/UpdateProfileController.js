@@ -8,14 +8,10 @@ export default class UpdateProfileController {
     this.res = res;
   }
 
-  async updateProfile(profileId, name, description) {
+  async updateProfile(profile) {
     try {
-      const profile = new Profiles(this.prisma);
-      const response = await profile.updateProfile(
-        profileId,
-        name,
-        description
-      );
+      const profiles = new Profiles(this.prisma);
+      const response = await profiles.updateProfile(profile);
 
       // 200 OK
       this.res.status(200).json(response);

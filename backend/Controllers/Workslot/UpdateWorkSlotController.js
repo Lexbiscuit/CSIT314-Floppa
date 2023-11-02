@@ -8,14 +8,10 @@ export default class UpdateWorkslotController {
     this.res = res;
   }
 
-  async updateWorkslot(workslotId, startTime, endTime) {
+  async updateWorkslot(workslot) {
     try {
-      const workslot = new Workslots();
-      const response = await workslot.updateWorkslot(
-        workslotId,
-        startTime,
-        endTime
-      );
+      const workslots = new Workslots();
+      const response = await workslots.updateWorkslot(workslot);
 
       // 200 OK
       this.res.status(200).json(response);

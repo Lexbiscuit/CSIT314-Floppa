@@ -3,12 +3,9 @@ export default class Workslots {
     this.prisma = prisma;
   }
 
-  async createWorkslot(startTime, endTime) {
+  async createWorkslot(workslot) {
     await this.prisma.Workslots.create({
-      data: {
-        startTime: startTime,
-        endTime: endTime,
-      },
+      data: workslot,
     });
 
     return { message: "Workslot created successfully." };
@@ -25,15 +22,15 @@ export default class Workslots {
     return response;
   }
 
-  async updateWorkslot(workslotId, startTime, endTime) {
+  async updateWorkslot(workslot) {
+    const updatedData = JSON.parse(JSON.stringify(workslot));
+    delete updatedData.workslotId;
+
     await this.prisma.Workslots.update({
       where: {
-        workslotId: Number(workslotId),
+        workslotId: Number(workslot.workslotId),
       },
-      data: {
-        startTime: startTime,
-        endTime: endTime,
-      },
+      data: updatedData,
     });
     return { message: "Workslot updated successfully." };
   }

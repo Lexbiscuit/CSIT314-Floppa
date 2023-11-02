@@ -8,27 +8,10 @@ export default class UpdateAccountController {
     this.res = res;
   }
 
-  async updateAccount(
-    accountId,
-    name,
-    profileId,
-    email,
-    password,
-    roleId,
-    dob
-  ) {
+  async updateAccount(account) {
     try {
       const accounts = new Accounts(this.prisma);
-      const response = await accounts.updateAccount(
-        accountId,
-        name,
-        profileId,
-        email,
-        password,
-        roleId,
-        dob
-      );
-
+      const response = await accounts.updateAccount(account);
       // 200 OK
       this.res.status(200).json(response);
     } catch (err) {

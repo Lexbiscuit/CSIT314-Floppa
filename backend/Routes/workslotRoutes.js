@@ -12,14 +12,14 @@ const prisma = new PrismaClient();
 
 // workslotRoutes.post("/create", [authJwt.verifyToken], async (req, res) => {
 workslotRoutes.post("/create", async (req, res) => {
-  const { startTime, endTime } = req.body;
+  const workslot = req.body;
 
   const createWorkslotController = new CreateWorkslotController(
     prisma,
     req,
     res
   );
-  await createWorkslotController.createWorkslot(startTime, endTime);
+  await createWorkslotController.createWorkslot(workslot);
 });
 
 // workslotRoutes.get("/retrieve", [authJwt.verifyToken], async (req, res) => {
@@ -34,14 +34,14 @@ workslotRoutes.get("/retrieve", async (req, res) => {
 
 // workslotRoutes.put("/update", [authJwt.verifyToken], async (req, res) => {
 workslotRoutes.put("/update", async (req, res) => {
-  const { workslotId, startTime, endTime } = req.body;
+  const workslot = req.body;
 
   const updateWorkslotController = new UpdateWorkslotController(
     prisma,
     req,
     res
   );
-  await updateWorkslotController.updateWorkslot(workslotId, startTime, endTime);
+  await updateWorkslotController.updateWorkslot(workslot);
 });
 
 // workslotRoutes.delete("/delete", [authJwt.verifyToken], async (req, res) => {
@@ -57,8 +57,8 @@ workslotRoutes.delete("/delete", async (req, res) => {
 });
 
 // workslotRoutes.get("/search", [authJwt.verifyToken], async (req, res) => {
-workslotRoutes.get("/search", async (req, res) => {
-  const workslotFilter = req.query;
+workslotRoutes.post("/search", async (req, res) => {
+  const workslotFilter = req.body;
 
   const searchWorkslotController = new SearchWorkslotController(
     prisma,

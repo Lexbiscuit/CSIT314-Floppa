@@ -1,5 +1,4 @@
 import * as bcrypt from "bcrypt";
-
 export default class Accounts {
   constructor(prisma) {
     this.prisma = prisma;
@@ -39,29 +38,19 @@ export default class Accounts {
     return response;
   }
 
-  async updateAccount(
-    accountId,
-    name,
-    profileId,
-    email,
-    password,
-    roleId,
-    dob
-  ) {
-    const hashedPassword = await bcrypt.hash(password, 10);
+  async updateAccount(account) {
+    const updatedData = JSON.parse(JSON.stringify(account));
+    if (updatedData.password) {
+      const hashedPassword = await bcrypt.hash(updatedData.password, 10);
+      updatedData.password = hashedPassword;
+    }
+    delete updatedData.accountId;
 
     await this.prisma.Accounts.update({
       where: {
-        accountId: Number(accountId),
+        accountId: Number(account.accountId),
       },
-      data: {
-        name: name,
-        profileId: Number(profileId),
-        email: email,
-        password: hashedPassword,
-        roleId: Number(roleId),
-        dob: dob,
-      },
+      data: updatedData,
     });
     return { message: "Account updated successfully" };
   }

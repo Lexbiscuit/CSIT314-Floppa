@@ -39,18 +39,10 @@ accountRoutes.get("/retrieve", async (req, res) => {
 
 // accountRoutes.put("/update", [authJwt.verifyToken], async (req, res) => {
 accountRoutes.put("/update", async (req, res) => {
-  const { accountId, name, profileId, email, password, roleId, dob } = req.body;
+  const account = req.body;
 
   const updateAccountController = new UpdateAccountController(prisma, req, res);
-  await updateAccountController.updateAccount(
-    accountId,
-    name,
-    profileId,
-    email,
-    password,
-    roleId,
-    dob
-  );
+  await updateAccountController.updateAccount(account);
 });
 
 // accountRoutes.post("/suspend", [authJwt.verifyToken], async (req, res) => {
@@ -78,8 +70,8 @@ accountRoutes.post("/unsuspend", async (req, res) => {
 });
 
 // accountRoutes.get("/search", [authJwt.verifyToken], async (req, res) => {
-accountRoutes.get("/search", async (req, res) => {
-  const accountFilter = req.query;
+accountRoutes.post("/search", async (req, res) => {
+  const accountFilter = req.body;
 
   const searchAccountController = new SearchAccountController(prisma, req, res);
   await searchAccountController.searchAccount(accountFilter);
