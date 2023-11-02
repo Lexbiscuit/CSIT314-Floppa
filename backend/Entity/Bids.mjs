@@ -94,6 +94,18 @@ export default class Bids {
     return response;
   }
 
+  async viewStaffBid(accountId) {
+          const response = await this.prisma.Bids.findMany({
+        where: {
+          accountId: accountId,
+        },
+        include: {
+          accounts: true,
+        },
+      });
+    return response;
+  }
+
   // --------------------- NOT IN USER STORY --------------------- //
   async createBid(accountId, workslotId, status, reason) {
     const response = await this.prisma.Bids.create({
