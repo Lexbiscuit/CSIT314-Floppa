@@ -59,7 +59,7 @@ bidRoutes.get("/staffslots", async (req, res) => {
 // --------------------- APPROVE/REJECT BIDS --------------------- //
 // bidRoutes.put("/approve", [authJwt.verifyToken], async (req, res) => {
 bidRoutes.put("/approve", async (req, res) => {
-  const { bidId } = req.body;
+  const { bidId, accountId, workslotId, status } = req.body;
 
   const approveBidController = new ApproveBidController(prisma, req, res);
   await approveBidController.approveBid(bidId, accountId, workslotId, status);
