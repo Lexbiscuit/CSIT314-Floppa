@@ -70,7 +70,7 @@ bidRoutes.put("/reject", async (req, res) => {
   const { bidId, reason } = req.body;
 
   const rejectBidController = new RejectBidController(prisma, req, res);
-  await rejectBidController.rejectBid(bidId, reason);
+  await rejectBidController.rejectBid(bidId, accountId, workslotId, reason);
 });
 
 // --------------------- NOT IN USER STORY --------------------- //
