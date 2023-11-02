@@ -60,7 +60,7 @@ bidRoutes.get("/staffslots", async (req, res) => {
 // bidRoutes.get("/staffbids/:accountId", [authJwt.verifyToken], async (req, res) => {
   bidRoutes.get("/staffbids/:accountId", async (req, res) => {
     const staffRtrvBidCtlr = new StaffRtrvBidCtlr(prisma, req, res);
-    await staffRtrvBidCtlr.retrieveStaffBids();
+    await staffRtrvBidCtlr.viewStaffBid();
   });
 
 // --------------------- APPROVE/REJECT BIDS --------------------- //
