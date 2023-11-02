@@ -14,7 +14,7 @@ export default class Profiles {
     return { message: "Profile created successfully." };
   }
 
-  async retrieveProfile() {
+  async retrieveProfiles() {
     const response = await this.prisma.Profiles.findMany({
       orderBy: [
         {

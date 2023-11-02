@@ -31,6 +31,7 @@ model Accounts {
   password  String   @db.Text
   dob       DateTime @db.Date
   roleId    Int?     @db.Integer
+  suspended Boolean  @db.Boolean
 
   profiles Profiles @relation(fields: [profileId], references: [profileId])
   bids     Bids[]

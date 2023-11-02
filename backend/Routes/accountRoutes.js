@@ -3,7 +3,8 @@ import { PrismaClient } from "@prisma/client";
 import CreateAccountController from "../Controllers/Account/CreateAccountController.js";
 import RetrieveAccountController from "../Controllers/Account/RetrieveAccountController.js";
 import UpdateAccountController from "../Controllers/Account/UpdateAccountController.js";
-import DeleteAccountController from "../Controllers/Account/DeleteAccountController.js";
+import SuspendAccountController from "../Controllers/Account/SuspendAccountController.js";
+import UnsuspendAccountController from "../Controllers/Account/UnsuspendAccountController.js";
 import SearchAccountController from "../Controllers/Account/SearchAccountController.js";
 import { authJwt } from "../middleware/authJwt.js";
 
@@ -12,7 +13,7 @@ const prisma = new PrismaClient();
 
 // accountRoutes.post("/create", [authJwt.verifyToken], async (req, res) => {
 accountRoutes.post("/create", async (req, res) => {
-  const { name, profileId, email, password, roleId, dob } = req.body;
+  const { name, profileId, email, password, roleId, dob, suspended } = req.body;
 
   const createAccountController = new CreateAccountController(prisma, req, res);
   await createAccountController.createAccount(
@@ -21,7 +22,8 @@ accountRoutes.post("/create", async (req, res) => {
     email,
     password,
     roleId,
-    dob
+    dob,
+    suspended
   );
 });
 
@@ -51,12 +53,28 @@ accountRoutes.put("/update", async (req, res) => {
   );
 });
 
-// accountRoutes.delete("/delete", [authJwt.verifyToken], async (req, res) => {
-accountRoutes.delete("/delete", async (req, res) => {
+// accountRoutes.post("/suspend", [authJwt.verifyToken], async (req, res) => {
+accountRoutes.post("/suspend", async (req, res) => {
   const { accountId } = req.body;
 
-  const deleteAccountController = new DeleteAccountController(prisma, req, res);
-  await deleteAccountController.deleteAccount(accountId);
+  const suspendAccountController = new SuspendAccountController(
+    prisma,
+    req,
+    res
+  );
+  await suspendAccountController.suspendAccount(accountId);
+});
+
+// accountRoutes.post("/unsuspend", [authJwt.verifyToken], async (req, res) => {
+accountRoutes.post("/unsuspend", async (req, res) => {
+  const { accountId } = req.body;
+
+  const unsuspendAccountController = new UnsuspendAccountController(
+    prisma,
+    req,
+    res
+  );
+  await unsuspendAccountController.unsuspendAccount(accountId);
 });
 
 // accountRoutes.get("/search", [authJwt.verifyToken], async (req, res) => {

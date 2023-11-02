@@ -3,66 +3,17 @@ import Appshell from "../components/Appshell";
 import CreateAccountForm from "../components/Accounts/CreateAccountForm";
 import UpdateAccountForm from "../components/Accounts/UpdateAccountForm";
 import TanstackTable from "../components/TanstackTable";
-import { Modal, Button, Group, Text, Container } from "@mantine/core";
-import { useDisclosure } from "@mantine/hooks";
+import { Container } from "@mantine/core";
 import axios from "axios";
 import AuthService from "../services/auth.service";
 import authHeader from "../services/auth-header";
-
-const DeleteAccountButton = (props: { data: any }) => {
-  const [opened, { close, open }] = useDisclosure(false);
-  const { accountId } = props.data;
-
-  return (
-    <>
-      <Modal opened={opened} onClose={close} size="auto" title="Delete Account">
-        <Text>Are you sure you want to delete this account?</Text>
-
-        <Group
-          mt="xl"
-          style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-        >
-          <Button variant="outline" onClick={close}>
-            Cancel
-          </Button>
-          <Button
-            variant="filled"
-            bg="red"
-            onClick={() => {
-              async function deleteAccount() {
-                await axios
-                  .delete("http://localhost:3000/accounts/delete", {
-                    headers: authHeader(),
-                    data: {
-                      accountId: Number(accountId),
-                    },
-                  })
-                  .then((res) => {
-                    alert(res.data.message);
-                    location.reload();
-                  })
-                  .catch(() => alert("Internal System Error."));
-              }
-
-              deleteAccount();
-              close();
-            }}
-          >
-            Delete
-          </Button>
-        </Group>
-      </Modal>
-
-      <Button bg="red" onClick={open}>
-        Delete
-      </Button>
-    </>
-  );
-};
+import { SuspendAccountForm } from "../components/Accounts/SuspendAccountForm";
+import {
+  useQuery,
+  useQueryClient,
+  QueryClient,
+  QueryClientProvider,
+} from "@tanstack/react-query";
 
 const Options = (props: { row: any }) => {
   const { row } = props;
@@ -70,15 +21,15 @@ const Options = (props: { row: any }) => {
   return (
     <div style={{ display: "flex" }}>
       <UpdateAccountForm data={row} />
-      <DeleteAccountButton data={row} />
+      <SuspendAccountForm data={row} />
     </div>
   );
 };
 
-interface Info {
-  getValue: any;
+type Info = {
+  getValue: () => string;
   row: any;
-}
+};
 
 const columns = [
   {
@@ -123,47 +74,37 @@ const columns = [
   },
 ];
 
+const retrieveAccounts = async () => {
+  const { data } = await axios.get("http://localhost:3000/accounts/retrieve", {
+    headers: authHeader(),
+  });
+  const transformData = data.map((account: any) => {
+    account.accountId = account.accountId.toString();
+    return account;
+  });
+
+  return transformData;
+};
+
+function useAccounts() {
+  return useQuery({
+    queryKey: ["retrieveAccounts"],
+    queryFn: () => retrieveAccounts(),
+  });
+}
+
 export default function Accounts() {
-  const [data, setData] = useState([]);
+  const { status, data, error, isFetching } = useAccounts();
 
   if (AuthService.getCurrentUser()) {
-    useEffect(() => {
-      async function fetchAccounts() {
-        await axios
-          .get("http://localhost:3000/accounts/retrieve", {
-            headers: authHeader(),
-          })
-          .then((res) => {
-            const transformId = res.data.map((account: any) => {
-              account.accountId = account.accountId.toString();
-              return account;
-            });
-            setData(transformId);
-          })
-          .catch(() => alert("Internal System Error."));
-      }
-
-      fetchAccounts();
-    }, []);
-
     return (
       <Appshell>
-        <h1>Accounts</h1>
-        <CreateAccountForm />
         <Container size="lg" my="1rem">
-          {data.length > 0 ? (
-            <TanstackTable columns={columns} data={data} />
-          ) : (
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-              }}
-            >
-              <h1>Table is empty!</h1>
-            </div>
-          )}
+          <h1>Accounts</h1>
+          <CreateAccountForm />
+          {isFetching && <h1>Loading...</h1>}
+          {error && <h1>An error occured</h1>}
+          {data && <TanstackTable columns={columns} data={data} />}
         </Container>
       </Appshell>
     );

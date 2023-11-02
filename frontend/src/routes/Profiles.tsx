@@ -8,6 +8,7 @@ import authHeader from "../services/auth-header";
 
 import { Modal, Button, Group, Text, Container } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
+import { useQuery } from "@tanstack/react-query";
 
 const DeleteProfileButton = (props: { data: any }) => {
   const [opened, { close, open }] = useDisclosure(false);
@@ -79,10 +80,10 @@ const Options = (props: { row: any }) => {
   );
 };
 
-interface Info {
-  getValue: any;
+type Info = {
+  getValue: () => string;
   row: any;
-}
+};
 
 const columns = [
   {
@@ -109,46 +110,36 @@ const columns = [
   },
 ];
 
+const retrieveProfiles = async () => {
+  const { data } = await axios.get("http://localhost:3000/profiles/retrieve", {
+    headers: authHeader(),
+  });
+  const transformData = data.map((profile: any) => {
+    profile.profileId = profile.profileId.toString();
+    return profile;
+  });
+
+  return transformData;
+};
+
+function useProfiles() {
+  return useQuery({
+    queryKey: ["retrieveProfiles"],
+    queryFn: () => retrieveProfiles(),
+  });
+}
+
 export default function Profile() {
-  const [data, setData] = useState([]);
-
-  useEffect(() => {
-    async function fetchProfile() {
-      await axios
-        .get("http://localhost:3000/profiles/retrieve", {
-          headers: authHeader(),
-        })
-        .then((res) => {
-          const transformId = res.data.map((profile: any) => {
-            profile.profileId = profile.profileId.toString();
-            return profile;
-          });
-          setData(transformId);
-        })
-        .catch(() => alert("Internal System Error."));
-    }
-
-    fetchProfile();
-  }, []);
+  const { status, data, error, isFetching } = useProfiles();
 
   return (
     <Appshell>
-      <h1>Profiles</h1>
-      <CreateProfileForm />
       <Container size="lg" my="1rem">
-        {data.length > 0 ? (
-          <TanstackTable columns={columns} data={data} />
-        ) : (
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          >
-            <h1>Table is empty!</h1>
-          </div>
-        )}
+        <h1>Profiles</h1>
+        <CreateProfileForm />
+        {isFetching && <h1>Loading...</h1>}
+        {error && <h1>An error occured</h1>}
+        {data && <TanstackTable columns={columns} data={data} />}
       </Container>
     </Appshell>
   );

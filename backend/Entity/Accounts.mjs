@@ -5,7 +5,15 @@ export default class Accounts {
     this.prisma = prisma;
   }
 
-  async createAccount(name, profileId, email, password, roleId, dob) {
+  async createAccount(
+    name,
+    profileId,
+    email,
+    password,
+    roleId,
+    dob,
+    suspended
+  ) {
     const hashedPassword = await bcrypt.hash(password, 10);
 
     await this.prisma.Accounts.create({
@@ -16,6 +24,7 @@ export default class Accounts {
         password: hashedPassword,
         roleId: Number(roleId),
         dob: dob,
+        suspended: suspended,
       },
     });
 
@@ -24,7 +33,7 @@ export default class Accounts {
 
   async retrieveAccounts() {
     const response = await this.prisma
-      .$queryRaw`select "accountId", pro.name as profile, acc.name, acc.email, acc.password, acc.roleId, acc.dob 
+      .$queryRaw`select acc."accountId", pro.name as profile, acc.name, acc.email, acc.password, acc."roleId", acc.dob 
       from "Accounts" as acc
       inner join "Profiles" as pro on acc."profileId"=pro."profileId"`;
     return response;
@@ -57,13 +66,22 @@ export default class Accounts {
     return { message: "Account updated successfully" };
   }
 
-  async deleteAccount(accountId) {
-    await this.prisma.Accounts.delete({
-      where: {
-        accountId: Number(accountId),
-      },
+  async suspendAccount(accountId) {
+    await this.prisma.Accounts.update({
+      where: { accountId: Number(accountId) },
+      data: { suspended: true },
     });
-    return { message: "Account deleted successfully" };
+
+    return { message: "Account suspended successfully" };
+  }
+
+  async unsuspendAccount(accountId) {
+    await this.prisma.SuspendedAccounts.deleteMany({
+      where: { accountId: Number(accountId) },
+      data: { suspended: false },
+    });
+
+    return { message: "Account unsuspended successfully" };
   }
 
   async searchAccount(accountFilter) {

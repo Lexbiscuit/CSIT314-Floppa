@@ -8,7 +8,15 @@ export default class CreateAccountController {
     this.res = res;
   }
 
-  async createAccount(name, profileId, email, password, roleId, dob) {
+  async createAccount(
+    name,
+    profileId,
+    email,
+    password,
+    roleId,
+    dob,
+    suspended
+  ) {
     try {
       const accounts = new Accounts(this.prisma);
 
@@ -18,7 +26,8 @@ export default class CreateAccountController {
         email,
         password,
         roleId,
-        dob
+        dob,
+        suspended
       );
 
       // 201 CREATED

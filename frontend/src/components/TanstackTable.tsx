@@ -39,9 +39,9 @@ const fuzzyFilter: FilterFn<any> = (row, columnId, value, addMeta) => {
   return itemRank.passed;
 };
 
-export default function TanstackTable(props: { columns: []; data: [] }) {
+export default function TanstackTable(props: { columns: any; data: any }) {
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
-    [],
+    []
   );
   const [globalFilter, setGlobalFilter] = React.useState("");
   const [data, setData] = useState(props.data);
@@ -116,7 +116,7 @@ export default function TanstackTable(props: { columns: []; data: [] }) {
                         >
                           {flexRender(
                             header.column.columnDef.header,
-                            header.getContext(),
+                            header.getContext()
                           )}
                           {{
                             asc: " 🔼",
@@ -145,7 +145,7 @@ export default function TanstackTable(props: { columns: []; data: [] }) {
                     <td key={cell.id}>
                       {flexRender(
                         cell.column.columnDef.cell,
-                        cell.getContext(),
+                        cell.getContext()
                       )}
                     </td>
                   );
@@ -260,7 +260,7 @@ function Filter({
       typeof firstValue === "number"
         ? []
         : Array.from(column.getFacetedUniqueValues().keys()).sort(),
-    [column.getFacetedUniqueValues()],
+    [column.getFacetedUniqueValues()]
   );
 
   return typeof firstValue === "number" ? (

@@ -7,25 +7,22 @@ import authHeader from "../../services/auth-header";
 
 export default function CreateAccountForm() {
   const [opened, { open, close }] = useDisclosure(false);
-
   const form = useForm({
     initialValues: {
       name: "",
-      profile: "",
+      profileId: "",
       email: "",
       password: "",
-      role: "",
+      roleId: "",
       dob: "",
     },
 
     validate: {
       name: isNotEmpty("Name cannot be empty."),
-      profile: isNotEmpty("Profile cannot be empty."),
+      profileId: isNotEmpty("Profile cannot be empty."),
       email: isEmail("Invalid email."),
       password: isNotEmpty("Password cannot be empty."),
-      role: isNotEmpty("Role cannot be empty."),
-      dob: (value) =>
-        /^\d{2}-\d{2}-\d{4}$/.test(value) ? null : "Invalid date of birth.",
+      dob: isNotEmpty("Date of birth cannot be empty."),
     },
   });
 
@@ -42,28 +39,44 @@ export default function CreateAccountForm() {
           onSubmit={form.onSubmit(() => {
             async function createAccount() {
               try {
-                axios
-                  .post(
-                    "http://localhost:3000/accounts/create",
-                    {
-                      name: form.values.name,
-                      profile: form.values.profile,
-                      email: form.values.email,
-                      password: form.values.password,
-                      role:
-                        form.values.profile != "Cafe Staff"
-                          ? "NIL"
-                          : form.values.role,
-                      dob: new Date(form.values.dob).toISOString(),
-                    },
-                    {
-                      headers: authHeader(),
-                    }
-                  )
-                  .then((res) => {
-                    alert(res.data.message);
-                    location.reload();
-                  });
+                if (Number(form.values.profileId) == 4) {
+                  await axios
+                    .post(
+                      "http://localhost:3000/accounts/create",
+                      {
+                        name: form.values.name,
+                        profileId: Number(form.values.profileId),
+                        email: form.values.email,
+                        password: form.values.password,
+                        roleId: Number(form.values.roleId),
+                        dob: new Date(form.values.dob).toISOString(),
+                        suspended: false,
+                      },
+                      { headers: authHeader() }
+                    )
+                    .then((res) => {
+                      alert(res.data.message);
+                      location.reload();
+                    });
+                } else {
+                  await axios
+                    .post(
+                      "http://localhost:3000/accounts/create",
+                      {
+                        name: form.values.name,
+                        profileId: Number(form.values.profileId),
+                        email: form.values.email,
+                        password: form.values.password,
+                        dob: new Date(form.values.dob).toISOString(),
+                        suspended: false,
+                      },
+                      { headers: authHeader() }
+                    )
+                    .then((res) => {
+                      alert(res.data.message);
+                      location.reload();
+                    });
+                }
               } catch (err) {
                 console.log(err);
                 alert("Internal System Error.");
@@ -84,12 +97,12 @@ export default function CreateAccountForm() {
             label="Profile"
             placeholder="Pick profile"
             data={[
-              "System Administrator",
-              "Cafe Owner",
-              "Cafe Manager",
-              "Cafe Staff",
+              { value: "1", label: "System Administrator" },
+              { value: "2", label: "Cafe Owner" },
+              { value: "3", label: "Cafe Manager" },
+              { value: "4", label: "Cafe Staff" },
             ]}
-            {...form.getInputProps("profile")}
+            {...form.getInputProps("profileId")}
             my="1rem"
           />
 
@@ -110,12 +123,17 @@ export default function CreateAccountForm() {
             my="1rem"
           />
 
-          {form.values.profile == "Cafe Staff" && (
+          {Number(form.values.profileId) == 4 && (
             <Select
               label="Role"
               placeholder="Pick role"
-              data={["Cashier", "Waiter", "Chef", "Barista"]}
-              {...form.getInputProps("role")}
+              data={[
+                { value: "1", label: "Barista" },
+                { value: "2", label: "Cashier" },
+                { value: "3", label: "Chef" },
+                { value: "4", label: "Waiter" },
+              ]}
+              {...form.getInputProps("roleId")}
               my="1rem"
             />
           )}
