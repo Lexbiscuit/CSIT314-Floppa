@@ -9,6 +9,7 @@ import MngrRtrvStaffSlotCtrl from "../Controllers/Bid/MngrRtrvStaffSlotCtrl.js";
 import MngrFltrAvailWSCtrl from "../Controllers/Bid/MngrFltrAvailWSCtrl.js";
 import RejectBidController from "../Controllers/Bid/RejectBidController.js";
 import SearchBidController from "../Controllers/Bid/SearchBidController.js";
+import StaffRtrvBidCtlr from "../Controllers/Bid/StaffRtrvBidCtlr.js";
 import { authJwt } from "../middleware/authJwt.js";
 
 const bidRoutes = Router();
@@ -55,6 +56,12 @@ bidRoutes.get("/staffslots", async (req, res) => {
   const mngrRtrvStaffSlotCtrl = new MngrRtrvStaffSlotCtrl(prisma, req, res);
   await mngrRtrvStaffSlotCtrl.viewWorkslots();
 });
+
+// bidRoutes.get("/staffbids/:accountId", [authJwt.verifyToken], async (req, res) => {
+  bidRoutes.get("/staffbids/:accountId", async (req, res) => {
+    const staffRtrvBidCtlr = new StaffRtrvBidCtlr(prisma, req, res);
+    await staffRtrvBidCtlr.retrieveStaffBids();
+  });
 
 // --------------------- APPROVE/REJECT BIDS --------------------- //
 // bidRoutes.put("/approve", [authJwt.verifyToken], async (req, res) => {
