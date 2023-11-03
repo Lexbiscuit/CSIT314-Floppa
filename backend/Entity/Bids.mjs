@@ -39,15 +39,13 @@ export default class Bids {
     return response;
   }
 
-  async ApproveBid(bidId, accountId, workslotId, status) {
+  async approveBid(bidId) {
     const response = await this.prisma.Bids.update({
       where: {
-        bidId: bidId,
-        accountId: accountId,
-        workslotId: workslotId,
+        bidId: bidId
       },
       data: {
-        status: status,
+        status: "Approve"
       },
     });
     return response;
@@ -64,12 +62,10 @@ export default class Bids {
     return response;
   }
 
-  async rejectBid(bidId, accountId, workslotId, reason) {
+  async rejectBid(bidId, reason) {
     const response = await this.prisma.Profiles.update({
       where: {
-        bidId: bidId,
-        accountId: accountId,
-        workslotId: workslotId,
+        bidId: bidId
       },
       data: {
         status: "Reject",

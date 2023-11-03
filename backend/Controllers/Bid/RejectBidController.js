@@ -1,4 +1,5 @@
 import { Prisma } from "@prisma/client";
+import Bids from "../../Entity/Bids.mjs";
 
 export default class RejectBidController {
   constructor(prisma, req, res) {
@@ -7,22 +8,13 @@ export default class RejectBidController {
     this.res = res;
   }
 
-  async rejectBid(bidId, accountId, workslotId, reason) {
+  async rejectBid(bidId, reason) {
     try {
-      const rejectBid = await this.prisma.Bids.update({
-        where: {
-          bidId: bidId,
-          accountId: accountId,
-          workslotId: workslotId,
-        },
-        data: {
-          status: "Reject",
-          reason: reason || null, // Set to null if not provided
-        },
-      });
+      const bids = new Bids();
+      const result = await bids.rejectBid(bidId, reason);
 
       // 201 Created
-      this.res.status(201).json(rejectBid);
+      this.res.status(201).json(result);  //return "reject" msg OR json string?
     } catch (err) {
       if (err instanceof Prisma.PrismaClientKnownRequestError) {
         if (err.code === "P2002")
