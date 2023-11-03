@@ -45,14 +45,14 @@ export default class Bids {
         bidId: bidId
       },
       data: {
-        status: "Approve"
+        status: "Approve",
       },
     });
     return response;
   }
 
   async retrieveStaff() {
-    const response = await this.prisma.Profiles.findMany({
+    const response = await this.prisma.Bids.findMany({
       orderBy: [
         {
           profileId: "asc",
@@ -63,13 +63,13 @@ export default class Bids {
   }
 
   async rejectBid(bidId, reason) {
-    const response = await this.prisma.Profiles.update({
+    const response = await this.prisma.Bids.update({
       where: {
         bidId: bidId
       },
       data: {
         status: "Reject",
-        reason: reason || null, // Set to null if not provided
+        reason: reason 
       },
     });
     return response;

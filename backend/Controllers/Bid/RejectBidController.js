@@ -10,7 +10,7 @@ export default class RejectBidController {
 
   async rejectBid(bidId, reason) {
     try {
-      const bids = new Bids();
+      const bids = new Bids(this.prisma);
       const result = await bids.rejectBid(bidId, reason);
 
       // 201 Created
