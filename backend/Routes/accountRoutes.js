@@ -13,18 +13,10 @@ const prisma = new PrismaClient();
 
 // accountRoutes.post("/create", [authJwt.verifyToken], async (req, res) => {
 accountRoutes.post("/create", async (req, res) => {
-  const { name, profileId, email, password, roleId, dob, suspended } = req.body;
+  const account = req.body;
 
   const createAccountController = new CreateAccountController(prisma, req, res);
-  await createAccountController.createAccount(
-    name,
-    profileId,
-    email,
-    password,
-    roleId,
-    dob,
-    suspended
-  );
+  await createAccountController.createAccount(account);
 });
 
 // accountRoutes.get("/retrieve", [authJwt.verifyToken], async (req, res) => {

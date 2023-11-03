@@ -1,10 +1,9 @@
 import React from "react";
-import { Modal, Button, Group, Text } from "@mantine/core";
+import { Modal, Button, Group, TextInput, Text } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import axios from "axios";
 import authHeader from "../../services/auth-header";
 import { useQuery } from "@tanstack/react-query";
-import { TextInput } from "@mantine/core";
 
 const suspendAccount = async (accountId: number, reason?: string) => {
   const { data } = await axios.post(
@@ -54,36 +53,46 @@ export const SuspendAccountForm = (props: { data: any | undefined }) => {
             justifyContent: "center",
           }}
         >
+          {suspended && (
+            <>
+              <Text>Are you sure you want to unsuspend this account?</Text>
+
+              <Button
+                variant="filled"
+                bg="red"
+                onClick={() => {
+                  unsuspendAccount(accountId);
+                  close();
+                  location.reload();
+                }}
+              >
+                Unsuspend
+              </Button>
+            </>
+          )}
+
+          {!suspended && (
+            <>
+              <TextInput label="Reason" ref={reasonRef} size="md"></TextInput>
+              <Button
+                variant="filled"
+                bg="red"
+                onClick={() => {
+                  suspendAccount(accountId, reasonRef.current?.value);
+                  close();
+                  location.reload();
+                }}
+              >
+                Suspend
+              </Button>
+            </>
+          )}
           <Button variant="outline" onClick={close}>
             Cancel
           </Button>
-
-          {suspended && (
-            <Button
-              variant="filled"
-              bg="red"
-              onClick={() => {
-                unsuspendAccount(accountId);
-                close();
-              }}
-            >
-              Unsuspend
-            </Button>
-          )}
-          {!suspended && (
-            <Button
-              variant="filled"
-              bg="red"
-              onClick={() => {
-                suspendAccount(accountId);
-                close();
-              }}
-            >
-              Suspend
-            </Button>
-          )}
         </Group>
       </Modal>
+
       <Button variant="outline" onClick={open}>
         Suspend
       </Button>
