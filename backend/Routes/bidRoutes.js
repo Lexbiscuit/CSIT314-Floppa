@@ -66,18 +66,18 @@ bidRoutes.get("/staffslots", async (req, res) => {
 // --------------------- APPROVE/REJECT BIDS --------------------- //
 // bidRoutes.put("/approve", [authJwt.verifyToken], async (req, res) => {
 bidRoutes.put("/approve", async (req, res) => {
-  const { bidId, accountId, workslotId, status } = req.body;
+  const { bidId } = req.body;
 
   const approveBidController = new ApproveBidController(prisma, req, res);
-  await approveBidController.approveBid(bidId, accountId, workslotId, status);
+  await approveBidController.approveBid(bidId);
 });
 
 // bidRoutes.put("/reject", [authJwt.verifyToken], async (req, res) => {
 bidRoutes.put("/reject", async (req, res) => {
-  const { bidId, accountId, workslotId, reason } = req.body;
+  const { bidId, reason } = req.body;
 
   const rejectBidController = new RejectBidController(prisma, req, res);
-  await rejectBidController.rejectBid(bidId, accountId, workslotId, reason);
+  await rejectBidController.rejectBid(bidId, reason);
 });
 
 // --------------------- NOT IN USER STORY --------------------- //

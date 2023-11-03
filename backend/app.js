@@ -3,7 +3,7 @@ import cors from "cors";
 import accountRoutes from "./Routes/accountRoutes.js";
 import profileRoutes from "./Routes/profileRoutes.js";
 import workslotRoutes from "./Routes/workslotRoutes.js";
-import bidRoutes from "./Routes/BidRoutes.js";
+import bidRoutes from "./Routes/bidRoutes.js";
 import authRoutes from "./Routes/authRoutes.js";
 
 const app = express();

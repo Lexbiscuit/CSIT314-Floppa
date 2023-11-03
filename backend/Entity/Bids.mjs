@@ -15,7 +15,7 @@ export default class Bids {
   }
 
   async updateBid(bidId, accountId, profileId) {
-    const response = await this.prisma.Profiles.update({
+    const response = await this.prisma.Bids.update({
       where: {
         bidId: Number(bidId),
       },
@@ -28,7 +28,7 @@ export default class Bids {
   }
 
   async searchBid(bidId, accountId, workslotId, status) {
-    const searchBid = await this.prisma.workslots.findUnique({
+    const searchBid = await this.prisma.Bids.findUnique({
       where: {
         bidId: Number(bidId),
         accountId: Number(accountId),
@@ -39,22 +39,20 @@ export default class Bids {
     return response;
   }
 
-  async ApproveBid(bidId, accountId, workslotId, status) {
+  async approveBid(bidId) {
     const response = await this.prisma.Bids.update({
       where: {
-        bidId: bidId,
-        accountId: accountId,
-        workslotId: workslotId,
+        bidId: bidId
       },
       data: {
-        status: status,
+        status: "Approve",
       },
     });
     return response;
   }
 
   async retrieveStaff() {
-    const response = await this.prisma.Profiles.findMany({
+    const response = await this.prisma.Bids.findMany({
       orderBy: [
         {
           profileId: "asc",
@@ -64,16 +62,14 @@ export default class Bids {
     return response;
   }
 
-  async rejectBid(bidId, accountId, workslotId, reason) {
-    const response = await this.prisma.Profiles.update({
+  async rejectBid(bidId, reason) {
+    const response = await this.prisma.Bids.update({
       where: {
-        bidId: bidId,
-        accountId: accountId,
-        workslotId: workslotId,
+        bidId: bidId
       },
       data: {
         status: "Reject",
-        reason: reason || null, // Set to null if not provided
+        reason: reason 
       },
     });
     return response;

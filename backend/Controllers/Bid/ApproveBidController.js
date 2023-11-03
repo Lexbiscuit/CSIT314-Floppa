@@ -1,4 +1,5 @@
 import { Prisma } from "@prisma/client";
+import Bids from "../../Entity/Bids.mjs";
 
 export default class ApproveBidController {
   constructor(prisma, req, res) {
@@ -7,21 +8,13 @@ export default class ApproveBidController {
     this.res = res;
   }
 
-  async approveBid(bidId, accountId, workslotId, status) {
+  async approveBid(bidId) {
     try {
-      const updateBid = await this.prisma.Bids.update({
-        where: {
-          bidId: bidId,
-          accountId: accountId,
-          workslotId: workslotId,
-        },
-        data: {
-          status: status,
-        },
-      });
+      const bids = new Bids(this.prisma);
+      const approvedBid = await bids.approve(bidId);
 
       // 201 Created
-      this.res.status(201).json(updateBid);
+      this.res.status(201).json(approvedBid); //return "approve" msg OR json string?
     } catch (err) {
       if (err instanceof Prisma.PrismaClientKnownRequestError) {
         if (err.code === "P2002")
