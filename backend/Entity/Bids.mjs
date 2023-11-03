@@ -15,7 +15,7 @@ export default class Bids {
   }
 
   async updateBid(bidId, accountId, profileId) {
-    const response = await this.prisma.Profiles.update({
+    const response = await this.prisma.Bids.update({
       where: {
         bidId: Number(bidId),
       },
@@ -28,7 +28,7 @@ export default class Bids {
   }
 
   async searchBid(bidId, accountId, workslotId, status) {
-    const searchBid = await this.prisma.workslots.findUnique({
+    const searchBid = await this.prisma.Bids.findUnique({
       where: {
         bidId: Number(bidId),
         accountId: Number(accountId),
