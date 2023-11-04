@@ -64,6 +64,7 @@ export default class Accounts {
     const response = await this.prisma.Accounts.findMany({
       where: accountFilter,
     });
+
     return response;
   }
 }

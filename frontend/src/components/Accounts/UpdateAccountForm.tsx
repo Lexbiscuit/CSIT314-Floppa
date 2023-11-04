@@ -4,6 +4,7 @@ import { Modal, TextInput, Button, Box, Select } from "@mantine/core";
 import { useForm, isNotEmpty, isEmail } from "@mantine/form";
 import axios from "axios";
 import authHeader from "../../services/auth-header";
+import { IconEdit } from "@tabler/icons-react";
 
 type Account = {
   name: string;
@@ -148,7 +149,7 @@ export default function UpdateAccountForm(props: { data: any }) {
           </Button>
         </Box>
       </Modal>
-      <Button onClick={open}>Edit</Button>
+      <IconEdit onClick={open} style={{ cursor: "pointer" }} />
     </>
   );
 }

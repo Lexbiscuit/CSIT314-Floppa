@@ -4,6 +4,7 @@ import { useDisclosure } from "@mantine/hooks";
 import axios from "axios";
 import authHeader from "../../services/auth-header";
 import { useQuery } from "@tanstack/react-query";
+import { IconEdit, IconCircleMinus } from "@tabler/icons-react";
 
 const suspendAccount = async (accountId: number, reason?: string) => {
   const { data } = await axios.post(
@@ -53,7 +54,7 @@ export const SuspendAccountForm = (props: { data: any | undefined }) => {
             justifyContent: "center",
           }}
         >
-          {suspended && (
+          {!suspended && (
             <>
               <Text>Are you sure you want to unsuspend this account?</Text>
 
@@ -71,7 +72,7 @@ export const SuspendAccountForm = (props: { data: any | undefined }) => {
             </>
           )}
 
-          {!suspended && (
+          {suspended && (
             <>
               <TextInput label="Reason" ref={reasonRef} size="md"></TextInput>
               <Button
@@ -93,9 +94,13 @@ export const SuspendAccountForm = (props: { data: any | undefined }) => {
         </Group>
       </Modal>
 
-      <Button variant="outline" onClick={open}>
-        Suspend
-      </Button>
+      <IconCircleMinus
+        onClick={open}
+        style={{
+          cursor: "pointer",
+          userSelect: "none",
+        }}
+      />
     </>
   );
 };
