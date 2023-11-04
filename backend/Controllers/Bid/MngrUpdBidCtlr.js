@@ -9,7 +9,7 @@ export default class MngrUpdBidCtlr {
 
   async updateBid(bidId, accountId, workslotId, status, reason) {
     try {
-      const updateBid = await this.prisma.Workslots.update({
+      const updateBid = await this.prisma.Bids.update({
         where: {
           bidId: Number(bidId),
         },

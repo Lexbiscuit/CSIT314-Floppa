@@ -1,5 +1,5 @@
 import { Prisma } from "@prisma/client";
-import { Bids } from "../../Entity/Bids.mjs";
+import Bids  from "../../Entity/Bids.mjs";
 
 export default class CreateBidController {
   constructor(prisma, req, res) {
@@ -8,10 +8,10 @@ export default class CreateBidController {
     this.res = res;
   }
 
-  async createBid(bidId) {
+  async createBid(accountId, workslotId, status, reason) {
     try {
       const bids = new Bids(this.prisma);
-      const createBid = await bids.create(bidId);
+      const createBid = await bids.createBid(accountId, workslotId, status, reason);
 
       // 201 Created
       this.res.status(201).json(createBid);
@@ -21,6 +21,7 @@ export default class CreateBidController {
           this.res.status(500).send({ message: err.message });
       } else {
         // 500 INTERNAL SERVER ERROR
+        console.log(err);
         this.res.status(500).send({ message: "Internal Server Error." });
       }
     }

@@ -27,14 +27,9 @@ export default class Bids {
     return response;
   }
 
-  async searchBid(bidId, accountId, workslotId, status) {
-    const searchBid = await this.prisma.Bids.findUnique({
-      where: {
-        bidId: Number(bidId),
-        accountId: Number(accountId),
-        workslotId: Number(workslotId),
-        status: status,
-      },
+  async searchBid(bidFilter) {
+    const response = await this.prisma.Bids.findMany({
+      where: bidFilter,
     });
     return response;
   }

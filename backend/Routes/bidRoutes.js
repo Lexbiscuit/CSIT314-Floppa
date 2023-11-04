@@ -31,7 +31,7 @@ bidRoutes.put("/update", async (req, res) => {
 });
 
 // bidRoutes.get("/search", [authJwt.verifyToken], async (req, res) => {
-bidRoutes.get("/search", async (req, res) => {
+bidRoutes.post("/search", async (req, res) => {
   const bidFilter = req.query;
 
   const searchBidController = new SearchBidController(prisma, req, res);
