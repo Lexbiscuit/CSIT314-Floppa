@@ -16,6 +16,7 @@ export default class SearchAccountController {
       this.res.status(200).json(response);
     } catch (err) {
       // 500 INTERNAL SERVER ERROR
+      console.log(err);
       this.res.status(500).send({ message: "Internal Server Error." });
     }
   }

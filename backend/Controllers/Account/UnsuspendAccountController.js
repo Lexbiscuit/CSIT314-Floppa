@@ -19,6 +19,8 @@ export default class UnsuspendAccountController {
       if (err instanceof Prisma.PrismaClientKnownRequestError) {
         this.res.status(500).send({ message: err.message });
       } else {
+        console.log(err);
+
         // 500 INTERNAL SERVER ERROR
         this.res.status(500).send({ message: err });
       }

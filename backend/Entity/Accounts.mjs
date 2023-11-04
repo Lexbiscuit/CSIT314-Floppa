@@ -16,11 +16,12 @@ export default class Accounts {
   }
 
   async retrieveAccounts() {
-    const response = await this.prisma
-      .$queryRaw`select a.accountId, a.profileId, p.name as profile, a.name, a.email, a.password, r.roleName as role, a.roleId, a.dob, a.suspended 
-      from Accounts as a
-      inner join Profiles as p on a.profileId = p.profileId
-      inner join Roles as r on r.roleId = a.roleId`;
+    const response = await this.prisma.Accounts.findMany({
+      include: {
+        profiles: true,
+        roles: true,
+      },
+    });
     return response;
   }
 
@@ -63,6 +64,10 @@ export default class Accounts {
   async searchAccount(accountFilter) {
     const response = await this.prisma.Accounts.findMany({
       where: accountFilter,
+      include: {
+        profiles: { select: { name: true } },
+        roles: { select: { roleName: true } },
+      },
     });
 
     return response;

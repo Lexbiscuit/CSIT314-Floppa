@@ -38,8 +38,8 @@ const columns = [
     footer: (props: any) => props.column.id,
   },
   {
-    accessorKey: "profileId",
-    header: "Profile ID",
+    accessorKey: "profiles.name",
+    header: "Profile",
     cell: (info: Info) => info.getValue(),
     footer: (props: any) => props.column.id,
   },
@@ -50,8 +50,8 @@ const columns = [
     footer: (props: any) => props.column.id,
   },
   {
-    accessorKey: "roleId",
-    header: "Role ID",
+    accessorKey: "roles.roleName",
+    header: "Role",
     cell: (info: Info) => info.getValue(),
     footer: (props: any) => props.column.id,
   },
@@ -101,10 +101,6 @@ function searchAccounts(accountFilter: any) {
 }
 
 export default function SearchAccountForm() {
-  const [dobDates, setDobDates] = useState<[Date | null, Date | null]>([
-    null,
-    null,
-  ]);
   const [accountFilter, setAccountFilter] = useState<any>({});
 
   const form = useForm({

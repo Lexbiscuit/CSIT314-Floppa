@@ -6,37 +6,43 @@ import authHeader from "../../services/auth-header";
 import { useQuery } from "@tanstack/react-query";
 import { IconEdit, IconCircleMinus } from "@tabler/icons-react";
 
-const suspendAccount = async (accountId: number, reason?: string) => {
-  const { data } = await axios.post(
-    "http://localhost:3000/accounts/suspend",
-    {
-      accountId: Number(accountId),
-      reason: reason,
-    },
-    {
-      headers: authHeader(),
-    }
-  );
-  alert(data.message);
+const suspendAccount = async (accountId: number) => {
+  await axios
+    .post(
+      "http://localhost:3000/accounts/suspend",
+      {
+        accountId: Number(accountId),
+      },
+      {
+        headers: authHeader(),
+      }
+    )
+    .then((res) => {
+      alert(res.data.message);
+    })
+    .catch((err) => {
+      alert(err);
+    });
 };
 
 const unsuspendAccount = async (accountId: number) => {
-  const { data } = await axios.post(
-    "http://localhost:3000/accounts/unsuspend",
-    {
-      accountId: Number(accountId),
-    },
-    {
-      headers: authHeader(),
-    }
-  );
-  alert(data.message);
+  await axios
+    .post(
+      "http://localhost:3000/accounts/unsuspend",
+      {
+        accountId: Number(accountId),
+      },
+      {
+        headers: authHeader(),
+      }
+    )
+    .then(() => alert("Account unsuspended"))
+    .catch((err) => alert(err));
 };
 
 export const SuspendAccountForm = (props: { data: any | undefined }) => {
   const [opened, { close, open }] = useDisclosure(false);
   const { accountId, suspended } = props.data;
-  const reasonRef = React.useRef<HTMLInputElement>(null);
 
   return (
     <>
@@ -54,7 +60,7 @@ export const SuspendAccountForm = (props: { data: any | undefined }) => {
             justifyContent: "center",
           }}
         >
-          {!suspended && (
+          {suspended == "Yes" && (
             <>
               <Text>Are you sure you want to unsuspend this account?</Text>
 
@@ -72,14 +78,15 @@ export const SuspendAccountForm = (props: { data: any | undefined }) => {
             </>
           )}
 
-          {suspended && (
+          {suspended == "No" && (
             <>
-              <TextInput label="Reason" ref={reasonRef} size="md"></TextInput>
+              <Text>Are you sure you want to suspend this account?</Text>
+
               <Button
                 variant="filled"
                 bg="red"
                 onClick={() => {
-                  suspendAccount(accountId, reasonRef.current?.value);
+                  suspendAccount(accountId);
                   close();
                   location.reload();
                 }}
@@ -88,6 +95,7 @@ export const SuspendAccountForm = (props: { data: any | undefined }) => {
               </Button>
             </>
           )}
+
           <Button variant="outline" onClick={close}>
             Cancel
           </Button>

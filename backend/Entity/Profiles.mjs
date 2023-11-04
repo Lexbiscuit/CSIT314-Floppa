@@ -3,12 +3,9 @@ export default class Profiles {
     this.prisma = prisma;
   }
 
-  async createProfile(name, description) {
+  async createProfile(profile) {
     await this.prisma.Profiles.create({
-      data: {
-        name: name,
-        description: description,
-      },
+      data: profile,
     });
 
     return { message: "Profile created successfully." };

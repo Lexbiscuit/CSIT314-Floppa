@@ -12,7 +12,7 @@ export default function ManageAccountGUI() {
     return (
       <Appshell>
         <Container size="md" my="1rem">
-          <Tabs defaultValue="create">
+          <Tabs>
             <Tabs.List>
               <Tabs.Tab value="create">Create User Account</Tabs.Tab>
               <Tabs.Tab value="tableView">User Account Table</Tabs.Tab>

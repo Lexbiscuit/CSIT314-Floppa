@@ -41,7 +41,7 @@ const columns = [
     footer: (props: any) => props.column.id,
   },
   {
-    accessorKey: "profile",
+    accessorKey: "profiles.name",
     header: "Profile",
     cell: (info: Info) => info.getValue(),
     footer: (props: any) => props.column.id,
@@ -53,7 +53,7 @@ const columns = [
     footer: (props: any) => props.column.id,
   },
   {
-    accessorKey: "role",
+    accessorKey: "roles.roleName",
     header: "Role",
     cell: (info: Info) => info.getValue(),
     footer: (props: any) => props.column.id,
@@ -67,7 +67,7 @@ const columns = [
   {
     accessorKey: "suspended",
     header: "Suspended",
-    cell: (info: Info) => (Number(info.getValue()) == 1 ? "Yes" : "No"),
+    cell: (info: Info) => info.getValue(),
     footer: (props: any) => props.column.id,
   },
   {
