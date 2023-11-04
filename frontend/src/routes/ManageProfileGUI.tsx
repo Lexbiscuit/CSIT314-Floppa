@@ -129,7 +129,7 @@ function useProfiles() {
   });
 }
 
-export default function Profile() {
+export default function ManageProfileGUI() {
   const { status, data, error, isFetching } = useProfiles();
 
   return (

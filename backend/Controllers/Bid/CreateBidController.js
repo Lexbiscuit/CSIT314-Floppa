@@ -1,5 +1,5 @@
 import { Prisma } from "@prisma/client";
-import Bids  from "../../Entity/Bids.mjs";
+import Bids from "../../Entity/Bids.mjs";
 
 export default class CreateBidController {
   constructor(prisma, req, res) {

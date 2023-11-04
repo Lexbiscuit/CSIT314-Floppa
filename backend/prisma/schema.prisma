@@ -6,16 +6,16 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "mysql"
   url      = env("DATABASE_URL")
 }
 
 model Bids {
-  bidId      Int     @id @default(autoincrement()) @db.Integer
-  accountId  Int     @db.Integer
-  workslotId Int     @db.Integer
-  status     String  @db.Text
-  reason     String? @db.Text
+  bidId      Int     @id @default(autoincrement())
+  accountId  Int
+  workslotId Int
+  status     String
+  reason     String?
 
   accounts  Accounts  @relation(fields: [accountId], references: [accountId])
   workslots Workslots @relation(fields: [workslotId], references: [workslotId])
@@ -24,14 +24,14 @@ model Bids {
 }
 
 model Accounts {
-  accountId Int      @id @default(autoincrement()) @db.Integer
-  profileId Int      @db.Integer
-  name      String   @db.Text
-  email     String   @unique @db.Text
-  password  String   @db.Text
-  dob       DateTime @db.Date
-  roleId    Int?     @db.Integer
-  suspended Boolean  @db.Boolean
+  accountId Int      @id @default(autoincrement())
+  profileId Int
+  name      String
+  email     String   @unique
+  password  String
+  dob       DateTime
+  roleId    Int?
+  suspended Boolean  @default(false)
 
   profiles Profiles @relation(fields: [profileId], references: [profileId])
   bids     Bids[]
@@ -41,9 +41,9 @@ model Accounts {
 }
 
 model Profiles {
-  profileId   Int    @id @default(autoincrement()) @db.Integer
-  name        String @unique @db.Text
-  description String @db.Text
+  profileId   Int    @id @default(autoincrement())
+  name        String @unique
+  description String
 
   accounts Accounts[]
 
@@ -51,9 +51,9 @@ model Profiles {
 }
 
 model Workslots {
-  workslotId Int      @id @default(autoincrement()) @db.Integer
-  startTime  DateTime @db.Timestamp
-  endTime    DateTime @db.Timestamp
+  workslotId Int      @id @default(autoincrement())
+  startTime  DateTime
+  endTime    DateTime
 
   bids            Bids[]
   workslots_roles Workslots_Roles[]
@@ -62,10 +62,10 @@ model Workslots {
 }
 
 model Workslots_Roles {
-  workslotRoleId Int @id @default(autoincrement()) @db.Integer
-  workslotId     Int @db.Integer
-  roleId         Int @db.Integer
-  count          Int @db.Integer
+  workslotRoleId Int @id @default(autoincrement())
+  workslotId     Int
+  roleId         Int
+  count          Int
 
   workslots Workslots @relation(fields: [workslotId], references: [workslotId])
   roles     Roles     @relation(fields: [roleId], references: [roleId])
@@ -74,8 +74,8 @@ model Workslots_Roles {
 }
 
 model Roles {
-  roleId   Int    @id @default(autoincrement()) @db.Integer
-  roleName String @db.Text
+  roleId   Int    @id @default(autoincrement())
+  roleName String
 
   workslots_roles Workslots_Roles[]
   accounts        Accounts[]

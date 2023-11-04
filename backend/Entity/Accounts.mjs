@@ -4,54 +4,42 @@ export default class Accounts {
     this.prisma = prisma;
   }
 
-  async createAccount(
-    name,
-    profileId,
-    email,
-    password,
-    roleId,
-    dob,
-    suspended
-  ) {
-    const hashedPassword = await bcrypt.hash(password, 10);
+  async createAccount(account) {
+    const hashedPassword = await bcrypt.hash(account.password, 10);
+    account.password = hashedPassword;
 
     await this.prisma.Accounts.create({
-      data: {
-        name: name,
-        profileId: Number(profileId),
-        email: email,
-        password: hashedPassword,
-        roleId: Number(roleId),
-        dob: dob,
-        suspended: suspended,
-      },
+      data: account,
     });
 
     return { message: "Account created successfully" };
   }
 
   async retrieveAccounts() {
-    const response = await this.prisma
-      .$queryRaw`select acc."accountId", pro.name as profile, acc.name, acc.email, acc.password, acc."roleId", acc.dob 
-      from "Accounts" as acc
-      inner join "Profiles" as pro on acc."profileId"=pro."profileId"`;
+    const response = await this.prisma.Accounts.findMany({
+      include: {
+        profiles: true,
+        roles: true,
+      },
+    });
     return response;
   }
 
   async updateAccount(account) {
-    const updatedData = JSON.parse(JSON.stringify(account));
+    const { accountId, ...updatedData } = account;
+
     if (updatedData.password) {
       const hashedPassword = await bcrypt.hash(updatedData.password, 10);
       updatedData.password = hashedPassword;
     }
-    delete updatedData.accountId;
 
     await this.prisma.Accounts.update({
       where: {
-        accountId: Number(account.accountId),
+        accountId: Number(accountId),
       },
       data: updatedData,
     });
+
     return { message: "Account updated successfully" };
   }
 
@@ -65,7 +53,7 @@ export default class Accounts {
   }
 
   async unsuspendAccount(accountId) {
-    await this.prisma.SuspendedAccounts.deleteMany({
+    await this.prisma.Accounts.update({
       where: { accountId: Number(accountId) },
       data: { suspended: false },
     });
@@ -76,7 +64,12 @@ export default class Accounts {
   async searchAccount(accountFilter) {
     const response = await this.prisma.Accounts.findMany({
       where: accountFilter,
+      include: {
+        profiles: { select: { name: true } },
+        roles: { select: { roleName: true } },
+      },
     });
+
     return response;
   }
 }

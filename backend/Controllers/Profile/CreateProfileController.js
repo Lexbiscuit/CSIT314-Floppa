@@ -8,7 +8,7 @@ export default class CreateProfileController {
     this.res = res;
   }
 
-  async createProfile(name, description) {
+  async createProfile(profile) {
     try {
       const profile = new Profiles(this.prisma);
       const response = await profile.createProfile(name, description);

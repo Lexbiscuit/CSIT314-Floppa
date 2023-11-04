@@ -8,27 +8,10 @@ export default class CreateAccountController {
     this.res = res;
   }
 
-  async createAccount(
-    name,
-    profileId,
-    email,
-    password,
-    roleId,
-    dob,
-    suspended
-  ) {
+  async createAccount(account) {
     try {
       const accounts = new Accounts(this.prisma);
-
-      const response = await accounts.createAccount(
-        name,
-        profileId,
-        email,
-        password,
-        roleId,
-        dob,
-        suspended
-      );
+      const response = await accounts.createAccount(account);
 
       // 201 CREATED
       this.res.status(201).json(response);
