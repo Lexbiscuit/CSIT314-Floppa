@@ -9,8 +9,8 @@ export default class SearchAccountController {
 
   async searchAccount(accountFilter) {
     try {
-      const account = new Accounts(this.prisma);
-      const response = await account.searchAccount(accountFilter);
+      const accounts = new Accounts(this.prisma);
+      const response = await accounts.searchAccounts(accountFilter);
 
       // 200 OK
       this.res.status(200).json(response);

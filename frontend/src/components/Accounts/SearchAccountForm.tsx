@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import authHeader from "../../services/auth-header";
 import UpdateAccountForm from "./UpdateAccountForm";
@@ -82,7 +82,7 @@ function searchAccounts(accountFilter: any) {
         accountFilter,
         {
           headers: authHeader(),
-        }
+        },
       );
 
       if (data.length > 0) {

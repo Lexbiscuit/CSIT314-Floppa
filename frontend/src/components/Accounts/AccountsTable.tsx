@@ -1,10 +1,4 @@
-import React, { useState, useEffect } from "react";
-import {
-  useQuery,
-  useQueryClient,
-  QueryClient,
-  QueryClientProvider,
-} from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import authHeader from "../../services/auth-header";
 import UpdateAccountForm from "./UpdateAccountForm";
 import axios from "axios";

@@ -23,12 +23,11 @@ export default class Workslots {
   }
 
   async updateWorkslot(workslot) {
-    const updatedData = JSON.parse(JSON.stringify(workslot));
-    delete updatedData.workslotId;
+    const { workslotId, ...updatedData } = workslot;
 
     await this.prisma.Workslots.update({
       where: {
-        workslotId: Number(workslot.workslotId),
+        workslotId: Number(workslotId),
       },
       data: updatedData,
     });
@@ -45,7 +44,7 @@ export default class Workslots {
   }
 
   async searchWorkslot(workslotFilter) {
-    const response = await this.prisma.Workslots.findUnique({
+    const response = await this.prisma.Workslots.findMany({
       where: workslotFilter,
     });
     return response;

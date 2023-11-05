@@ -28,15 +28,18 @@ export default function Header() {
     </a>
   ));
 
-  const LogoutButton = () => (
+  const logout = (event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
+    event.preventDefault();
+    AuthService.logout();
+    alert("You have been logged out.");
+    window.location.replace("/logout");
+  };
+
+  const LogoutBtn = () => (
     <a
       href={"/logout"}
       className={classes.link}
-      onClick={(event) => {
-        event.preventDefault();
-        AuthService.logout();
-        window.location.replace("/logout");
-      }}
+      onClick={(event) => logout(event)}
     >
       Logout
     </a>
@@ -61,7 +64,7 @@ export default function Header() {
         </div>
         <Group gap={5} visibleFrom="xs">
           {items}
-          <LogoutButton />
+          <LogoutBtn />
         </Group>
 
         <Burger opened={opened} onClick={toggle} hiddenFrom="xs" size="sm" />

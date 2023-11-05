@@ -5,6 +5,7 @@ import UpdateProfileForm from "../components/Profiles/UpdateProfileForm";
 import TanstackTable from "../components/TanstackTable";
 import axios from "axios";
 import authHeader from "../services/auth-header";
+import AuthService from "../services/auth.service";
 
 import { Modal, Button, Group, Text, Container } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
@@ -130,17 +131,21 @@ function useProfiles() {
 }
 
 export default function ManageProfileGUI() {
-  const { status, data, error, isFetching } = useProfiles();
+  if (AuthService.getCurrentUser()) {
+    const { status, data, error, isFetching } = useProfiles();
 
-  return (
-    <Appshell>
-      <Container size="lg" my="1rem">
-        <h1>Profiles</h1>
-        <CreateProfileForm />
-        {isFetching && <h1>Loading...</h1>}
-        {error && <h1>An error occured</h1>}
-        {data && <TanstackTable columns={columns} data={data} />}
-      </Container>
-    </Appshell>
-  );
+    return (
+      <Appshell>
+        <Container size="lg" my="1rem">
+          <h1>Profiles</h1>
+          <CreateProfileForm />
+          {isFetching && <h1>Loading...</h1>}
+          {error && <h1>An error occured</h1>}
+          {data && <TanstackTable columns={columns} data={data} />}
+        </Container>
+      </Appshell>
+    );
+  } else {
+    window.location.replace("/");
+  }
 }

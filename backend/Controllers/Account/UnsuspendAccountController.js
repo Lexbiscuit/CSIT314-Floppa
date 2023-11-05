@@ -10,8 +10,8 @@ export default class UnsuspendAccountController {
 
   async unsuspendAccount(accountId) {
     try {
-      const account = new Accounts(this.prisma);
-      const response = await account.unsuspendAccount(accountId);
+      const accounts = new Accounts(this.prisma);
+      const response = await accounts.unsuspendAccount(accountId);
 
       // 200 OK
       this.res.status(200).json(response);

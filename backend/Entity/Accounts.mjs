@@ -61,12 +61,22 @@ export default class Accounts {
     return { message: "Account unsuspended successfully" };
   }
 
-  async searchAccount(accountFilter) {
+  async searchAccounts(accountFilter) {
     const response = await this.prisma.Accounts.findMany({
       where: accountFilter,
       include: {
         profiles: { select: { name: true } },
         roles: { select: { roleName: true } },
+      },
+    });
+
+    return response;
+  }
+
+  async loginAccount(email) {
+    const response = await this.prisma.Accounts.findUnique({
+      where: {
+        email: email,
       },
     });
 

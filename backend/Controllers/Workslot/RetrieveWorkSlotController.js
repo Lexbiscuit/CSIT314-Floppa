@@ -9,14 +9,14 @@ export default class RetrieveWorkslotController {
 
   async retrieveWorkslots() {
     try {
-      const workslot = new Workslots();
+      const workslot = new Workslots(this.prisma);
       const response = await workslot.retrieveWorkslots();
 
       // 200 OK
       this.res.status(200).json(response);
-    } catch (err) {
+    } catch ({ message }) {
       // 500 INTERNAL SERVER ERROR
-      this.res.status(500).send({ message: err });
+      this.res.status(500).send({ message });
     }
   }
 }

@@ -9,8 +9,8 @@ export default class RetrieveAccountController {
 
   async retrieveAccounts() {
     try {
-      const accounts = new Accounts(this.prisma);
-      const response = await accounts.retrieveAccounts();
+      const account = new Accounts(this.prisma);
+      const response = await account.retrieveAccounts();
 
       // 200 OK
       this.res.status(200).json(response);
