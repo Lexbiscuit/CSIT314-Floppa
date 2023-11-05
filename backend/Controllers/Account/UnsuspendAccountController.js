@@ -15,32 +15,9 @@ export default class UnsuspendAccountController {
 
       // 200 OK
       this.res.status(200).json(response);
-    } catch (err) {
-      if (err instanceof Prisma.PrismaClientKnownRequestError) {
-        this.res.status(500).send({ message: err.message });
-      } else {
-        console.log(err);
-
-        // 500 INTERNAL SERVER ERROR
-        this.res.status(500).send({ message: err });
-      }
-    }
-  }
-
-  async unsuspendAccount(accountId) {
-    try {
-      const account = new Accounts(this.prisma);
-      const response = await account.unsuspendAccount(accountId);
-
-      // 200 OK
-      this.res.status(200).json(response);
-    } catch (err) {
-      if (err instanceof Prisma.PrismaClientKnownRequestError) {
-        this.res.status(500).send({ message: err.message });
-      } else {
-        // 500 INTERNAL SERVER ERROR
-        this.res.status(500).send({ message: err });
-      }
+    } catch ({ message }) {
+      // 500 INTERNAL SERVER ERROR
+      this.res.status(500).send({ message });
     }
   }
 }

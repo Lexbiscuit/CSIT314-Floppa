@@ -10,18 +10,14 @@ export default class CreateProfileController {
 
   async createProfile(profile) {
     try {
-      const profile = new Profiles(this.prisma);
-      const response = await profile.createProfile(name, description);
+      const profiles = new Profiles(this.prisma);
+      const response = await profiles.createProfile(profile);
 
       // 201 CREATED
       this.res.status(201).json(response);
-    } catch (err) {
-      if (err instanceof Prisma.PrismaClientKnownRequestError) {
-        this.res.status(500).send({ message: err.message });
-      } else {
-        // 500 INTERNAL SERVER ERROR
-        this.res.status(500).send({ message: err });
-      }
+    } catch ({ message }) {
+      // 500 INTERNAL SERVER ERROR
+      this.res.status(500).send({ message });
     }
   }
 }

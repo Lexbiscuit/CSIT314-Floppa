@@ -1,16 +1,16 @@
-import Accounts from "../../Entity/Accounts.mjs";
+import Profiles from "../../Entity/Profiles.mjs";
 
-export default class SearchAccountController {
+export default class SuspendProfileController {
   constructor(prisma, req, res) {
     this.prisma = prisma;
     this.req = req;
     this.res = res;
   }
 
-  async searchAccount(accountFilter) {
+  async suspendProfile(profileId) {
     try {
-      const accounts = new Accounts(this.prisma);
-      const response = await accounts.searchAccounts(accountFilter);
+      const profile = new Profiles(this.prisma);
+      const response = await profile.suspendProfile(profileId);
 
       // 200 OK
       this.res.status(200).json(response);

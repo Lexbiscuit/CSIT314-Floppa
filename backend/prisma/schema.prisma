@@ -41,9 +41,10 @@ model Accounts {
 }
 
 model Profiles {
-  profileId   Int    @id @default(autoincrement())
-  name        String @unique
+  profileId   Int     @id @default(autoincrement())
+  name        String  @unique
   description String
+  suspended   Boolean @default(false)
 
   accounts Accounts[]
 
@@ -74,8 +75,8 @@ model Workslots_Roles {
 }
 
 model Roles {
-  roleId   Int    @id @default(autoincrement())
-  roleName String
+  roleId Int    @id @default(autoincrement())
+  name   String
 
   workslots_roles Workslots_Roles[]
   accounts        Accounts[]

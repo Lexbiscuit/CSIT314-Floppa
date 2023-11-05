@@ -14,9 +14,9 @@ export default class SearchProfileController {
 
       // 200 OK
       this.res.status(200).json(response);
-    } catch (err) {
+    } catch ({ message }) {
       // 500 INTERNAL SERVER ERROR
-      this.res.status(500).send({ message: err });
+      this.res.status(500).send({ message });
     }
   }
 }

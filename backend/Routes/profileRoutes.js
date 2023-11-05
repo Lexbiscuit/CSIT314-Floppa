@@ -3,7 +3,8 @@ import { PrismaClient } from "@prisma/client";
 import CreateProfileController from "../Controllers/Profile/CreateProfileController.js";
 import RetrieveProfileController from "../Controllers/Profile/RetrieveProfileController.js";
 import UpdateProfileController from "../Controllers/Profile/UpdateProfileController.js";
-import DeleteProfileController from "../Controllers/Profile/DeleteProfileController.js";
+import SuspendProfileController from "../Controllers/Profile/SuspendProfileController.js";
+import UnsuspendProfileController from "../Controllers/Profile/UnsuspendProfileController.js";
 import SearchProfileController from "../Controllers/Profile/SearchProfileController.js";
 import { authJwt } from "../middleware/authJwt.js";
 
@@ -36,12 +37,26 @@ profileRoutes.put("/update", async (req, res) => {
   await updateProfileController.updateProfile(profile);
 });
 
-// profileRoutes.delete("/delete", [authJwt.verifyToken], async (req, res) => {
-profileRoutes.delete("/delete", async (req, res) => {
+profileRoutes.post("/suspend", async (req, res) => {
   const { profileId } = req.body;
 
-  const deleteProfileController = new DeleteProfileController(prisma, req, res);
-  await deleteProfileController.deleteProfile(profileId);
+  const suspendProfileController = new SuspendProfileController(
+    prisma,
+    req,
+    res
+  );
+  await suspendProfileController.suspendProfile(profileId);
+});
+
+profileRoutes.post("/unsuspend", async (req, res) => {
+  const { profileId } = req.body;
+
+  const unsuspendProfileController = new UnsuspendProfileController(
+    prisma,
+    req,
+    res
+  );
+  await unsuspendProfileController.unsuspendProfile(profileId);
 });
 
 // profileRoutes.get("/search", [authJwt.verifyToken], async (req, res) => {

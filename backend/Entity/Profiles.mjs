@@ -23,24 +23,38 @@ export default class Profiles {
   }
 
   async updateProfile(profile) {
-    const updatedData = JSON.parse(JSON.stringify(profile));
-    delete updatedData.profileId;
+    const { profileId, ...updatedData } = JSON.parse(JSON.stringify(profile));
     await this.prisma.Profiles.update({
       where: {
-        profileId: Number(profile.profileId),
+        profileId: Number(profileId),
       },
       data: updatedData,
     });
     return { message: "Profile updated successfully." };
   }
 
-  async deleteProfile(profileId) {
-    await this.prisma.Profiles.delete({
+  async suspendProfile(profileId) {
+    await this.prisma.Profiles.update({
       where: {
         profileId: Number(profileId),
       },
+      data: {
+        suspended: true,
+      },
     });
-    return { message: "Profile deleted successfully." };
+    return { message: "Profile suspended successfully." };
+  }
+
+  async unsuspendProfile(profileId) {
+    await this.prisma.Profiles.update({
+      where: {
+        profileId: Number(profileId),
+      },
+      data: {
+        suspended: false,
+      },
+    });
+    return { message: "Profile unsuspended successfully." };
   }
 
   async searchProfile(profileFilter) {

@@ -15,13 +15,9 @@ export default class CreateAccountController {
 
       // 201 CREATED
       this.res.status(201).json(response);
-    } catch (err) {
-      if (err instanceof Prisma.PrismaClientKnownRequestError) {
-        this.res.status(500).send({ message: err.message });
-      } else {
-        // 500 INTERNAL SERVER ERROR
-        this.res.status(500).send({ message: err });
-      }
+    } catch ({ message }) {
+      // 500 INTERNAL SERVER ERROR
+      this.res.status(500).send({ message });
     }
   }
 }
