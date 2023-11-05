@@ -47,7 +47,7 @@ const columns = [
     footer: (props: any) => props.column.id,
   },
   {
-    accessorKey: "roles.roleName",
+    accessorKey: "roles.name",
     header: "Role",
     cell: (info: Info) => info.getValue(),
     footer: (props: any) => props.column.id,
@@ -78,7 +78,7 @@ function retrieveAccounts() {
         "http://localhost:3000/accounts/retrieve",
         {
           headers: authHeader(),
-        }
+        },
       );
       const transformData = data.map((account: any) => {
         account.accountId = account.accountId.toString();

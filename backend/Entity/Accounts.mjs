@@ -66,7 +66,7 @@ export default class Accounts {
       where: accountFilter,
       include: {
         profiles: { select: { name: true } },
-        roles: { select: { roleName: true } },
+        roles: { select: { name: true } },
       },
     });
 
