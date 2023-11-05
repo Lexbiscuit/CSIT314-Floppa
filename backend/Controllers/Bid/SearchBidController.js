@@ -1,4 +1,5 @@
 import { Prisma } from "@prisma/client";
+import Bids from "../../Entity/Bids.mjs";
 
 export default class SearchBidController {
   constructor(prisma, req, res) {
@@ -9,15 +10,14 @@ export default class SearchBidController {
 
   async searchBid(bidFilter) {
     try {
-      const searchBid = await this.prisma.workslots.findMany({
-        where: bidFilter,
-      });
+      const bids = new Bids(this.prisma);
+      const response = await bids.searchBid(bidFilter)
 
       // 200 OK
-      this.res.status(200).json(searchBid);
-    } catch (err) {
+      this.res.status(200).json(response);
+    } catch (message) {
       // 500 INTERNAL SERVER ERROR
-      this.res.status(500).send({ message: err });
+      this.res.status(500).send({ message });
     }
   }
 }

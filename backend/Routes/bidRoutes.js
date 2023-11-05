@@ -24,15 +24,14 @@ bidRoutes.get("/retrieve", async (req, res) => {
 
 // bidRoutes.put("/update", [authJwt.verifyToken], async (req, res) => {
 bidRoutes.put("/update", async (req, res) => {
-  const { bidId, accountId, workslotId, status, reason } = req.body;
-
+  const bid  = req.body;
   const mngrUpdBidCtlr = new MngrUpdBidCtlr(prisma, req, res);
-  await mngrUpdBidCtlr.updateBid(bidId, accountId, workslotId, status, reason);
+  await mngrUpdBidCtlr.updateBid(bid);
 });
 
 // bidRoutes.get("/search", [authJwt.verifyToken], async (req, res) => {
 bidRoutes.post("/search", async (req, res) => {
-  const bidFilter = req.query;
+  const bidFilter = req.body;
 
   const searchBidController = new SearchBidController(prisma, req, res);
   await searchBidController.searchBid(bidFilter);
@@ -83,10 +82,10 @@ bidRoutes.put("/reject", async (req, res) => {
 // --------------------- NOT IN USER STORY --------------------- //
 // bidRoutes.post("/create", [authJwt.verifyToken], async (req, res) => {
 bidRoutes.post("/create", async (req, res) => {
-  const { accountId, workslotId, status, reason } = req.body;
+  const bid = req.body;
 
   const createBidController = new CreateBidController(prisma, req, res);
-  await createBidController.createBid(accountId, workslotId, status, reason);
+  await createBidController.createBid(bid);
 });
 
 export default bidRoutes;

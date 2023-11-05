@@ -3,6 +3,14 @@ export default class Bids {
     this.prisma = prisma;
   }
 
+  async createBid(bid) {
+    await this.prisma.Bids.create({
+      data: bid,
+    });
+    return {message : "Bids created successfully"};
+  }
+
+
   async retrieveBids() {
     const response = await this.prisma.Bids.findMany({
       orderBy: [
@@ -14,15 +22,13 @@ export default class Bids {
     return response;
   }
 
-  async updateBid(bidId, accountId, profileId) {
+  async updateBid(bid) {
+    const { bidId, ...updatedData } = bid;
     const response = await this.prisma.Bids.update({
       where: {
         bidId: Number(bidId),
       },
-      data: {
-        accountId: accountId,
-        profileId: profileId,
-      },
+      data: updatedData
     });
     return response;
   }
@@ -64,7 +70,7 @@ export default class Bids {
       },
       data: {
         status: "Reject",
-        reason: reason 
+        reason: reason
       },
     });
     return response;
@@ -97,16 +103,4 @@ export default class Bids {
     return response;
   }
 
-  // --------------------- NOT IN USER STORY --------------------- //
-  async createBid(accountId, workslotId, status, reason) {
-    const response = await this.prisma.Bids.create({
-      data: {
-        accountId: accountId,
-        workslotId: workslotId,
-        status: status,
-        reason: reason,
-      },
-    });
-    return response;
-  }
 }

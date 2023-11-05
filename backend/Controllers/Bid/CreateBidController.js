@@ -8,22 +8,16 @@ export default class CreateBidController {
     this.res = res;
   }
 
-  async createBid(accountId, workslotId, status, reason) {
+  async createBid(bid) {
     try {
       const bids = new Bids(this.prisma);
-      const createBid = await bids.createBid(accountId, workslotId, status, reason);
+      const response = await bids.createBid(bid);
 
       // 201 Created
-      this.res.status(201).json(createBid);
-    } catch (err) {
-      if (err instanceof Prisma.PrismaClientKnownRequestError) {
-        if (err.code === "P2002")
-          this.res.status(500).send({ message: err.message });
-      } else {
-        // 500 INTERNAL SERVER ERROR
-        console.log(err);
-        this.res.status(500).send({ message: "Internal Server Error." });
-      }
+      this.res.status(201).json(response);
+    } catch (message) {
+      this.res.status(500).send({ message });
     }
   }
 }
+

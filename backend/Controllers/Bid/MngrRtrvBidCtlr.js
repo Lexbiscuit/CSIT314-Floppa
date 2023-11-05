@@ -1,4 +1,5 @@
 import { Prisma } from "@prisma/client";
+import Bids from "../../Entity/Bids.mjs";
 
 
 
@@ -11,26 +12,17 @@ export default class MngrRtrvBidCtlr {
 
   async retrieveBids() {
     try {
-      const countBids = await this.prisma.Bids.count();
-      const retrieveBids = await this.prisma.Bids.findMany({
-        orderBy: [
-          {
-            BidId: "asc",
-          },
-        ],
-      });
+      const bids = new Bids(this.prisma);
+      const response = await bids.retrieveBids();
+
 
       // 200 OK.
       this.res.status(200).json({
-        message: `There are currently ${countBids} bids present`,
-        bids: retrieveBids,
+        response,
       });
-    } catch (err) {
-      console.error(err);
-
+    } catch (message) {
       // 500 INTERNAL SERVER ERROR
-      console.log(err);
-      this.res.status(500).send({ message: "Internal Server Error." });
+      this.res.status(500).send({ message });
     }
   }
 }

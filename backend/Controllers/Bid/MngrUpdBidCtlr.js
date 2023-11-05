@@ -1,4 +1,5 @@
 import { Prisma } from "@prisma/client";
+import Bids from "../../Entity/Bids.mjs";
 
 export default class MngrUpdBidCtlr {
   constructor(prisma, req, res) {
@@ -7,29 +8,18 @@ export default class MngrUpdBidCtlr {
     this.res = res;
   }
 
-  async updateBid(bidId, accountId, workslotId, status, reason) {
+  async updateBid(bid) {
+
     try {
-      const updateBid = await this.prisma.Bids.update({
-        where: {
-          bidId: Number(bidId),
-        },
-        data: {
-          accountId: accountId,
-          workslotId: workslotId,
-          status: status,
-          reason: reason,
-        },
-      });
+      const bids = new Bids(this.prisma);
+      const response = await bids.updateBid(bid);
 
       // 200 OK.
-      this.res.status(200).send({ message: "Workslot updated successfully." });
+      this.res.status(200).json(response);
     } catch (err) {
-      if (err instanceof Prisma.PrismaClientKnownRequestError) {
-        this.res.status(500).send({ message: err.message });
-      } else {
-        // 500 INTERNAL SERVER ERROR
-        this.res.status(500).send({ message: err });
-      }
+      this.res.status(500).send({ message });
     }
   }
 }
+
+

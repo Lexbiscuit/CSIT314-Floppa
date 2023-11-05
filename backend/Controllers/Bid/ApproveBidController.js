@@ -16,13 +16,8 @@ export default class ApproveBidController {
       // 201 Created
       this.res.status(201).json(approvedBid); //return "approve" msg OR json string?
     } catch (err) {
-      if (err instanceof Prisma.PrismaClientKnownRequestError) {
-        if (err.code === "P2002")
-          this.res.status(500).send({ message: err.message });
-      } else {
-        // 500 INTERNAL SERVER ERROR
-        this.res.status(500).send({ message: "Internal Server Error." });
+        this.res.status(500).send({ message });
       }
     }
   }
-}
+
