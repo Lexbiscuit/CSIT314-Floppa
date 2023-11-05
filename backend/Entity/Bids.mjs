@@ -47,7 +47,7 @@ export default class Bids {
   }
 
   async retrieveStaff() {
-    const response = await this.prisma.Bids.findMany({
+    const response = await this.prisma.Profiles.findMany({
       orderBy: [
         {
           profileId: "asc",

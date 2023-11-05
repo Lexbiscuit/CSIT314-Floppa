@@ -11,7 +11,7 @@ export default class ApproveBidController {
   async approveBid(bidId) {
     try {
       const bids = new Bids(this.prisma);
-      const approvedBid = await bids.approve(bidId);
+      const approvedBid = await bids.approveBid(bidId);
 
       // 201 Created
       this.res.status(201).json(approvedBid); //return "approve" msg OR json string?
