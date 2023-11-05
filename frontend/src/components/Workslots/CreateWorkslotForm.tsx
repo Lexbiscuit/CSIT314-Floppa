@@ -12,12 +12,11 @@ export default function CreateWorkslotForm() {
         .post(
           "http://localhost:3000/workslots/create",
           {
-            startTime: data.startTime,
-            endTime: data.endTime,
+            ...data,
           },
           {
             headers: authHeader(),
-          }
+          },
         )
         .then((res) => alert(res.data.message))
         .catch((error) => alert(error));
@@ -34,6 +33,7 @@ export default function CreateWorkslotForm() {
       startTime: isNotEmpty("Start time cannot be empty."),
       endTime: isNotEmpty("End time cannot be empty."),
     },
+
     transformValues: (values) => ({
       startTime: new Date(values.startTime).toISOString(),
       endTime: new Date(values.endTime).toISOString(),
