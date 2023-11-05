@@ -11,7 +11,6 @@ export default class SearchAccountController {
     try {
       const accounts = new Accounts(this.prisma);
       const response = await accounts.searchAccounts(accountFilter);
-
       // 200 OK
       this.res.status(200).json(response);
     } catch ({ message }) {

@@ -1,4 +1,3 @@
-import { Prisma } from "@prisma/client";
 import Accounts from "../../Entity/Accounts.mjs";
 
 export default class UpdateAccountController {

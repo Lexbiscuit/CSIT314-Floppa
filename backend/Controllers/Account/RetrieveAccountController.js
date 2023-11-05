@@ -11,7 +11,6 @@ export default class RetrieveAccountController {
     try {
       const account = new Accounts(this.prisma);
       const response = await account.retrieveAccounts();
-
       // 200 OK
       this.res.status(200).json(response);
     } catch ({ message }) {

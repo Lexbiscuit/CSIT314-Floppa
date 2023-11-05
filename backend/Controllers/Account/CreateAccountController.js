@@ -1,4 +1,3 @@
-import { Prisma } from "@prisma/client";
 import Accounts from "../../Entity/Accounts.mjs";
 
 export default class CreateAccountController {
@@ -12,7 +11,6 @@ export default class CreateAccountController {
     try {
       const accounts = new Accounts(this.prisma);
       const response = await accounts.createAccount(account);
-
       // 201 CREATED
       this.res.status(201).json(response);
     } catch ({ message }) {
