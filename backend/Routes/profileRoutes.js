@@ -13,10 +13,10 @@ const prisma = new PrismaClient();
 
 // profileRoutes.post("/create", [authJwt.verifyToken], async (req, res) => {
 profileRoutes.post("/create", async (req, res) => {
-  const { name, description } = req.body;
+  const profile = req.body;
 
   const createProfileController = new CreateProfileController(prisma, req, res);
-  await createProfileController.createProfile(name, description);
+  await createProfileController.createProfile(profile);
 });
 
 // profileRoutes.get("/retrieve", [authJwt.verifyToken], async (req, res) => {
@@ -24,8 +24,9 @@ profileRoutes.get("/retrieve", async (req, res) => {
   const retrieveProfileController = new RetrieveProfileController(
     prisma,
     req,
-    res
+    res,
   );
+
   await retrieveProfileController.retrieveProfiles();
 });
 
@@ -43,7 +44,7 @@ profileRoutes.post("/suspend", async (req, res) => {
   const suspendProfileController = new SuspendProfileController(
     prisma,
     req,
-    res
+    res,
   );
   await suspendProfileController.suspendProfile(profileId);
 });
@@ -54,7 +55,7 @@ profileRoutes.post("/unsuspend", async (req, res) => {
   const unsuspendProfileController = new UnsuspendProfileController(
     prisma,
     req,
-    res
+    res,
   );
   await unsuspendProfileController.unsuspendProfile(profileId);
 });

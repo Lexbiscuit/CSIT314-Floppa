@@ -23,7 +23,7 @@ export default class Profiles {
   }
 
   async updateProfile(profile) {
-    const { profileId, ...updatedData } = JSON.parse(JSON.stringify(profile));
+    const { profileId, ...updatedData } = profile;
     await this.prisma.Profiles.update({
       where: {
         profileId: Number(profileId),

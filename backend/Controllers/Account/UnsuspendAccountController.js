@@ -1,4 +1,3 @@
-import { Prisma } from "@prisma/client";
 import Accounts from "../../Entity/Accounts.mjs";
 
 export default class UnsuspendAccountController {
@@ -12,7 +11,6 @@ export default class UnsuspendAccountController {
     try {
       const accounts = new Accounts(this.prisma);
       const response = await accounts.unsuspendAccount(accountId);
-
       // 200 OK
       this.res.status(200).json(response);
     } catch ({ message }) {
