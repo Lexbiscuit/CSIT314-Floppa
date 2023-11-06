@@ -15,12 +15,13 @@ const prisma = new PrismaClient();
 StaffbidRoutes.post("/create", async (req, res) => {
     const staffbid = req.body;
 
-    const CreateBidController = new CreateBidController(prisma, req, res);
-    await CreateBidController.createBid(staffbid);
+    const StaffcreateBidController = new CreateBidController(prisma, req, res);
+    await StaffcreateBidController.createBid(staffbid);
 });
 
 StaffbidRoutes.get("/retrieve", async (req, res) => {
-    const staffbid = req.body
+    const staffRtrvBidCtlr = new StaffRtrvBidCtlr(prisma, req, res);
+    await staffRtrvBidCtlr.retrieveBids();
 })
 
 export default StaffbidRoutes;
