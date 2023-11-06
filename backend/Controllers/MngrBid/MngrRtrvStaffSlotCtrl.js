@@ -6,7 +6,7 @@ export default class MngrRtrvStaffSlotCtrl {
     this.req = req;
     this.res = res;
   }
-  async viewWorkSlotsForAccount(accountId) {
+  async viewWorkSlotsForAccount(accountId) { // to be tested
     try {
       // Step 2: Retrieve all work slots associated with the account.
       const workSlotsForAccount = await this.prisma.Workslots.findMany({

@@ -82,14 +82,15 @@ export default class Accounts {
       return response;
   }
 
-  async retrieveAvailStaff () {
-    const retrieveAvailStaff = await prisma.accounts.findMany({
+  async findAvailableStaff() {
+    const availableStaff = await this.prisma.accounts.findMany({
       where: {
         bids: {
           none: {} // Filter for accounts with no bids
         }
       }
     });
+    return availableStaff;
   //   return retrieveAvailStaff;
   //   const response = await this.prisma.Accounts.findMany({
   //     where: {

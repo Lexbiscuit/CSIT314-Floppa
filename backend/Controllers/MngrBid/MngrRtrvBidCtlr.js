@@ -12,13 +12,14 @@ export default class MngrRtrvBidCtlr {
 
   async retrieveBids() {
     try {
-      const bids = new Bids(this.prisma);
+      const countBids = await this.prisma.Bids.count();
+      const bids = new Bids (this.prisma);
       const response = await bids.retrieveBids();
 
 
       // 200 OK.
       this.res.status(200).json({
-        response,
+        bids: response,
       });
     } catch (message) {
       // 500 INTERNAL SERVER ERROR
