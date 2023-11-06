@@ -1,12 +1,12 @@
 import { Router } from "express";
 import { PrismaClient } from "@prisma/client";
 import StaffRtrvBidCtlr from "../Controllers/StaffBid/StffRtrvBidsCtlr.js";
-import StaffBidSlotCtlr from "../Controllers/StaffBid/StaffBidSlotCtlr.js";
+// import StaffBidSlotCtlr from "../Controllers/StaffBid/StaffBidSlotCtlr.js";
 import StaffUpdBidCtlr from "../Controllers/StaffBid/StaffUpdBidCtlr.js";
 import StaffDltBidSlotCtlr from "../Controllers/StaffBid/StffDltBidSlotCtlr.js";
-import StaffSrchBidCtlr from "../Controllers/StaffBid/StaffSrchBidCtlr.js";
-import StaffRtrvAvailWrkslotCtlr from "../Controllers/StaffBid/StffRtrvAvailWrksltCtlr.js";
-import StaffRtrvBidsRslt from "../Controllers/StaffBid/StffRtrvBidsRslt.js";
+// import StaffSrchBidCtlr from "../Controllers/StaffBid/StaffSrchBidCtlr.js";
+// import StaffRtrvAvailWrkslotCtlr from "../Controllers/StaffBid/StffRtrvAvailWrksltCtlr.js";
+// import StaffRtrvBidsRslt from "../Controllers/StaffBid/StffRtrvBidsRslt.js";
 import CreateBidController from "../Controllers/StaffBid/StaffBidSlotCtlr.js";
 
 const StaffbidRoutes = Router();
