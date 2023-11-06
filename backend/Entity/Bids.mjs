@@ -84,7 +84,7 @@ export default class Bids {
   }
 
     // --------------------- THIS IS MANAGER VIEW STAFF SLOT ENTITY--------------------- //
-  async viewStaffWithSlot() {
+  async viewStaffWithSlot() { // to be tested
     const staffWithAssignedWorkSlots = await this.prisma.Staff.findMany({
       where: {
         workslots: {

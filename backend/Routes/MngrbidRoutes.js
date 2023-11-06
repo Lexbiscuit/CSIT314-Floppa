@@ -1,15 +1,15 @@
 import { Router } from "express";
 import { PrismaClient } from "@prisma/client";
-import ApproveBidController from "../Controllers/Bid/ApproveBidController.js";
-import CreateBidController from "../Controllers/Bid/CreateBidController.js";
-import MngrUpdBidCtlr from "../Controllers/Bid/MngrUpdBidCtlr.js";
-import MngrRtrvAvailStaffCtlr from "../Controllers/Bid/MngrRtrvAvailStaffCtlr.js";
-import MngrRtrvBidCtlr from "../Controllers/Bid/MngrRtrvBidCtlr.js";
-import MngrRtrvStaffSlotCtrl from "../Controllers/Bid/MngrRtrvStaffSlotCtrl.js";
-import MngrFltrAvailWSCtrl from "../Controllers/Bid/MngrFltrAvailWSCtrl.js";
-import RejectBidController from "../Controllers/Bid/RejectBidController.js";
-import SearchBidController from "../Controllers/Bid/SearchBidController.js";
-import StaffRtrvBidCtlr from "../Controllers/Bid/StaffRtrvBidCtlr.js";
+import ApproveBidController from "../Controllers/MngrBid/ApproveBidController.js";
+import CreateBidController from "../Controllers/MngrBid/CreateBidController.js";
+import MngrUpdBidCtlr from "../Controllers/MngrBid/MngrUpdBidCtlr.js";
+import MngrRtrvAvailStaffCtlr from "../Controllers/MngrBid/MngrRtrvAvailStaffCtlr.js";
+import MngrRtrvBidCtlr from "../Controllers/MngrBid/MngrRtrvBidCtlr.js";
+import MngrRtrvStaffSlotCtrl from "../Controllers/MngrBid/MngrRtrvStaffSlotCtrl.js";
+import MngrFltrAvailWSCtrl from "../Controllers/MngrBid/MngrFltrAvailWSCtrl.js";
+import RejectBidController from "../Controllers/MngrBid/RejectBidController.js";
+import SearchBidController from "../Controllers/MngrBid/SearchBidController.js";
+import StaffRtrvBidCtlr from "../Controllers/MngrBid/StaffRtrvBidCtlr.js";
 import { authJwt } from "../middleware/authJwt.js";
 
 const bidRoutes = Router();
@@ -51,7 +51,7 @@ bidRoutes.get("/availws", async (req, res) => {
 });
 
 // bidRoutes.get("/staffslots", [authJwt.verifyToken], async (req, res) => {
-bidRoutes.get("/staffslots", async (req, res) => {
+bidRoutes.get("/staffslots", async (req, res) => { // to be edited and changed
   const mngrRtrvStaffSlotCtrl = new MngrRtrvStaffSlotCtrl(prisma, req, res);
   await mngrRtrvStaffSlotCtrl.viewWorkslots();
 });
