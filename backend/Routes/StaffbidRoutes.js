@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { PrismaClient } from "@prisma/client";
 import StaffRtrvBidCtlr from "../Controllers/StaffBid/StffRtrvBidsCtlr.js";
-//import StaffBidSlotCtlr from "../Controllers/StaffBid/StaffBidSlotCtlr.js";
+import StaffBidSlotCtlr from "../Controllers/StaffBid/StaffBidSlotCtlr.js";
 import StaffUpdBidCtlr from "../Controllers/StaffBid/StaffUpdBidCtlr.js";
 import StaffDltBidSlotCtlr from "../Controllers/StaffBid/StffDltBidSlotCtlr.js";
 //import StaffSrchBidCtlr from "../Controllers/StaffBid/StaffSrchBidCtlr.js";
@@ -15,7 +15,7 @@ const prisma = new PrismaClient();
 StaffbidRoutes.post("/create", async (req, res) => {
     const staffbid = req.body;
 
-    const StaffcreateBidController = new CreateBidController(prisma, req, res);
+    const StaffcreateBidController = new StaffBidSlotCtlr(prisma, req, res);
     await StaffcreateBidController.createBid(staffbid);
 });
 

@@ -79,7 +79,7 @@ bidRoutes.put("/reject", async (req, res) => {
   await rejectBidController.rejectBid(bidId, reason);
 });
 
-// --------------------- NOT IN USER STORY --------------------- //
+// ---------------------- NOT IN USER STORY ---------------------- //
 // bidRoutes.post("/create", [authJwt.verifyToken], async (req, res) => {
 bidRoutes.post("/create", async (req, res) => {
   const bid = req.body;

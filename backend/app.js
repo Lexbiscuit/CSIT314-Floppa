@@ -3,9 +3,10 @@ import cors from "cors";
 import accountRoutes from "./Routes/accountRoutes.js";
 import profileRoutes from "./Routes/profileRoutes.js";
 import workslotRoutes from "./Routes/workslotRoutes.js";
-import MngrbidRoutes from "./Routes/MngrbidRoutes.js";
+import mngrbidRoutes from "./Routes/mngrbidRoutes.js"
+import staffbidRoutes from "./Routes/staffbidRoutes.js";
 import authRoutes from "./Routes/authRoutes.js";
-import StaffbidRoutes from "./Routes/StaffbidRoutes.js";
+
 
 const app = express();
 const port = 3000;
@@ -43,9 +44,9 @@ app.use("/profiles", profileRoutes);
 
 app.use("/workslots", workslotRoutes);
 
-app.use("/Mngrbids", MngrbidRoutes);
+app.use("/Mngrbids", mngrbidRoutes);
 
-app.use("/Staffbids", StaffbidRoutes);
+app.use("/Staffbids", staffbidRoutes);
 
 app.listen(port, () => {
   console.log(`CSIT314 "Team Floppa" Express.js app listening on port ${port}`);
