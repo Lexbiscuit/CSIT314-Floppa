@@ -137,7 +137,7 @@ export default class Bids {
 
   async updateBid(bid) {
     const { bidId, ...updateData } = bid;
-    const response = await this.prisma.update({
+    const response = await this.prisma.Bids.update({
       where: {
         bidId: bidId
       },
@@ -148,7 +148,7 @@ export default class Bids {
   }
 
   async deleteBidSlot(bidId) {
-    const response = await this.prisma.delete({
+    const response = await this.prisma.Bids.delete({
       where: {
         bidId: bidId
       }
