@@ -24,4 +24,18 @@ StaffbidRoutes.get("/retrieve", async (req, res) => {
     await staffRtrvBidCtlr.retrieveBids();
 })
 
+StaffbidRoutes.put("/update", async (req, res) => {
+    const staffbid = req.body;
+
+    const staffUpdBidCtlr = new StaffUpdBidCtlr(prisma, req, res);
+    await staffUpdBidCtlr.updateBid(staffbid);
+});
+
+StaffbidRoutes.delete("/delete", async (req, res) => {
+    const bidId = req.body;
+
+    const staffDltBidSlotCtlr = new StaffDltBidSlotCtlr(prisma, req, res);
+    await staffDltBidSlotCtlr.deleteBidSlot(bidId);
+});
+
 export default StaffbidRoutes;
