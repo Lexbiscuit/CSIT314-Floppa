@@ -3,6 +3,8 @@ export default class Bids {
     this.prisma = prisma;
   }
 
+
+  // --------------------- THIS IS MANAGER CREATE BIDS ENTITY--------------------- //
   async createBid(bid) {
     await this.prisma.Bids.create({
       data: bid,
@@ -10,7 +12,7 @@ export default class Bids {
     return {message : "Bids created successfully"};
   }
 
-
+  // --------------------- THIS IS MANAGER RETRIEVE BIDS ENTITY--------------------- //
   async retrieveBids() {
     const response = await this.prisma.Bids.findMany({
       orderBy: [
@@ -22,6 +24,7 @@ export default class Bids {
     return response;
   }
 
+    // --------------------- THIS IS MANAGER UPDATE BIDS ENTITY--------------------- //
   async updateBid(bid) {
     const { bidId, ...updatedData } = bid;
     const response = await this.prisma.Bids.update({
@@ -33,6 +36,7 @@ export default class Bids {
     return response;
   }
 
+    // --------------------- THIS IS MANAGER SEARCH BIDS ENTITY--------------------- //
   async searchBid(bidFilter) {
     const response = await this.prisma.Bids.findMany({
       where: bidFilter,
@@ -40,6 +44,7 @@ export default class Bids {
     return response;
   }
 
+    // --------------------- THIS IS MANAGER APPROVE BIDS ENTITY--------------------- //
   async approveBid(bidId) {
     const response = await this.prisma.Bids.update({
       where: {
@@ -52,6 +57,7 @@ export default class Bids {
     return response;
   }
 
+    // --------------------- THIS IS MANAGER RETRIEVE STAFF ENTITY--------------------- //
   async retrieveStaff() {
     const response = await this.prisma.Profiles.findMany({
       orderBy: [
@@ -63,6 +69,7 @@ export default class Bids {
     return response;
   }
 
+    // --------------------- THIS IS MANAGER REJECT BIDS ENTITY--------------------- //
   async rejectBid(bidId, reason) {
     const response = await this.prisma.Bids.update({
       where: {
@@ -76,6 +83,7 @@ export default class Bids {
     return response;
   }
 
+    // --------------------- THIS IS MANAGER VIEW STAFF SLOT ENTITY--------------------- //
   async viewStaffWithSlot() {
     const staffWithAssignedWorkSlots = await this.prisma.Staff.findMany({
       where: {
@@ -91,6 +99,7 @@ export default class Bids {
     return response;
   }
 
+    // --------------------- THIS IS MANAGER RETRIEVE STAFF BIDS ENTITY--------------------- //
   async viewStaffBid(accountId) {
     const response = await this.prisma.Bids.findMany({
       where: {
