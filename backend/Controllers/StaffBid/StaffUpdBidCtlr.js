@@ -16,7 +16,7 @@ export default class StaffUpdBidCtlr {
 
       // 200 OK.
       this.res.status(200).json(response);
-    } catch (err) {
+    } catch (message) {
       this.res.status(500).send({ message });
     }
   }

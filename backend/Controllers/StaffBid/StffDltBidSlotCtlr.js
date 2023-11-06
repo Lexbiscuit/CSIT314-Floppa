@@ -14,7 +14,7 @@ export default class StffDltBidSlotCtlr{
         const response = await bids.deleteBidSlot(bidId);
 
         // 200 OK.
-      this.res.status(200).json({message});
+      this.res.status(200).json(response);
         }
         catch(message){
             this.res.status(500).send({ message });
