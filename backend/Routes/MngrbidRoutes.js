@@ -79,13 +79,5 @@ bidRoutes.put("/reject", async (req, res) => {
   await rejectBidController.rejectBid(bidId, reason);
 });
 
-// ---------------------- NOT IN USER STORY ---------------------- //
-// bidRoutes.post("/create", [authJwt.verifyToken], async (req, res) => {
-bidRoutes.post("/create", async (req, res) => {
-  const bid = req.body;
-
-  const createBidController = new CreateBidController(prisma, req, res);
-  await createBidController.createBid(bid);
-});
 
 export default bidRoutes;

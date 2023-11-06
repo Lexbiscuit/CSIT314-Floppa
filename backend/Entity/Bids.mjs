@@ -3,15 +3,6 @@ export default class Bids {
     this.prisma = prisma;
   }
 
-
-  // --------------------- THIS IS MANAGER CREATE BIDS ENTITY--------------------- //
-  async createBid(bid) {
-    await this.prisma.Bids.create({
-      data: bid,
-    });
-    return { message: "Bids created successfully" };
-  }
-
   // --------------------- THIS IS MANAGER RETRIEVE BIDS ENTITY--------------------- //
   async retrieveBids() {
     const response = await this.prisma.Bids.findMany({
