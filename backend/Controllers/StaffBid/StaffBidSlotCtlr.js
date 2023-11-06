@@ -8,10 +8,10 @@ export default class StaffBidSlotCtlr {
         this.res = res;
     }
 
-    async createBid(StaffBids) {
+    async createBid(Bids) {
         try {
             const bids = new Staffbid(this.prisma);
-            const response = await bids.createBid(StaffBids);
+            const response = await bids.createBid(Bids);
 
             // 201 Created
             this.res.status(201).json(response);

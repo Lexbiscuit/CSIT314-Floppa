@@ -12,7 +12,7 @@ export default class StaffRtrvBidCtlr {
 
     async retrieveBids() {
         try {
-            const bids = new Staffbid(this.prisma);
+            const bids = new Bids(this.prisma);
             const response = await bids.retrieveBids();
 
 
