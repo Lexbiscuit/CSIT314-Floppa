@@ -12,7 +12,6 @@ export default class MngrRtrvBidCtlr {
 
   async retrieveBids() {
     try {
-      const countBids = await this.prisma.Bids.count();
       const bids = new Bids (this.prisma);
       const response = await bids.retrieveBids();
 

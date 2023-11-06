@@ -44,9 +44,9 @@ app.use("/profiles", profileRoutes);
 
 app.use("/workslots", workslotRoutes);
 
-app.use("/Mngrbids", mngrbidRoutes);
+app.use("/mngrbids", mngrbidRoutes);
 
-app.use("/Staffbids", staffbidRoutes);
+app.use("/staffbids", staffbidRoutes);
 
 app.listen(port, () => {
   console.log(`CSIT314 "Team Floppa" Express.js app listening on port ${port}`);

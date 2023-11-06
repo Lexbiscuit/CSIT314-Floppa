@@ -1,7 +1,6 @@
 import { Router } from "express";
 import { PrismaClient } from "@prisma/client";
 import ApproveBidController from "../Controllers/MngrBid/ApproveBidController.js";
-import CreateBidController from "../Controllers/MngrBid/CreateBidController.js";
 import MngrUpdBidCtlr from "../Controllers/MngrBid/MngrUpdBidCtlr.js";
 import MngrRtrvAvailStaffCtlr from "../Controllers/MngrBid/MngrRtrvAvailStaffCtlr.js";
 import MngrRtrvBidCtlr from "../Controllers/MngrBid/MngrRtrvBidCtlr.js";
