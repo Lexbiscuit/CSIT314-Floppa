@@ -155,7 +155,13 @@ export default class Bids {
     });
 
     return { message: "Bid delete successfully." };
-
   }
 
+  async searchStaffBid(bid) {
+    const response = await this.prisma.Bids.findMany({
+      where: bid
+    });
+
+    return response;
+  }
 }

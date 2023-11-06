@@ -4,7 +4,7 @@ import StaffRtrvBidCtlr from "../Controllers/StaffBid/StffRtrvBidsCtlr.js";
 import StaffBidSlotCtlr from "../Controllers/StaffBid/StaffBidSlotCtlr.js";
 import StaffUpdBidCtlr from "../Controllers/StaffBid/StaffUpdBidCtlr.js";
 import StaffDltBidSlotCtlr from "../Controllers/StaffBid/StffDltBidSlotCtlr.js";
-//import StaffSrchBidCtlr from "../Controllers/StaffBid/StaffSrchBidCtlr.js";
+import StaffSrchBidCtlr from "../Controllers/StaffBid/StaffSrchBidCtlr.js";
 //import StaffRtrvAvailWrkslotCtlr from "../Controllers/StaffBid/StffRtrvAvailWrksltCtlr.js";
 //import StaffRtrvBidsRslt from "../Controllers/StaffBid/StffRtrvBidsRslt.js";
 import CreateBidController from "../Controllers/StaffBid/StaffBidSlotCtlr.js";
@@ -36,6 +36,13 @@ StaffbidRoutes.delete("/delete", async (req, res) => {
 
     const staffDltBidSlotCtlr = new StaffDltBidSlotCtlr(prisma, req, res);
     await staffDltBidSlotCtlr.deleteBidSlot(bidId);
+});
+
+StaffbidRoutes.post("/search", async (req, res) => {
+    const bid = req.body;
+
+    const staffSrchBidCtlr = new StaffSrchBidCtlr(prisma, req, res);
+    await staffSrchBidCtlr.searchStaffBid(bid);
 });
 
 export default StaffbidRoutes;
