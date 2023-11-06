@@ -125,7 +125,7 @@ export default class Bids {
   }
 
   async retrieveBids() {
-    await this.prisma.Bids.findMany({
+   const response = await this.prisma.Bids.findMany({
       orderBy: [
         {
           bidId: "asc",
