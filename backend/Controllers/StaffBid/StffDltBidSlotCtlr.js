@@ -1,5 +1,5 @@
 import { Prisma } from "@prisma/client";
-import Bids from "../../Entity/Staffbids.mjs";
+import Bids from "../../Entity/Bids.mjs";
 
 export default class StffDltBidSlotCtlr{
     constructor(prisma, req, res) {

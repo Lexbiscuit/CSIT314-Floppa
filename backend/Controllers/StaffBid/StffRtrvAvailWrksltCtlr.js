@@ -1,2 +1,2 @@
 import { Prisma } from "@prisma/client";
-import Staffbid from "../../Entity/StaffBids.mjs";
+import Bids from "../../Entity/Bids.mjs";
