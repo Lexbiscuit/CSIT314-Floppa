@@ -22,6 +22,7 @@ export default class StaffRtrvBidCtlr {
             });
         } catch (message) {
             // 500 INTERNAL SERVER ERROR
+            console.log(message);
             this.res.status(500).send({ message });
         }
     }

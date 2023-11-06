@@ -9,7 +9,7 @@ export default class Bids {
     await this.prisma.Bids.create({
       data: bid,
     });
-    return {message : "Bids created successfully"};
+    return { message: "Bids created successfully" };
   }
 
   // --------------------- THIS IS MANAGER RETRIEVE BIDS ENTITY--------------------- //
@@ -24,7 +24,7 @@ export default class Bids {
     return response;
   }
 
-    // --------------------- THIS IS MANAGER UPDATE BIDS ENTITY--------------------- //
+  // --------------------- THIS IS MANAGER UPDATE BIDS ENTITY--------------------- //
   async updateBid(bid) {
     const { bidId, ...updatedData } = bid;
     const response = await this.prisma.Bids.update({
@@ -36,7 +36,7 @@ export default class Bids {
     return response;
   }
 
-    // --------------------- THIS IS MANAGER SEARCH BIDS ENTITY--------------------- //
+  // --------------------- THIS IS MANAGER SEARCH BIDS ENTITY--------------------- //
   async searchBid(bidFilter) {
     const response = await this.prisma.Bids.findMany({
       where: bidFilter,
@@ -44,7 +44,7 @@ export default class Bids {
     return response;
   }
 
-    // --------------------- THIS IS MANAGER APPROVE BIDS ENTITY--------------------- //
+  // --------------------- THIS IS MANAGER APPROVE BIDS ENTITY--------------------- //
   async approveBid(bidId) {
     const response = await this.prisma.Bids.update({
       where: {
@@ -57,7 +57,7 @@ export default class Bids {
     return response;
   }
 
-    // --------------------- THIS IS MANAGER RETRIEVE STAFF ENTITY--------------------- //
+  // --------------------- THIS IS MANAGER RETRIEVE STAFF ENTITY---------------------//
   async retrieveStaff() {
     const response = await this.prisma.Profiles.findMany({
       orderBy: [
@@ -69,7 +69,7 @@ export default class Bids {
     return response;
   }
 
-    // --------------------- THIS IS MANAGER REJECT BIDS ENTITY--------------------- //
+  // --------------------- THIS IS MANAGER REJECT BIDS ENTITY--------------------- //
   async rejectBid(bidId, reason) {
     const response = await this.prisma.Bids.update({
       where: {
@@ -83,7 +83,7 @@ export default class Bids {
     return response;
   }
 
-    // --------------------- THIS IS MANAGER VIEW STAFF SLOT ENTITY--------------------- //
+  // --------------------- THIS IS MANAGER VIEW STAFF SLOT ENTITY--------------------- //
   async viewStaffWithSlot() { // to be tested
     const staffWithAssignedWorkSlots = await this.prisma.Staff.findMany({
       where: {
@@ -99,7 +99,7 @@ export default class Bids {
     return response;
   }
 
-    // --------------------- THIS IS MANAGER RETRIEVE STAFF BIDS ENTITY--------------------- //
+  // --------------------- THIS IS MANAGER RETRIEVE STAFF BIDS ENTITY--------------------- //
   async viewStaffBid(accountId) {
     const response = await this.prisma.Bids.findMany({
       where: {
@@ -110,6 +110,52 @@ export default class Bids {
       },
     });
     return response;
+  }
+
+
+  //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+  //------------------------------------!!!!! STAFF CONTROLLERS STARTS FROM HERE !!!!!!------------------------------------ 
+  //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+  async createBid(staffbid) {
+    await this.prisma.Bids.create({
+      data: staffbid,
+    });
+    return { message: "Your beads have been submitted" }
+  }
+
+  async retrieveBids() {
+    await this.prisma.Bids.findMany({
+      orderBy: [
+        {
+          bidId: "asc",
+        },
+      ],
+    });
+    return response;
+  }
+
+  async updateBid(bid) {
+    const { bidId, ...updateData } = bid;
+    const response = await this.prisma.update({
+      where: {
+        bidId: bidId
+      },
+      data: updateData
+    });
+
+    return { message: "Bid update successfully." };
+  }
+
+  async deleteBidSlot(bidId) {
+    const response = await this.prisma.delete({
+      where: {
+        bidId: bidId
+      }
+    });
+
+    return { message: "Bid delete successfully." };
+
   }
 
 }

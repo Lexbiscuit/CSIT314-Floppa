@@ -1,7 +1,7 @@
 import { Prisma } from "@prisma/client";
 import Staffbid from "../../Entity/StaffBids.mjs";
 
-export default class CreateBidController {
+export default class StaffBidSlotCtlr {
     constructor(prisma, req, res) {
         this.prisma = prisma;
         this.req = req;
@@ -16,6 +16,7 @@ export default class CreateBidController {
             // 201 Created
             this.res.status(201).json(response);
         } catch (message) {
+            console.log(message);
             this.res.status(500).send({ message });
         }
     }
