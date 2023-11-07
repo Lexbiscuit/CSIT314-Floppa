@@ -6,8 +6,7 @@ import StaffUpdBidCtlr from "../Controllers/StaffBid/StaffUpdBidCtlr.js";
 import StaffDltBidSlotCtlr from "../Controllers/StaffBid/StffDltBidSlotCtlr.js";
 import StaffSrchBidCtlr from "../Controllers/StaffBid/StaffSrchBidCtlr.js";
 //import StaffRtrvAvailWrkslotCtlr from "../Controllers/StaffBid/StffRtrvAvailWrksltCtlr.js";
-//import StaffRtrvBidsRslt from "../Controllers/StaffBid/StffRtrvBidsRslt.js";
-import CreateBidController from "../Controllers/StaffBid/StaffBidSlotCtlr.js";
+import StffRtrvBidsRsltCtlr from "../Controllers/StaffBid/StffRtrvBidsRslt.js";
 
 const StaffbidRoutes = Router();
 const prisma = new PrismaClient();
@@ -22,6 +21,11 @@ StaffbidRoutes.post("/create", async (req, res) => {
 StaffbidRoutes.get("/retrieve", async (req, res) => {
     const staffRtrvBidCtlr = new StaffRtrvBidCtlr(prisma, req, res);
     await staffRtrvBidCtlr.retrieveBids();
+})
+
+StaffbidRoutes.get("/result", async (req, res) => {
+    const staffRtrvBidResultCtlr = new StffRtrvBidsRsltCtlr(prisma, req, res);
+    await staffRtrvBidResultCtlr.retrieveResults();
 })
 
 StaffbidRoutes.put("/update", async (req, res) => {

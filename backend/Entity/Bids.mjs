@@ -116,13 +116,25 @@ export default class Bids {
   }
 
   async retrieveBids() {
-   const response = await this.prisma.Bids.findMany({
+    const response = await this.prisma.Bids.findMany({
       orderBy: [
         {
           bidId: "asc",
         },
       ],
     });
+    return response;
+  }
+
+  async retrieveResults() {
+    const response = await this.prisma.Bids.findMany({
+      where:{
+        status:{
+          not: "pending"
+        }
+      }
+      });
+
     return response;
   }
 
