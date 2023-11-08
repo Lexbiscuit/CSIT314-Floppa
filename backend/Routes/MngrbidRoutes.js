@@ -46,7 +46,7 @@ bidRoutes.get("/availstaff", async (req, res) => {
 // bidRoutes.get("/availws", [authJwt.verifyToken], async (req, res) => {
 bidRoutes.get("/availws", async (req, res) => {
   const mngrFltrAvailWSCtrl = new MngrFltrAvailWSCtrl(prisma, req, res);
-  await mngrFltrAvailWSCtrl.rtrvAvailWs();
+  await mngrFltrAvailWSCtrl.filterAvailWS();    
 });
 
 // bidRoutes.get("/staffslots", [authJwt.verifyToken], async (req, res) => {

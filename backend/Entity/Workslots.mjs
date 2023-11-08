@@ -49,4 +49,20 @@ export default class Workslots {
     });
     return response;
   }
+
+  async filterAvailWS() {
+    const response = await this.prisma.Workslots.findMany({
+      where: {
+        bids: { 
+          none: {}
+        },
+      },
+      orderBy: [
+        {
+          workslotId: "asc",
+        },
+      ],
+    });
+    return response;
+  }
 }

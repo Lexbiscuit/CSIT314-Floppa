@@ -14,8 +14,8 @@ export default class ApproveBidController {
       const approvedBid = await bids.approveBid(bidId);
 
       // 201 Created
-      this.res.status(201).json(approvedBid); //return "approve" msg OR json string?
-    } catch (err) {
+      this.res.status(201).json(approvedBid); 
+    } catch ({ message }) {
         this.res.status(500).send({ message });
       }
     }

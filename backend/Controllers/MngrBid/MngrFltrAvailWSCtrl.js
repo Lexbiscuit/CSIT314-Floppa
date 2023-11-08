@@ -1,4 +1,5 @@
 import { Prisma } from "@prisma/client";
+import Workslots from "../../Entity/Workslots.mjs";
 
 export default class MngrFltrAvailWSCtrl {
   constructor(prisma, req, res) {
@@ -12,30 +13,17 @@ export default class MngrFltrAvailWSCtrl {
    *
    * @returns {Workslots[]} - An array of available work slots.
    */
-  async rtrvAvailWS() {
+
+  async filterAvailWS() {
     try {
-      
-      const availableWorkslots = await this.prisma.Workslots.findMany({
-        
-        where: {
-          Bids: {none :[]}
-        },
-        
-        orderBy: [
-          {
-            workslotId: "asc",
-          },
-        ],
-      });
+      const workslots = new Workslots(this.prisma);
+      const response = await workslots.filterAvailWS();
 
-
-      this.res.status(200).json(availableWorkslots);
-    } catch (err) {
-      console.error(err);
-
+      this.res.status(200).json(response);
+    } catch ({ message }) {
       // 500 INTERNAL SERVER ERROR
-      console.log(err);
-      this.res.status(500).send({ message: "Internal Server Error." });
+      console.log({ message });
+      this.res.status(500).send({ message });
     }
   }
 }
