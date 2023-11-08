@@ -103,6 +103,20 @@ export default class Bids {
     return response;
   }
 
+   // --------------------- THIS IS MANAGER RETRIEVE APPROVED STAFF--------------------- //
+  async retrieveStaffSlot() {
+    const response = await this.prisma.Bids.findMany({
+      where: {
+        status: "Approve",
+      },
+      include: {
+        accounts: true
+      },
+    });
+
+    return response;
+  }
+
 
   //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
   //------------------------------------!!!!! STAFF CONTROLLERS STARTS FROM HERE !!!!!!------------------------------------ 

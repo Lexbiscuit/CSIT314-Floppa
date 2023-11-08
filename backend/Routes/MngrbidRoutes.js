@@ -52,7 +52,7 @@ bidRoutes.get("/availws", async (req, res) => {
 // bidRoutes.get("/staffslots", [authJwt.verifyToken], async (req, res) => {
 bidRoutes.get("/staffslots", async (req, res) => { // to be edited and changed
   const mngrRtrvStaffSlotCtrl = new MngrRtrvStaffSlotCtrl(prisma, req, res);
-  await mngrRtrvStaffSlotCtrl.viewWorkslots();
+  await mngrRtrvStaffSlotCtrl.retrieveStaffSlot();
 });
 
 // bidRoutes.get("/staffbids/:accountId", [authJwt.verifyToken], async (req, res) => {
