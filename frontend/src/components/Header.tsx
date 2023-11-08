@@ -7,12 +7,23 @@ import AuthService from "../services/auth.service";
 import classes from "../styles/Header.module.css";
 import FloppaLogo from "../assets/FloppaLogo.png";
 
-const links = [
+const allLinks = [
   { link: "/dashboard", label: "Dashboard" },
-  { link: "/accounts", label: "Accounts" },
-  { link: "/profiles", label: "Profiles" },
-  { link: "/workslots", label: "Work Slots" },
+  { link: "/accounts", label: "Accounts", profiles: [1] },
+  { link: "/profiles", label: "Profiles", profiles: [1] },
+  { link: "/workslots", label: "Work Slots", profiles: [2] },
+  { link: "/managerbids", label: "Manager Bids", profiles: [3] },
+  { link: "/staffbids", label: "Staff Bids", profiles: [4] },
 ];
+
+const currentUser = AuthService.getCurrentUser();
+const links = allLinks.filter((link) => {
+  if (link.profiles) {
+    return link.profiles.includes(currentUser.profileId);
+  } else {
+    return true;
+  }
+});
 
 export default function Header() {
   const [opened, { toggle }] = useDisclosure(false);

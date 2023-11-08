@@ -79,23 +79,23 @@ export default class Accounts {
         email: email,
       },
     });
-      return response;
+    return response;
   }
 
-  async findAvailableStaff() {
+  async retrieveAvailStaff() {
     const availableStaff = await this.prisma.accounts.findMany({
       where: {
         bids: {
-          none: {} // Filter for accounts with no bids
-        }
-      }
+          none: {}, // Filter for accounts with no bids
+        },
+      },
     });
     return availableStaff;
-  //   return retrieveAvailStaff;
-  //   const response = await this.prisma.Accounts.findMany({
-  //     where: {
-  //       }
-  //     }
-  //   })
+    //   return retrieveAvailStaff;
+    //   const response = await this.prisma.Accounts.findMany({
+    //     where: {
+    //       }
+    //     }
+    //   })
   }
 }

@@ -9,10 +9,9 @@ export default class StaffUpdBidCtlr {
   }
 
   async updateBid(bid) {
-
     try {
       const bids = new Bids(this.prisma);
-      const response = await bids.updateBid(bid);
+      const response = await bids.updateBidStaff(bid);
 
       // 200 OK.
       this.res.status(200).json(response);
@@ -21,5 +20,3 @@ export default class StaffUpdBidCtlr {
     }
   }
 }
-
-

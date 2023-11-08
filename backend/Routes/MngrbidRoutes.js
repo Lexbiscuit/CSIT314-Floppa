@@ -23,7 +23,7 @@ bidRoutes.get("/retrieve", async (req, res) => {
 
 // bidRoutes.put("/update", [authJwt.verifyToken], async (req, res) => {
 bidRoutes.put("/update", async (req, res) => {
-  const bid  = req.body;
+  const bid = req.body;
   const mngrUpdBidCtlr = new MngrUpdBidCtlr(prisma, req, res);
   await mngrUpdBidCtlr.updateBid(bid);
 });
@@ -40,26 +40,27 @@ bidRoutes.post("/search", async (req, res) => {
 // bidRoutes.get("/availstaff", [authJwt.verifyToken], async (req, res) => {
 bidRoutes.get("/availstaff", async (req, res) => {
   const mngrRtrvAvailStaffCtlr = new MngrRtrvAvailStaffCtlr(prisma, req, res);
-  await mngrRtrvAvailStaffCtlr.rtrvStaff();
+  await mngrRtrvAvailStaffCtlr.retrieveAvailStaff();
 });
 
 // bidRoutes.get("/availws", [authJwt.verifyToken], async (req, res) => {
 bidRoutes.get("/availws", async (req, res) => {
   const mngrFltrAvailWSCtrl = new MngrFltrAvailWSCtrl(prisma, req, res);
-  await mngrFltrAvailWSCtrl.filterAvailWS();    
+  await mngrFltrAvailWSCtrl.filterAvailWS();
 });
 
 // bidRoutes.get("/staffslots", [authJwt.verifyToken], async (req, res) => {
-bidRoutes.get("/staffslots", async (req, res) => { // to be edited and changed
+bidRoutes.get("/staffslots", async (req, res) => {
+  // to be edited and changed
   const mngrRtrvStaffSlotCtrl = new MngrRtrvStaffSlotCtrl(prisma, req, res);
   await mngrRtrvStaffSlotCtrl.retrieveStaffSlot();
 });
 
 // bidRoutes.get("/staffbids/:accountId", [authJwt.verifyToken], async (req, res) => {
-  bidRoutes.get("/staffbids/:accountId", async (req, res) => {
-    const staffRtrvBidCtlr = new StaffRtrvBidCtlr(prisma, req, res);
-    await staffRtrvBidCtlr.viewStaffBid();
-  });
+bidRoutes.get("/staffbids/:accountId", async (req, res) => {
+  const staffRtrvBidCtlr = new StaffRtrvBidCtlr(prisma, req, res);
+  await staffRtrvBidCtlr.viewStaffBid();
+});
 
 // --------------------- APPROVE/REJECT BIDS --------------------- //
 // bidRoutes.put("/approve", [authJwt.verifyToken], async (req, res) => {
@@ -77,6 +78,5 @@ bidRoutes.put("/reject", async (req, res) => {
   const rejectBidController = new RejectBidController(prisma, req, res);
   await rejectBidController.rejectBid(bidId, reason);
 });
-
 
 export default bidRoutes;

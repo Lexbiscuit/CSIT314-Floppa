@@ -50,7 +50,7 @@ export default function CreateAccountForm() {
     transformValues: (values) => ({
       ...values,
       profileId: Number(values.profileId),
-      roleId: Number(values.roleId) == 4 ? Number(values.roleId) : undefined,
+      roleId: Number(values.profileId) == 4 ? Number(values.roleId) : undefined,
       dob: new Date(values.dob).toISOString(),
     }),
   });

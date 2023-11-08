@@ -4,31 +4,27 @@ export default class Bids {
   }
 
   // --------------------- THIS IS MANAGER RETRIEVE BIDS ENTITY--------------------- //
-  async retrieveBids() {
+  async retrieveBidsMngr() {
     const response = await this.prisma.Bids.findMany({
-      orderBy: [
-        {
-          bidId: "asc",
-        },
-      ],
+      orderBy: [{ workslots: { workslotId: "asc" } }, { bidId: "asc" }],
     });
     return response;
   }
 
   // --------------------- THIS IS MANAGER UPDATE BIDS ENTITY--------------------- //
-  async updateBid(bid) {
+  async updateBidMngr(bid) {
     const { bidId, ...updatedData } = bid;
-    const response = await this.prisma.Bids.update({
+    await this.prisma.Bids.update({
       where: {
         bidId: Number(bidId),
       },
-      data: updatedData
+      data: updatedData,
     });
-    return response;
+    return { message: "Bid updated successfully." };
   }
 
   // --------------------- THIS IS MANAGER SEARCH BIDS ENTITY--------------------- //
-  async searchBid(bidFilter) {
+  async searchBidMngr(bidFilter) {
     const response = await this.prisma.Bids.findMany({
       where: bidFilter,
     });
@@ -39,7 +35,7 @@ export default class Bids {
   async approveBid(bidId) {
     const response = await this.prisma.Bids.update({
       where: {
-        bidId: bidId
+        bidId: bidId,
       },
       data: {
         status: "Approve",
@@ -64,18 +60,19 @@ export default class Bids {
   async rejectBid(bidId, reason) {
     const response = await this.prisma.Bids.update({
       where: {
-        bidId: bidId
+        bidId: bidId,
       },
       data: {
         status: "Reject",
-        reason: reason
+        reason: reason,
       },
     });
     return response;
   }
 
   // --------------------- THIS IS MANAGER VIEW STAFF SLOT ENTITY--------------------- //
-  async viewStaffWithSlot() { // to be tested
+  async viewStaffWithSlot() {
+    // to be tested
     const staffWithAssignedWorkSlots = await this.prisma.Staff.findMany({
       where: {
         workslots: {
@@ -103,33 +100,18 @@ export default class Bids {
     return response;
   }
 
-   // --------------------- THIS IS MANAGER RETRIEVE APPROVED STAFF--------------------- //
-  async retrieveStaffSlot() {
-    const response = await this.prisma.Bids.findMany({
-      where: {
-        status: "Approve",
-      },
-      include: {
-        accounts: true
-      },
-    });
-
-    return response;
-  }
-
-
   //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-  //------------------------------------!!!!! STAFF CONTROLLERS STARTS FROM HERE !!!!!!------------------------------------ 
+  //------------------------------------!!!!! STAFF CONTROLLERS STARTS FROM HERE !!!!!!------------------------------------
   //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
   async createBid(staffbid) {
     await this.prisma.Bids.create({
       data: staffbid,
     });
-    return { message: "Your beads have been submitted" }
+    return { message: "Your beads have been submitted" };
   }
 
-  async retrieveBids() {
+  async retrieveBidsStaff() {
     const response = await this.prisma.Bids.findMany({
       orderBy: [
         {
@@ -142,23 +124,23 @@ export default class Bids {
 
   async retrieveResults() {
     const response = await this.prisma.Bids.findMany({
-      where:{
-        status:{
-          not: "pending"
-        }
-      }
-      });
+      where: {
+        status: {
+          not: "pending",
+        },
+      },
+    });
 
     return response;
   }
 
-  async updateBid(bid) {
+  async updateBidStaff(bid) {
     const { bidId, ...updateData } = bid;
     const response = await this.prisma.Bids.update({
       where: {
-        bidId: bidId
+        bidId: bidId,
       },
-      data: updateData
+      data: updateData,
     });
 
     return { message: "Bid update successfully." };
@@ -167,8 +149,8 @@ export default class Bids {
   async deleteBidSlot(bidId) {
     const response = await this.prisma.Bids.delete({
       where: {
-        bidId: bidId
-      }
+        bidId: bidId,
+      },
     });
 
     return { message: "Bid delete successfully." };
@@ -176,7 +158,7 @@ export default class Bids {
 
   async searchStaffBid(bid) {
     const response = await this.prisma.Bids.findMany({
-      where: bid
+      where: bid,
     });
 
     return response;

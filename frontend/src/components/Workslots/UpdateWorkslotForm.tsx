@@ -2,26 +2,36 @@ import React from "react";
 import { useDisclosure } from "@mantine/hooks";
 import { Modal, TextInput, Button, Box } from "@mantine/core";
 import { useForm, isNotEmpty } from "@mantine/form";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import authHeader from "../../services/auth-header";
+import { IconEdit } from "@tabler/icons-react";
 
 export default function UpdateWorkslotForm(props: { data: any }) {
   const [opened, { open, close }] = useDisclosure(false);
 
+  const queryClient = useQueryClient();
   const updateWorkslot = useMutation({
-    mutationFn: async (values: any) => {
-      axios
-        .put("http://localhost:3000/workslots/update", values, {
-          headers: authHeader(),
-        })
-        .then((res) => alert(res.data.message))
-        .catch((error) => alert(error));
+    mutationFn: (values: any) => {
+      return axios.put("http://localhost:3000/workslots/update", values, {
+        headers: authHeader(),
+      });
+    },
+    onSuccess: (res) => {
+      alert(res.data.message);
+      queryClient.invalidateQueries({ queryKey: ["retrieveWorkslots"] });
+    },
+    onError: (err) => {
+      alert(err.response.data.message);
     },
   });
 
   const form = useForm({
-    initialValues: { ...props.data },
+    initialValues: {
+      workslotId: props.data.workslotId,
+      startTime: props.data.startTime.slice(0, 16),
+      endTime: props.data.endTime.slice(0, 16),
+    },
 
     validate: {
       startTime: isNotEmpty("Start time cannot be empty."),
@@ -29,7 +39,6 @@ export default function UpdateWorkslotForm(props: { data: any }) {
     },
 
     transformValues: (values) => ({
-      ...values,
       startTime: new Date(values.startTime).toISOString(),
       endTime: new Date(values.endTime).toISOString(),
     }),
@@ -75,7 +84,7 @@ export default function UpdateWorkslotForm(props: { data: any }) {
           </Button>
         </Box>
       </Modal>
-      <Button onClick={open}>Edit</Button>
+      <IconEdit onClick={open} style={{ cursor: "pointer" }} />
     </>
   );
 }

@@ -3,11 +3,29 @@ import { useDisclosure } from "@mantine/hooks";
 import { Modal, TextInput, Button, Box } from "@mantine/core";
 import { useForm, isNotEmpty } from "@mantine/form";
 import axios from "axios";
+import { IconEdit } from "@tabler/icons-react";
 import authHeader from "../../services/auth-header";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 export default function UpdateProfileForm(props: { data: any }) {
   const [opened, { open, close }] = useDisclosure(false);
   const { profileId, name, description } = props.data;
+  const queryClient = useQueryClient();
+
+  const { mutate: updateProfile } = useMutation({
+    mutationFn: async (profile: any) => {
+      return axios.put("http://localhost:3000/profiles/update", profile, {
+        headers: authHeader(),
+      });
+    },
+    onSuccess: (res) => {
+      alert(res.data.message);
+      queryClient.invalidateQueries({ queryKey: ["retrieveProfiles"] });
+    },
+    onError: (err) => {
+      alert(err.response.data.message);
+    },
+  });
 
   const form = useForm({
     initialValues: {
@@ -32,29 +50,8 @@ export default function UpdateProfileForm(props: { data: any }) {
       >
         <Box
           component="form"
-          onSubmit={form.onSubmit(() => {
-            async function updateProfile() {
-              try {
-                axios
-                  .put(
-                    "http://localhost:3000/profiles/update",
-                    {
-                      profileId: Number(form.values.profileId),
-                      name: form.values.name,
-                      description: form.values.description,
-                    },
-                    {
-                      headers: authHeader(),
-                    }
-                  )
-                  .then((res) => alert(res.data.message));
-
-                location.reload();
-              } catch (err) {
-                alert("Internal System Error.");
-              }
-            }
-            updateProfile();
+          onSubmit={form.onSubmit((values) => {
+            updateProfile(values);
           })}
         >
           <TextInput
@@ -86,7 +83,7 @@ export default function UpdateProfileForm(props: { data: any }) {
           </Button>
         </Box>
       </Modal>
-      <Button onClick={open}>Edit</Button>
+      <IconEdit onClick={open} style={{ cursor: "pointer" }} />
     </>
   );
 }

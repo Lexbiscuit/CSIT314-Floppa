@@ -6,20 +6,23 @@ import authHeader from "../../services/auth-header";
 import { useMutation } from "@tanstack/react-query";
 
 export default function CreateWorkslotForm() {
-  const createWorkslot = useMutation({
+  const { mutate: createWorkslot } = useMutation({
     mutationFn: async (data: any) => {
-      await axios
-        .post(
-          "http://localhost:3000/workslots/create",
-          {
-            ...data,
-          },
-          {
-            headers: authHeader(),
-          },
-        )
-        .then((res) => alert(res.data.message))
-        .catch((error) => alert(error));
+      return axios.post(
+        "http://localhost:3000/workslots/create",
+        {
+          ...data,
+        },
+        {
+          headers: authHeader(),
+        }
+      );
+    },
+    onSuccess: (res) => {
+      alert(res.data.message);
+    },
+    onError: (err) => {
+      alert(err.response.data.message);
     },
   });
 
@@ -44,8 +47,8 @@ export default function CreateWorkslotForm() {
     <Box
       component="form"
       onSubmit={form.onSubmit((values) => {
-        createWorkslot.mutate(values);
-        window.location.reload();
+        createWorkslot(values);
+        form.reset();
       })}
     >
       <TextInput

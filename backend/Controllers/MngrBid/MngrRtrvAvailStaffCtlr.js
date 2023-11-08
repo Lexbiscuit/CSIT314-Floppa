@@ -8,10 +8,10 @@ export default class FindAvailableStaffController {
     this.res = res;
   }
 
-  async findAvailableStaff() {
+  async retrieveAvailStaff() {
     try {
       const accounts = new Accounts(this.prisma);
-      const availableStaff = await accounts.findAvailableStaff();
+      const availableStaff = await accounts.retrieveAvailStaff();
 
       this.res.status(200).json(availableStaff);
     } catch (error) {

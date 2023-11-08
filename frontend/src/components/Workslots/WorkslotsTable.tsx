@@ -31,13 +31,15 @@ const columns = [
   {
     accessorKey: "startTime",
     header: "Start Time",
-    cell: (info: Info) => new Date(info.getValue()).toLocaleString(),
+    cell: (info: Info) =>
+      new Date(info.getValue()).toLocaleString("en-SG", { timeZone: "UTC" }),
     footer: (props: any) => props.column.id,
   },
   {
     accessorKey: "endTime",
     header: "End Time",
-    cell: (info: Info) => new Date(info.getValue()).toLocaleString(),
+    cell: (info: Info) =>
+      new Date(info.getValue()).toLocaleString("en-SG", { timeZone: "UTC" }),
     footer: (props: any) => props.column.id,
   },
   {

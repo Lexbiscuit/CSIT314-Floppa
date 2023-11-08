@@ -78,7 +78,7 @@ function retrieveAccounts() {
         "http://localhost:3000/accounts/retrieve",
         {
           headers: authHeader(),
-        },
+        }
       );
       const transformData = data.map((account: any) => {
         account.accountId = account.accountId.toString();

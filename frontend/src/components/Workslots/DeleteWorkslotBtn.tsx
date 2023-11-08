@@ -2,21 +2,27 @@ import { Modal, Text, Group, Button } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import axios from "axios";
 import authHeader from "../../services/auth-header";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { IconCircleMinus } from "@tabler/icons-react";
 
 const DeleteWorkslotBtn = (props: { data: any }) => {
   const [opened, { close, open }] = useDisclosure(false);
   const { workslotId } = props.data;
 
-  const deleteWorkslot = useMutation({
+  const queryClient = useQueryClient();
+  const { mutate: deleteWorkslot } = useMutation({
     mutationFn: async (workslotId: number) => {
-      await axios
-        .delete("http://localhost:3000/workslots/delete", {
-          headers: authHeader(),
-          data: { workslotId },
-        })
-        .then((res) => alert(res.data.message))
-        .catch((error) => alert(error.message));
+      return axios.delete("http://localhost:3000/workslots/delete", {
+        headers: authHeader(),
+        data: { workslotId },
+      });
+    },
+    onSuccess: (res) => {
+      alert(res.data.message);
+      queryClient.invalidateQueries({ queryKey: ["retrieveWorkslots"] });
+    },
+    onError: (err) => {
+      alert(err.response.data.message);
     },
   });
 
@@ -46,19 +52,15 @@ const DeleteWorkslotBtn = (props: { data: any }) => {
             variant="filled"
             bg="red"
             onClick={() => {
-              deleteWorkslot.mutate(workslotId);
+              deleteWorkslot(Number(workslotId));
               close();
-              location.reload();
             }}
           >
             Delete
           </Button>
         </Group>
       </Modal>
-
-      <Button bg="red" onClick={open}>
-        Delete
-      </Button>
+      <IconCircleMinus onClick={open} style={{ cursor: "pointer" }} />
     </>
   );
 };

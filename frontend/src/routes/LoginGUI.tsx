@@ -14,6 +14,7 @@ import { useForm, isNotEmpty, isEmail } from "@mantine/form";
 import classes from "../styles/AuthenticationImage.module.css";
 import { useNavigate } from "react-router-dom";
 import AuthService from "../services/auth.service";
+import { useMutation } from "@tanstack/react-query";
 
 export default function LoginGUI() {
   return (
@@ -33,7 +34,20 @@ export default function LoginGUI() {
 
 function LoginForm() {
   const navigate = useNavigate();
-  const [loading, setLoading] = useState(false);
+  const { mutate: login, status: loginStatus } = useMutation({
+    mutationFn: AuthService.login,
+    onSuccess: (data) => {
+      if (data.data.accessToken) {
+        localStorage.setItem("user", JSON.stringify(data.data));
+      }
+      alert(data.data.message);
+      navigate("/dashboard");
+      window.location.reload();
+    },
+    onError: (error) => {
+      alert(error.response.data.message);
+    },
+  });
 
   const form = useForm({
     initialValues: {
@@ -52,27 +66,8 @@ function LoginForm() {
       <Box
         component="form"
         onSubmit={form.onSubmit((values) => {
-          setLoading(true);
-
           if (values.email.length > 0 && values.password.length > 0) {
-            AuthService.login(values.email, values.password).then(
-              () => {
-                navigate("/dashboard");
-                window.location.reload();
-              },
-              (error: any) => {
-                const resMessage =
-                  (error.response &&
-                    error.response.data &&
-                    error.response.data.message) ||
-                  error.message ||
-                  error.toString();
-                alert(resMessage);
-              }
-            );
-          } else {
-            alert("Please fill in all fields.");
-            setLoading(false);
+            login({ ...values });
           }
         })}
       >
@@ -90,7 +85,13 @@ function LoginForm() {
           {...form.getInputProps("password")}
         />
         <Checkbox label="Keep me logged in" mt="xl" size="md" />
-        <Button fullWidth mt="xl" size="md" type="submit" disabled={loading}>
+        <Button
+          fullWidth
+          mt="xl"
+          size="md"
+          type="submit"
+          disabled={loginStatus === "pending"}
+        >
           Login
         </Button>
       </Box>

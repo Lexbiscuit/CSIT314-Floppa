@@ -5,39 +5,35 @@ import { useForm, isNotEmpty, isEmail } from "@mantine/form";
 import axios from "axios";
 import authHeader from "../../services/auth-header";
 import { IconEdit } from "@tabler/icons-react";
-
-type Account = {
-  name: string;
-  profileId: number;
-  email: string;
-  password: string | undefined;
-  roleId?: number;
-  dob: string;
-};
-
-async function updateAccount(account: Account) {
-  try {
-    await axios
-      .put("http://localhost:3000/accounts/update", account, {
-        headers: authHeader(),
-      })
-      .then((res) => {
-        alert(res.data.message);
-        location.reload();
-      });
-  } catch (err) {
-    alert("Internal System Error.");
-  }
-}
+import { useMutation } from "@tanstack/react-query";
 
 export default function UpdateAccountForm(props: { data: any }) {
   const [opened, { open, close }] = useDisclosure(false);
-  const { password, roleId, profile, ...account } = props.data;
+  const account = props.data;
+
+  const { mutate: updateAccount } = useMutation({
+    mutationFn: async (account: any) => {
+      return axios.put("http://localhost:3000/accounts/update", account, {
+        headers: authHeader(),
+      });
+    },
+    onSuccess: (res) => {
+      alert(res.data.message);
+      location.reload();
+    },
+    onError: (err) => {
+      alert(err.response.data.message);
+    },
+  });
 
   const form = useForm({
     initialValues: {
-      ...account,
-      roleId: roleId ? roleId : 0,
+      accountId: account.accountId,
+      name: account.name,
+      profileId: Number(account.profileId),
+      email: account.email,
+      roleId: account.roleId ? Number(account.roleId) : undefined,
+      dob: account.dob,
       password: "",
     },
 
@@ -53,10 +49,11 @@ export default function UpdateAccountForm(props: { data: any }) {
     },
 
     transformValues: (values) => ({
-      ...values,
       accountId: Number(values.accountId),
-      password: values.password == "" ? undefined : values.password,
       profileId: Number(values.profileId),
+      name: values.name,
+      email: values.email,
+      password: values.password == "" ? undefined : values.password,
       roleId: Number(values.profileId) == 4 ? Number(values.roleId) : undefined,
       dob: new Date(values.dob).toISOString(),
     }),
@@ -73,7 +70,20 @@ export default function UpdateAccountForm(props: { data: any }) {
         <Box
           component="form"
           onSubmit={form.onSubmit((values) => {
-            updateAccount(values);
+            const { profileId, roleId, ...updatedData } = values;
+
+            const account = {
+              profiles: { connect: { profileId: Number(profileId) } },
+              ...updatedData,
+            };
+
+            if (profileId == 4) {
+              account.roles = { connect: { roleId: Number(roleId) } };
+            } else {
+              account.roles = { disconnect: true };
+            }
+
+            updateAccount(account);
           })}
         >
           <TextInput

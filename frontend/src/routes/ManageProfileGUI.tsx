@@ -12,11 +12,11 @@ import { Container } from "@mantine/core";
 import AuthService from "../services/auth.service";
 
 export default function ManageProfileGUI() {
-  if (!AuthService.getCurrentUser()) {
+  if (AuthService.getCurrentUser()) {
     return (
       <Appshell>
         <Container size="md" my="1rem">
-          <Tabs>
+          <Tabs defaultValue="create">
             <Tabs.List>
               <Tabs.Tab value="create">Create User Profile</Tabs.Tab>
               <Tabs.Tab value="tableView">User Profile Table</Tabs.Tab>

@@ -11,7 +11,7 @@ export default class SearchBidController {
   async searchBid(bidFilter) {
     try {
       const bids = new Bids(this.prisma);
-      const response = await bids.searchBid(bidFilter)
+      const response = await bids.searchBidMngr(bidFilter);
 
       // 200 OK
       this.res.status(200).json(response);
