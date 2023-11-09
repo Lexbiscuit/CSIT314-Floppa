@@ -98,4 +98,31 @@ export default class Accounts {
     //     }
     //   })
   }
+
+  async retrieveStaffSlot() {
+    const response = await this.prisma.Accounts.findMany({
+      //1st where, condition for Accounts
+      where: {
+        bids: {
+          some: {
+            status: "Approve",
+          },
+        },
+      },
+      select: {
+        accountId: true,
+        name: true,
+        email: true,
+        suspended: true,
+        bids: {
+          //2nd where, condition for Bids
+          where: {
+            status: "Approve",
+          },
+        },
+      },
+    });
+
+    return response;
+  }
 }

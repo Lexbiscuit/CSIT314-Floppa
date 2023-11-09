@@ -87,6 +87,19 @@ export default class Bids {
     return response;
   }
 
+     // --------------------- THIS IS MANAGER RETRIEVE APPROVED STAFF--------------------- //
+     async retrieveStaffSlot() {
+      const response = await this.prisma.Bids.findMany({
+        where: {
+          status: "Approve",
+        },
+        include: {
+          accounts: true
+        },
+      });
+      return response;
+    }
+
   // --------------------- THIS IS MANAGER RETRIEVE STAFF BIDS ENTITY--------------------- //
   async viewStaffBid(accountId) {
     const response = await this.prisma.Bids.findMany({
@@ -99,7 +112,7 @@ export default class Bids {
     });
     return response;
   }
-
+  
   //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
   //------------------------------------!!!!! STAFF CONTROLLERS STARTS FROM HERE !!!!!!------------------------------------
   //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++

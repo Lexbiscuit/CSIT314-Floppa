@@ -1,5 +1,5 @@
 import { Prisma } from "@prisma/client";
-import Bids from "../../Entity/Bids.mjs";
+import Accounts from "../../Entity/Accounts.mjs";
 import { response } from "express";
 
 export default class MngrRtrvStaffSlotCtrl {
@@ -11,11 +11,12 @@ export default class MngrRtrvStaffSlotCtrl {
 
   async retrieveStaffSlot() {
     try {
-      const bids = new Bids(this.prisma);
-      const response = await bids.retrieveStaffSlot();
+      const accounts = new Accounts(this.prisma);  
+      const response = await accounts.retrieveStaffSlot();
 
       this.res.status(200).json(response);
     } catch ({ message }) {
+      console.log(message);
       // 500 INTERNAL SERVER ERROR
       this.res.status(500).send({ message });
     }
