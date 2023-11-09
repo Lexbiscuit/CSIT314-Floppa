@@ -53,8 +53,8 @@ export default class Workslots {
   async filterAvailWS() {
     const response = await this.prisma.Workslots.findMany({
       where: {
-        bids: { 
-          none: {}
+        bids: {
+          none: {},
         },
       },
       orderBy: [
@@ -62,6 +62,43 @@ export default class Workslots {
           workslotId: "asc",
         },
       ],
+    });
+    return response;
+  }
+
+  // Retrieve datas from tables Workslots -> Workslots-roles -> Roles
+  // Datas: [workslotId, workslots_roles{count}, roles{name}]
+  async staffRtrvAvailWS() {
+    const response = await this.prisma.Workslots.findMany({
+      //1st where, condition for Workslots
+      where: {
+        workslots_roles: {
+          some: {
+            NOT: {
+              count: 0,
+            },
+          },
+        },
+      },
+      //2nd where, condition for workslots_roles
+      select: {
+        workslotId: true,
+        workslots_roles: {
+          where: {
+            NOT: {
+              count: 0,
+            },
+          },
+          select: {
+            count: true,
+            roles: {
+              select: {
+                name: true,
+              },
+            },
+          },
+        },
+      },
     });
     return response;
   }

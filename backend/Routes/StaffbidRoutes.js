@@ -5,7 +5,7 @@ import StaffBidSlotCtlr from "../Controllers/StaffBid/StaffBidSlotCtlr.js";
 import StaffUpdBidCtlr from "../Controllers/StaffBid/StaffUpdBidCtlr.js";
 import StaffDltBidSlotCtlr from "../Controllers/StaffBid/StffDltBidSlotCtlr.js";
 import StaffSrchBidCtlr from "../Controllers/StaffBid/StaffSrchBidCtlr.js";
-//import StaffRtrvAvailWrkslotCtlr from "../Controllers/StaffBid/StffRtrvAvailWrksltCtlr.js";
+import StaffRtrvAvailWrkslotCtlr from "../Controllers/StaffBid/StffRtrvAvailWrksltCtlr.js";
 import StffRtrvBidsRsltCtlr from "../Controllers/StaffBid/StffRtrvBidsRslt.js";
 
 const StaffbidRoutes = Router();
@@ -47,6 +47,11 @@ StaffbidRoutes.post("/search", async (req, res) => {
 
     const staffSrchBidCtlr = new StaffSrchBidCtlr(prisma, req, res);
     await staffSrchBidCtlr.searchStaffBid(bid);
+});
+
+StaffbidRoutes.get("/availws", async (req, res) => {
+    const staffRtrvAvailWrkslotCtlr = new StaffRtrvAvailWrkslotCtlr(prisma, req, res);
+    await staffRtrvAvailWrkslotCtlr.staffRtrvAvailWS();
 });
 
 export default StaffbidRoutes;
