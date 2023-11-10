@@ -55,6 +55,7 @@ model Workslots {
   workslotId Int      @id @default(autoincrement())
   startTime  DateTime
   endTime    DateTime
+  weekNumber Int
 
   bids            Bids[]
   workslots_roles Workslots_Roles[]
