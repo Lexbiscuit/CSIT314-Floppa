@@ -49,7 +49,7 @@ export default class Bids {
   }
 
   // --------------------- THIS IS MANAGER RETRIEVE STAFF ENTITY---------------------//
-  async retrieveStaff() {
+  async retrieveAvailStaff() {
     const response = await this.prisma.Profiles.findMany({
       orderBy: [
         {
