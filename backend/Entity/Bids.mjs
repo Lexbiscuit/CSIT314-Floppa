@@ -5,8 +5,12 @@ export default class Bids {
 
   // --------------------- THIS IS MANAGER RETRIEVE BIDS ENTITY--------------------- //
   async retrieveBidsMngr() {
-    const response = await this.prisma.Bids.findMany({
-      orderBy: [{ workslots: { workslotId: "asc" } }, { bidId: "asc" }],
+    const response = await this.prisma.Workslots.findMany({
+      include: {
+        bids: {
+          orderBy: { bidId: 'asc' }, // Order bids within each workslot
+        },
+      },
     });
     return response;
   }
@@ -87,18 +91,21 @@ export default class Bids {
     return response;
   }
 
-     // --------------------- THIS IS MANAGER RETRIEVE APPROVED STAFF--------------------- //
-     async retrieveStaffSlot() {
-      const response = await this.prisma.Bids.findMany({
-        where: {
-          status: "Approve",
-        },
-        include: {
-          accounts: true
-        },
-      });
-      return response;
-    }
+  // --------------------- THIS IS MANAGER RETRIEVE APPROVED STAFF--------------------- //
+  async retrieveStaffSlot() {
+    const response = await this.prisma.Bids.findMany({
+      where: {
+        status: "Approve",
+      },
+      include: {
+        accounts: true
+      },
+      orderBy: {
+        bidId: DESC
+      }
+    });
+    return response;
+  }
 
   // --------------------- THIS IS MANAGER RETRIEVE STAFF BIDS ENTITY--------------------- //
   async viewStaffBid(accountId) {
@@ -112,7 +119,7 @@ export default class Bids {
     });
     return response;
   }
-  
+
   //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
   //------------------------------------!!!!! STAFF CONTROLLERS STARTS FROM HERE !!!!!!------------------------------------
   //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++

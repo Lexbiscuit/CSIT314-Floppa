@@ -1,5 +1,6 @@
 import { Prisma } from "@prisma/client";
 import Bids from "../../Entity/Bids.mjs";
+import Workslots from "../../Entity/Workslots.mjs";
 
 export default class MngrRtrvBidCtlr {
   constructor(prisma, req, res) {
@@ -17,6 +18,7 @@ export default class MngrRtrvBidCtlr {
       this.res.status(200).json(response);
     } catch ({ message }) {
       // 500 INTERNAL SERVER ERROR
+      console.log(message);
       this.res.status(500).send({ message });
     }
   }
