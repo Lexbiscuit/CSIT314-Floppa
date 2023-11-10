@@ -7,7 +7,7 @@ export default class SearchAccountController {
     this.res = res;
   }
 
-  async searchAccount(accountFilter) {
+  async searchAccounts(accountFilter) {
     try {
       const accounts = new Accounts(this.prisma);
       const response = await accounts.searchAccounts(accountFilter);

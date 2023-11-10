@@ -41,5 +41,7 @@ export default function ManageProfileGUI() {
         </Container>
       </Appshell>
     );
+  } else {
+    location.replace("/");
   }
 }

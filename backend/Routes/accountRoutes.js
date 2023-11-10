@@ -24,7 +24,7 @@ accountRoutes.get("/retrieve", async (req, res) => {
   const retrieveAccountController = new RetrieveAccountController(
     prisma,
     req,
-    res,
+    res
   );
   await retrieveAccountController.retrieveAccounts();
 });
@@ -44,7 +44,7 @@ accountRoutes.post("/suspend", async (req, res) => {
   const suspendAccountController = new SuspendAccountController(
     prisma,
     req,
-    res,
+    res
   );
   await suspendAccountController.suspendAccount(accountId);
 });
@@ -56,7 +56,7 @@ accountRoutes.post("/unsuspend", async (req, res) => {
   const unsuspendAccountController = new UnsuspendAccountController(
     prisma,
     req,
-    res,
+    res
   );
   await unsuspendAccountController.unsuspendAccount(accountId);
 });
