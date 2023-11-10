@@ -1,7 +1,8 @@
 import { Prisma } from "@prisma/client";
 import Accounts from "../../Entity/Accounts.mjs";
+import Bids from "../../Entity/Bids.mjs";
 
-export default class FindAvailableStaffController {
+export default class MngrRtrvAvailStaffCtlr {
   constructor(prisma, req, res) {
     this.prisma = prisma;
     this.req = req;
@@ -10,7 +11,7 @@ export default class FindAvailableStaffController {
 
   async retrieveAvailStaff() {
     try {
-      const accounts = new Accounts(this.prisma);
+      const accounts = new Bids(this.prisma);
       const response = await accounts.retrieveAvailStaff();
 
       this.res.status(200).json(response);

@@ -8,7 +8,7 @@ export default class Bids {
     const response = await this.prisma.Workslots.findMany({
       include: {
         bids: {
-          orderBy: { bidId: 'asc' }, // Order bids within each workslot
+          orderBy: { bidId: 'asc' }, 
         },
       },
     });
@@ -50,15 +50,25 @@ export default class Bids {
 
   // --------------------- THIS IS MANAGER RETRIEVE STAFF ENTITY---------------------//
   async retrieveAvailStaff() {
-    const response = await this.prisma.Profiles.findMany({
-      orderBy: [
-        {
-          profileId: "asc",
+    const response = await this.prisma.Accounts.findMany({
+        orderBy: [
+            {
+                accountId: 'asc',
+            },
+        ],
+        include: {
+            bids: true
         },
-      ],
     });
-    return response;
-  }
+
+    const responseWithBidCount = response.map(account => ({
+        ...account,
+        bidCount: account.bids.length,
+    }));
+    const sortedResponse = responseWithBidCount.sort((a, b) => a.bidCount - b.bidCount);
+
+    return responseWithBidCount;
+}
 
   // --------------------- THIS IS MANAGER REJECT BIDS ENTITY--------------------- //
   async rejectBid(bidId, reason) {
