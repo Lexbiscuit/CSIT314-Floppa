@@ -105,7 +105,7 @@ export default class Accounts {
       where: {
         bids: {
           some: {
-            status: "Approve",
+            status: "approved",
           },
         },
       },
@@ -115,9 +115,16 @@ export default class Accounts {
         email: true,
         suspended: true,
         bids: {
-          //2nd where, condition for Bids
+          select: {
+            workslots: {
+              select: {
+                startTime: true,
+                endTime: true,
+              },
+            },
+          }, //2nd where, condition for Bids
           where: {
-            status: "Approve",
+            status: "approved",
           },
         },
       },
