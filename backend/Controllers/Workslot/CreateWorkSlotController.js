@@ -1,5 +1,6 @@
 import { Prisma } from "@prisma/client";
 import Workslots from "../../Entity/Workslots.mjs";
+import { DateTime } from "luxon";
 
 export default class CreateWorkslotController {
   constructor(prisma, req, res) {
@@ -11,6 +12,7 @@ export default class CreateWorkslotController {
   async createWorkslot(workslot) {
     try {
       const workslots = new Workslots(this.prisma);
+      workslot["weekNumber"] = DateTime.fromISO(workslot.startTime).weekNumber;
       const response = await workslots.createWorkslot(workslot);
 
       // 201 CREATED
