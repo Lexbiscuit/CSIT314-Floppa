@@ -51,7 +51,7 @@ export default class Workslots {
   }
 
   async filterAvailWS() {
-    const required = await this.prisma.Workslots.findMany({
+    const workslots = await this.prisma.Workslots.findMany({
       select: {
         workslotId: true,
         workslots_roles: {
@@ -60,7 +60,52 @@ export default class Workslots {
             count: true,
           },
         },
+        bids: {
+          select: {
+            accounts: {
+              select: {
+                roleId: true,
+              },
+            },
+          },
+        },
       },
+    });
+
+    const response = workslots.map((workslot) => {
+      if (workslot.bids == 0) {
+        return workslot;
+      }
+
+      const bidMap = new Map();
+      workslot.bids.map((bid) => {
+        if (bidMap.get(bid.accounts.roleId)) {
+          bidMap.set(bid.accounts.roleId, bidMap.get(bid.accounts.roleId) + 1);
+        } else {
+          bidMap.set(bid.accounts.roleId, 1);
+        }
+      });
+
+      let isAvailable = true;
+      workslot.workslots_roles.every((workslot_role) => {
+        if (bidMap.get(workslot_role.roleId) < workslot_role.count) {
+          isAvailable = false;
+          return false;
+        }
+      });
+
+      if (!isAvailable) {
+        const { bids, ...workslotDetails } = workslot;
+        workslotDetails["current"] = Array.from(bidMap, ([roleId, count]) => ({
+          roleId,
+          count,
+        }));
+        return workslotDetails;
+      }
+    });
+
+    return response.filter((ws) => {
+      return ws != null;
     });
   }
 
