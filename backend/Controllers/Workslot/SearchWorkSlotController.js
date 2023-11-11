@@ -1,6 +1,6 @@
 import Workslots from "../../Entity/Workslots.mjs";
 
-export default class SearchWorkSlotController {
+export default class SearchWorkslotController {
   constructor(prisma, req, res) {
     this.prisma = prisma;
     this.req = req;

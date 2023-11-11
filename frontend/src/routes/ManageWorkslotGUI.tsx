@@ -5,7 +5,7 @@ import AuthService from "../services/auth.service";
 import { Tabs } from "@mantine/core";
 import CreateWorkslotForm from "../components/Workslots/CreateWorkslotForm";
 import WorkslotsTable from "../components/Workslots/WorkslotsTable";
-// import SearchWorkslotForm from "../components/Workslots/SearchWorkslotForm";
+import SearchWorkslotForm from "../components/Workslots/SearchWorkslotForm";
 
 export default function ManageWorkslotGUI() {
   if (AuthService.getCurrentUser()) {
@@ -30,8 +30,8 @@ export default function ManageWorkslotGUI() {
             </Tabs.Panel>
 
             <Tabs.Panel value="search">
-              <h1>Search Accounts</h1>
-              {/* <SearchWorkslotForm /> */}
+              <h1>Search Workslots</h1>
+              <SearchWorkslotForm />
             </Tabs.Panel>
           </Tabs>
         </Container>
