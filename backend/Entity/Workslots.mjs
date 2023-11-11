@@ -51,19 +51,17 @@ export default class Workslots {
   }
 
   async filterAvailWS() {
-    const response = await this.prisma.Workslots.findMany({
-      where: {
-        bids: {
-          none: {},
+    const required = await this.prisma.Workslots.findMany({
+      select: {
+        workslotId: true,
+        workslots_roles: {
+          select: {
+            roleId: true,
+            count: true,
+          },
         },
       },
-      orderBy: [
-        {
-          workslotId: "asc",
-        },
-      ],
     });
-    return response;
   }
 
   // Retrieve datas from tables Workslots -> Workslots-roles -> Roles

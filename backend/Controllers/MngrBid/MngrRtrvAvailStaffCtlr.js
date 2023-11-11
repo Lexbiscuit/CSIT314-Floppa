@@ -11,7 +11,7 @@ export default class MngrRtrvAvailStaffCtlr {
 
   async retrieveAvailStaff() {
     try {
-      const accounts = new Bids(this.prisma);
+      const accounts = new Accounts(this.prisma);
       const response = await accounts.retrieveAvailStaff();
 
       this.res.status(200).json(response);

@@ -8,7 +8,7 @@ export default class Bids {
     const response = await this.prisma.Workslots.findMany({
       include: {
         bids: {
-          orderBy: { bidId: 'asc' }, 
+          orderBy: { bidId: "asc" },
         },
       },
     });
@@ -51,24 +51,22 @@ export default class Bids {
   // --------------------- THIS IS MANAGER RETRIEVE STAFF ENTITY---------------------//
   async retrieveAvailStaff() {
     const response = await this.prisma.Accounts.findMany({
-        orderBy: [
-            {
-                accountId: 'asc',
-            },
-        ],
-        include: {
-            bids: true
+      include: {
+        bids: true,
+        _count: {
+          select: {
+            bids: true,
+          },
         },
+      },
+      orderBy: {
+        bids: {
+          _count: "desc",
+        },
+      },
     });
-
-    const responseWithBidCount = response.map(account => ({
-        ...account,
-        bidCount: account.bids.length,
-    }));
-    const sortedResponse = responseWithBidCount.sort((a, b) => a.bidCount - b.bidCount);
-
-    return responseWithBidCount;
-}
+    return response;
+  }
 
   // --------------------- THIS IS MANAGER REJECT BIDS ENTITY--------------------- //
   async rejectBid(bidId, reason) {
@@ -108,11 +106,11 @@ export default class Bids {
         status: "Approve",
       },
       include: {
-        accounts: true
+        accounts: true,
       },
       orderBy: {
-        bidId: DESC
-      }
+        bidId: DESC,
+      },
     });
     return response;
   }
