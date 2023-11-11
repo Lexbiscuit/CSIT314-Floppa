@@ -17,7 +17,7 @@ const allRoutes = [
   { path: "/dashboard", element: <Dashboard /> },
   { path: "/accounts", element: <ManageAccountGUI />, profiles: [1] },
   { path: "/profiles", element: <ManageProfileGUI />, profiles: [1] },
-  { path: "/workslots", element: <ManageWorkslotGUI />, profiles: [2] },
+  { path: "/workslots", element: <ManageWorkslotGUI />, profiles: [1, 2] },
   { path: "/managerbids", element: <ManagerBidsGUI />, profiles: [3] },
   { path: "/staffbids", element: <StaffBidsGUI />, profiles: [4] },
 ];
