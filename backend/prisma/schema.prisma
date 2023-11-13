@@ -30,12 +30,11 @@ model Accounts {
   email     String   @unique
   password  String
   dob       DateTime
-  roleId    Int?
+  role      String?
   suspended Boolean  @default(false)
 
   profiles Profiles @relation(fields: [profileId], references: [profileId])
   bids     Bids[]
-  roles    Roles?   @relation(fields: [roleId], references: [roleId])
 
   @@map("Accounts")
 }
@@ -56,31 +55,11 @@ model Workslots {
   startTime  DateTime
   endTime    DateTime
   weekNumber Int
+  cashiers   Int      @default(1)
+  chefs      Int      @default(1)
+  waiters    Int      @default(1)
 
-  bids            Bids[]
-  workslots_roles Workslots_Roles[]
+  bids Bids[]
 
   @@map("Workslots")
-}
-
-model Workslots_Roles {
-  workslotRoleId Int @id @default(autoincrement())
-  workslotId     Int
-  roleId         Int
-  count          Int
-
-  workslots Workslots @relation(fields: [workslotId], references: [workslotId])
-  roles     Roles     @relation(fields: [roleId], references: [roleId])
-
-  @@map("Workslots_Roles")
-}
-
-model Roles {
-  roleId Int    @id @default(autoincrement())
-  name   String
-
-  workslots_roles Workslots_Roles[]
-  accounts        Accounts[]
-
-  @@map("Roles")
 }
