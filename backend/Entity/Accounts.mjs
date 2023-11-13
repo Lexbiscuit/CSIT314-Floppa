@@ -19,7 +19,6 @@ export default class Accounts {
     const response = await this.prisma.Accounts.findMany({
       include: {
         profiles: true,
-        roles: true,
       },
     });
     return response;
@@ -66,7 +65,6 @@ export default class Accounts {
       where: accountFilter,
       include: {
         profiles: { select: { name: true } },
-        roles: { select: { name: true } },
       },
     });
 
