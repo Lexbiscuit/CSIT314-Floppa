@@ -7,10 +7,12 @@ import StaffDltBidSlotCtlr from "../Controllers/StaffBid/StffDltBidSlotCtlr.js";
 import StaffSrchBidCtlr from "../Controllers/StaffBid/StaffSrchBidCtlr.js";
 import StaffRtrvAvailWrkslotCtlr from "../Controllers/StaffBid/StffRtrvAvailWrksltCtlr.js";
 import StffRtrvBidsRsltCtlr from "../Controllers/StaffBid/StffRtrvBidsRslt.js";
+import { authJwt } from "../middleware/authJwt.js";
+
 
 const StaffbidRoutes = Router();
 const prisma = new PrismaClient();
-
+//staffbidroutes
 StaffbidRoutes.post("/create", async (req, res) => {
     const staffbid = req.body;
 
@@ -23,7 +25,8 @@ StaffbidRoutes.get("/retrieve", async (req, res) => {
     await staffRtrvBidCtlr.retrieveBids();
 })
 
-StaffbidRoutes.get("/result", async (req, res) => {
+StaffbidRoutes.get("/result", [authJwt.verifyToken], async (req, res) => {
+// StaffbidRoutes.get("/result", async (req, res) => {
     const staffRtrvBidResultCtlr = new StffRtrvBidsRsltCtlr(prisma, req, res);
     await staffRtrvBidResultCtlr.retrieveResults();
 })

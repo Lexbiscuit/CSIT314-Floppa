@@ -94,7 +94,7 @@ export default class Accounts {
       },
       orderBy: {
         bids: {
-          _count: "desc",
+          _count: "asc",
         },
       },
     });
@@ -107,7 +107,7 @@ export default class Accounts {
       where: {
         bids: {
           some: {
-            status: "approved",
+            status: "Approve",
           },
         },
       },
@@ -118,15 +118,17 @@ export default class Accounts {
         suspended: true,
         bids: {
           select: {
+            bidId: true,
             workslots: {
               select: {
                 startTime: true,
                 endTime: true,
+                weekNumber: true,
               },
             },
           }, //2nd where, condition for Bids
           where: {
-            status: "approved",
+            status: "Approve",
           },
         },
       },

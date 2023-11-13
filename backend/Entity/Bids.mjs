@@ -62,7 +62,7 @@ export default class Bids {
       },
       orderBy: {
         bids: {
-          _count: "desc",
+          _count: "asc",
         },
       },
     });
@@ -137,7 +137,7 @@ export default class Bids {
     await this.prisma.Bids.create({
       data: staffbid,
     });
-    return { message: "Your beads have been submitted" };
+    return { message: "Your bid have been submitted" };
   }
 
   async retrieveBidsStaff() {
@@ -151,12 +151,23 @@ export default class Bids {
     return response;
   }
 
-  async retrieveResults() {
+  async retrieveResults(decoded) {
+    let newMap = new Map(Object.entries(decoded));
+    let name = newMap.get("name");
+
+    const acctData = await this.prisma.Accounts.findFirst({where:{name: name}});
+    
+    newMap = new Map(Object.entries(acctData));
+    const accountId = newMap.get("accountId");
+
     const response = await this.prisma.Bids.findMany({
       where: {
+        AND: {
+        accountId: accountId,
         status: {
           not: "pending",
         },
+      },
       },
     });
 
