@@ -10,7 +10,7 @@ import StffRtrvBidsRsltCtlr from "../Controllers/StaffBid/StffRtrvBidsRslt.js";
 
 const StaffbidRoutes = Router();
 const prisma = new PrismaClient();
-
+//staffbidroutes
 StaffbidRoutes.post("/create", async (req, res) => {
     const staffbid = req.body;
 
