@@ -61,7 +61,7 @@ export default class Bids {
       },
       orderBy: {
         bids: {
-          _count: "desc",
+          _count: "asc",
         },
       },
     });
