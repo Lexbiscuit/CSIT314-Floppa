@@ -62,7 +62,7 @@ bidRoutes.get("/staffbids/:accountId", async (req, res) => {
   await staffRtrvBidCtlr.viewStaffBid();
 });
 
-// --------------------- APPROVE/REJECT BIDS --------------------- //
+// --------------------- APPROVE/REJECT BIDS ---------------------- //
 // bidRoutes.put("/approve", [authJwt.verifyToken], async (req, res) => {
 bidRoutes.put("/approve", async (req, res) => {
   const { bidId } = req.body;
