@@ -6,6 +6,7 @@ export default class Bids {
   // --------------------- THIS IS MANAGER RETRIEVE BIDS ENTITY--------------------- //
   async retrieveBidsMngr() {
     const response = await this.prisma.Workslots.findMany({
+      orderBy: [{ startTime: "asc" }],
       include: {
         bids: {
           orderBy: { bidId: "asc" },
