@@ -31,15 +31,31 @@ const columns = [
   {
     accessorKey: "startTime",
     header: "Start Time",
-    cell: (info: Info) =>
-      new Date(info.getValue()).toLocaleString("en-SG", { timeZone: "UTC" }),
+    cell: (info: Info) => new Date(info.getValue()).toLocaleString(),
     footer: (props: any) => props.column.id,
   },
   {
     accessorKey: "endTime",
     header: "End Time",
-    cell: (info: Info) =>
-      new Date(info.getValue()).toLocaleString("en-SG", { timeZone: "UTC" }),
+    cell: (info: Info) => new Date(info.getValue()).toLocaleString(),
+    footer: (props: any) => props.column.id,
+  },
+  {
+    accessorKey: "chefs",
+    header: "Chefs",
+    cell: (info: Info) => info.getValue(),
+    footer: (props: any) => props.column.id,
+  },
+  {
+    accessorKey: "cashiers",
+    header: "Cashiers",
+    cell: (info: Info) => info.getValue(),
+    footer: (props: any) => props.column.id,
+  },
+  {
+    accessorKey: "waiters",
+    header: "Waiters",
+    cell: (info: Info) => info.getValue(),
     footer: (props: any) => props.column.id,
   },
   {
@@ -58,11 +74,7 @@ function retrieveWorkslots() {
           headers: authHeader(),
         }
       );
-      const transformData = data.map((workslot: any) => {
-        workslot.workslotId = workslot.workslotId.toString();
-        return workslot;
-      });
-      return transformData;
+      return data;
     },
   });
 }
@@ -74,8 +86,7 @@ export default function WorkslotsTable() {
     <>
       {isLoading && <div>Loading...</div>}
       {isError && <div>Error</div>}
-      {isSuccess && data.length === 0 && <div>No workslots found</div>}
-      {isSuccess && data.length > 0 && <TanstackTable {...{ data, columns }} />}
+      {isSuccess && <TanstackTable {...{ data, columns }} />}
     </>
   );
 }
