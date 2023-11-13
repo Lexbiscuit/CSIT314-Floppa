@@ -136,7 +136,7 @@ export default class Bids {
     await this.prisma.Bids.create({
       data: staffbid,
     });
-    return { message: "Your beads have been submitted" };
+    return { message: "Your bid have been submitted" };
   }
 
   async retrieveBidsStaff() {
