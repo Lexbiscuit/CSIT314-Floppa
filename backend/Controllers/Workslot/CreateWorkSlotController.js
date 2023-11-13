@@ -22,6 +22,13 @@ export default class CreateWorkslotController {
         });
       }
 
+      const currentDate = DateTime.now();
+      if (startTime < currentDate) {
+        return this.res.status(500).send({
+          message: "Start time must be in the future. Workslot not created.",
+        });
+      }
+
       if (cashiers < 1 || chefs < 1 || waiters < 1) {
         return this.res.status(500).send({
           message:
