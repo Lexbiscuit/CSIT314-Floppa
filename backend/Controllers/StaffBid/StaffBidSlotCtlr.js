@@ -2,21 +2,32 @@ import { Prisma } from "@prisma/client";
 import Bids from "../../Entity/Bids.mjs";
 
 export default class StaffBidSlotCtlr {
-    constructor(prisma, req, res) {
-        this.prisma = prisma;
-        this.req = req;
-        this.res = res;
-    }
+  constructor(prisma, req, res) {
+    this.prisma = prisma;
+    this.req = req;
+    this.res = res;
+  }
 
-    async createBid(bid) {
-        try {
-            const staffBids = new Bids(this.prisma);
-            const response = await staffBids.createBid(bid);
+  async createBid(bid) {
+    try {
+      const staffBids = new Bids(this.prisma);
 
-            // 201 Created
-            this.res.status(201).json(response);
-        } catch (message) {
-            this.res.status(500).send({ message });
-        }
+      // check if bid exists
+      let bidExists = true;
+      bidExists = await staffBids.checkExists(bid.accountId, bid.workslotId);
+      if (bidExists) {
+        return this.res.status(500).send({
+          message: "Bid already exists. Bid not created.",
+        });
+      }
+
+      const response = await staffBids.createBid(bid);
+
+      // 201 Created
+      this.res.status(201).json(response);
+    } catch (message) {
+      console.log(message);
+      this.res.status(500).send({ message });
     }
+  }
 }

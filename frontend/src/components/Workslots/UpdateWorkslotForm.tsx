@@ -9,6 +9,7 @@ import { IconEdit } from "@tabler/icons-react";
 
 export default function UpdateWorkslotForm(props: { data: any }) {
   const [opened, { open, close }] = useDisclosure(false);
+  const { startTime, endTime, ...workslots } = props.data;
 
   const queryClient = useQueryClient();
   const updateWorkslot = useMutation({
@@ -28,9 +29,9 @@ export default function UpdateWorkslotForm(props: { data: any }) {
 
   const form = useForm({
     initialValues: {
-      workslotId: props.data.workslotId,
-      startTime: props.data.startTime.slice(0, 16),
-      endTime: props.data.endTime.slice(0, 16),
+      startTime: new Date(startTime).toLocaleString(),
+      endTime: new Date(endTime).toLocaleString(),
+      ...workslots,
     },
 
     validate: {
@@ -41,6 +42,9 @@ export default function UpdateWorkslotForm(props: { data: any }) {
     transformValues: (values) => ({
       startTime: new Date(values.startTime).toISOString(),
       endTime: new Date(values.endTime).toISOString(),
+      chefs: Number(values.chefs),
+      cashiers: Number(values.cashiers),
+      waiters: Number(values.waiters),
     }),
   });
 
@@ -52,7 +56,6 @@ export default function UpdateWorkslotForm(props: { data: any }) {
           onSubmit={form.onSubmit((values) => {
             updateWorkslot.mutate(values);
             close();
-            window.location.reload();
           })}
         >
           <TextInput
@@ -76,6 +79,30 @@ export default function UpdateWorkslotForm(props: { data: any }) {
             size="md"
             type="dateTime-local"
             {...form.getInputProps("endTime")}
+            my="1rem"
+          />
+
+          <TextInput
+            label="Chefs"
+            size="md"
+            type="number"
+            {...form.getInputProps("chefs")}
+            my="1rem"
+          />
+
+          <TextInput
+            label="Waiters"
+            size="md"
+            type="number"
+            {...form.getInputProps("waiters")}
+            my="1rem"
+          />
+
+          <TextInput
+            label="Cashiers"
+            size="md"
+            type="number"
+            {...form.getInputProps("cashiers")}
             my="1rem"
           />
 

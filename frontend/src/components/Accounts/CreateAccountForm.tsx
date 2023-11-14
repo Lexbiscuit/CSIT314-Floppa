@@ -9,7 +9,7 @@ type Account = {
   profileId: number;
   email: string;
   password: string;
-  roleId?: number;
+  role: string;
   dob: string;
 };
 
@@ -23,8 +23,8 @@ async function createAccount(account: Account) {
         alert(res.data.message);
         location.reload();
       });
-  } catch (err) {
-    alert("Internal System Error.");
+  } catch (error: any) {
+    alert(error.response.data.message);
   }
 }
 
@@ -32,10 +32,10 @@ export default function CreateAccountForm() {
   const form = useForm({
     initialValues: {
       name: "",
-      profileId: 0,
+      profileId: "",
       email: "",
       password: "",
-      roleId: 0,
+      role: "",
       dob: "",
     },
 
@@ -50,7 +50,6 @@ export default function CreateAccountForm() {
     transformValues: (values) => ({
       ...values,
       profileId: Number(values.profileId),
-      roleId: Number(values.profileId) == 4 ? Number(values.roleId) : undefined,
       dob: new Date(values.dob).toISOString(),
     }),
   });
@@ -104,13 +103,8 @@ export default function CreateAccountForm() {
         <Select
           label="Role"
           placeholder="Pick role"
-          data={[
-            { value: "1", label: "Barista" },
-            { value: "2", label: "Cashier" },
-            { value: "3", label: "Chef" },
-            { value: "4", label: "Waiter" },
-          ]}
-          {...form.getInputProps("roleId")}
+          data={["Cashier", "Waiter", "Chef"]}
+          {...form.getInputProps("role")}
           my="1rem"
         />
       )}

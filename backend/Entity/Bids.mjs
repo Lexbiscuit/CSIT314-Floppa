@@ -113,6 +113,19 @@ export default class Bids {
     return response;
   }
 
+  async checkExists(accountId, workslotId) {
+    const response = await this.prisma.Bids.findFirst({
+      where: {
+        AND: {
+          accountId,
+          workslotId,
+        },
+      },
+    });
+    if (!response) return false;
+    return true;
+  }
+
   //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
   //------------------------------------!!!!! STAFF CONTROLLERS STARTS FROM HERE !!!!!!------------------------------------
   //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -139,19 +152,21 @@ export default class Bids {
     let newMap = new Map(Object.entries(decoded));
     let name = newMap.get("name");
 
-    const acctData = await this.prisma.Accounts.findFirst({where:{name: name}});
-    
+    const acctData = await this.prisma.Accounts.findFirst({
+      where: { name: name },
+    });
+
     newMap = new Map(Object.entries(acctData));
     const accountId = newMap.get("accountId");
 
     const response = await this.prisma.Bids.findMany({
       where: {
         AND: {
-        accountId: accountId,
-        status: {
-          not: "pending",
+          accountId: accountId,
+          status: {
+            not: "pending",
+          },
         },
-      },
       },
     });
 

@@ -47,7 +47,7 @@ const columns = [
     footer: (props: any) => props.column.id,
   },
   {
-    accessorKey: "roles.name",
+    accessorKey: "role",
     header: "Role",
     cell: (info: Info) => info.getValue(),
     footer: (props: any) => props.column.id,

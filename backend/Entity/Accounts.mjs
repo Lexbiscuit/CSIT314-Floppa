@@ -1,4 +1,5 @@
 import * as bcrypt from "bcrypt";
+import { DateTime } from "luxon";
 export default class Accounts {
   constructor(prisma) {
     this.prisma = prisma;
@@ -81,8 +82,13 @@ export default class Accounts {
   }
 
   async retrieveAvailStaff() {
+    const currentWeek = DateTime.now().weekNumber;
     const response = await this.prisma.Accounts.findMany({
+      where: {
+        profileId: { equals: 4 },
+      },
       include: {
+        profiles: true,
         bids: true,
         _count: {
           select: {
@@ -105,7 +111,7 @@ export default class Accounts {
       where: {
         bids: {
           some: {
-            status: "Approve",
+            status: "approved",
           },
         },
       },
@@ -113,12 +119,13 @@ export default class Accounts {
         accountId: true,
         name: true,
         email: true,
-        suspended: true,
+        role: true,
         bids: {
           select: {
             bidId: true,
             workslots: {
               select: {
+                workslotId: true,
                 startTime: true,
                 endTime: true,
                 weekNumber: true,
@@ -126,7 +133,12 @@ export default class Accounts {
             },
           }, //2nd where, condition for Bids
           where: {
-            status: "Approve",
+            status: "approved",
+          },
+        },
+        profiles: {
+          select: {
+            name: true,
           },
         },
       },

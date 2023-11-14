@@ -9,7 +9,7 @@ import { useMutation } from "@tanstack/react-query";
 
 export default function UpdateAccountForm(props: { data: any }) {
   const [opened, { open, close }] = useDisclosure(false);
-  const account = props.data;
+  const { password, role, profileId, dob, ...account } = props.data;
 
   const { mutate: updateAccount } = useMutation({
     mutationFn: async (account: any) => {
@@ -28,33 +28,32 @@ export default function UpdateAccountForm(props: { data: any }) {
 
   const form = useForm({
     initialValues: {
-      accountId: account.accountId,
-      name: account.name,
-      profileId: Number(account.profileId),
-      email: account.email,
-      roleId: account.roleId ? Number(account.roleId) : undefined,
-      dob: account.dob,
+      profileId: profileId,
+      dob: new Date(dob).toISOString().slice(0, -14),
       password: "",
+      role: role ? role : undefined,
+      ...account,
     },
 
     validate: {
       name: isNotEmpty("Name cannot be empty."),
       profileId: isNotEmpty("Profile cannot be empty."),
       email: isEmail("Invalid email."),
-      roleId: (value, values) =>
-        values.profileId == 4 &&
-        value == null &&
+      role: (value, values) =>
+        values.profile == "Cafe Staff" &&
+        value == undefined &&
         isNotEmpty("Role cannot be empty."),
       dob: isNotEmpty("Date of birth cannot be empty."),
     },
 
     transformValues: (values) => ({
       accountId: Number(values.accountId),
-      profileId: Number(values.profileId),
       name: values.name,
+      profileId: Number(values.profileId),
       email: values.email,
-      password: values.password == "" ? undefined : values.password,
-      roleId: Number(values.profileId) == 4 ? Number(values.roleId) : undefined,
+      password: values.password,
+      role:
+        values.profileId == Number(values.profileId) ? values.role : undefined,
       dob: new Date(values.dob).toISOString(),
     }),
   });
@@ -70,20 +69,7 @@ export default function UpdateAccountForm(props: { data: any }) {
         <Box
           component="form"
           onSubmit={form.onSubmit((values) => {
-            const { profileId, roleId, ...updatedData } = values;
-
-            const account = {
-              profiles: { connect: { profileId: Number(profileId) } },
-              ...updatedData,
-            };
-
-            if (profileId == 4) {
-              account.roles = { connect: { roleId: Number(roleId) } };
-            } else {
-              account.roles = { disconnect: true };
-            }
-
-            updateAccount(account);
+            updateAccount(values);
           })}
         >
           <TextInput
@@ -130,17 +116,12 @@ export default function UpdateAccountForm(props: { data: any }) {
             my="1rem"
           />
 
-          {Number(form.values.profileId) == 4 && (
+          {form.values.profile == "Cafe Staff" && (
             <Select
               label="Role"
               placeholder="Pick role"
-              data={[
-                { value: "1", label: "Barista" },
-                { value: "2", label: "Cashier" },
-                { value: "3", label: "Chef" },
-                { value: "4", label: "Waiter" },
-              ]}
-              {...form.getInputProps("roleId")}
+              data={["Cashier", "Waiter", "Chef"]}
+              {...form.getInputProps("role")}
               my="1rem"
             />
           )}

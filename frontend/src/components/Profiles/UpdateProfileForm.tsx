@@ -52,6 +52,7 @@ export default function UpdateProfileForm(props: { data: any }) {
           component="form"
           onSubmit={form.onSubmit((values) => {
             updateProfile(values);
+            close();
           })}
         >
           <TextInput

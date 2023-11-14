@@ -30,16 +30,25 @@ export default function CreateWorkslotForm() {
     initialValues: {
       startTime: "",
       endTime: "",
+      chefs: 1,
+      cashiers: 1,
+      waiters: 1,
     },
 
     validate: {
       startTime: isNotEmpty("Start time cannot be empty."),
       endTime: isNotEmpty("End time cannot be empty."),
+      chefs: isNotEmpty("Number of chefs cannot be empty."),
+      cashiers: isNotEmpty("Number of cashiers cannot be empty."),
+      waiters: isNotEmpty("Number of waiters cannot be empty."),
     },
 
     transformValues: (values) => ({
       startTime: new Date(values.startTime).toISOString(),
       endTime: new Date(values.endTime).toISOString(),
+      chefs: Number(values.chefs),
+      cashiers: Number(values.cashiers),
+      waiters: Number(values.waiters),
     }),
   });
 
@@ -67,6 +76,29 @@ export default function CreateWorkslotForm() {
         my="1rem"
       />
 
+      <TextInput
+        label="Chefs"
+        size="md"
+        type="number"
+        {...form.getInputProps("chefs")}
+        my="1rem"
+      />
+
+      <TextInput
+        label="Waiters"
+        size="md"
+        type="number"
+        {...form.getInputProps("waiters")}
+        my="1rem"
+      />
+
+      <TextInput
+        label="Cashiers"
+        size="md"
+        type="number"
+        {...form.getInputProps("cashiers")}
+        my="1rem"
+      />
       <Button type="submit" my="1rem" w="100%">
         Create
       </Button>

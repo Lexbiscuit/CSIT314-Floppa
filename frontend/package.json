@@ -19,6 +19,7 @@
     "@mantine/hooks": "^7.1.2",
     "@mui/icons-material": "^5.14.12",
     "@mui/material": "^5.14.12",
+    "@table-library/react-table-library": "^4.1.7",
     "@tabler/icons-react": "^2.40.0",
     "@tanstack/match-sorter-utils": "^8.8.4",
     "@tanstack/react-query": "^5.4.3",

@@ -50,7 +50,7 @@ const columns = [
     footer: (props: any) => props.column.id,
   },
   {
-    accessorKey: "roles.name",
+    accessorKey: "role",
     header: "Role",
     cell: (info: Info) => info.getValue(),
     footer: (props: any) => props.column.id,
@@ -82,7 +82,7 @@ function searchAccounts(accountFilter: any) {
         accountFilter,
         {
           headers: authHeader(),
-        },
+        }
       );
 
       if (data.length > 0) {
@@ -106,30 +106,38 @@ export default function SearchAccountForm() {
   const form = useForm({
     initialValues: {
       name: "",
-      profileId: 0,
+      profileId: "",
       email: "",
-      roleId: 0,
+      role: "",
+      dob: "",
     },
 
     transformValues: (values) => ({
-      name: values.name == "" ? undefined : values.name,
+      name: values.name == "" ? undefined : { contains: values.name },
       profileId:
-        Number(values.profileId) == 0 ? undefined : Number(values.profileId),
-      email: values.email == "" ? undefined : values.email,
-      roleId: Number(values.roleId) == 4 ? Number(values.roleId) : undefined,
+        Number(values.profileId) == 0
+          ? undefined
+          : { equals: Number(values.profileId) },
+      email: values.email == "" ? undefined : { contains: values.email },
+      role: values.role == "" ? undefined : { equals: values.role },
+      dob:
+        values.dob == ""
+          ? undefined
+          : { equals: new Date(values.dob).toISOString() },
     }),
   });
 
   const { isSuccess, data, isError, isLoading, refetch } =
     searchAccounts(accountFilter);
 
+  const AccountsTable = () => <TanstackTable {...{ data, columns }} />;
   return (
     <>
       <Container mb="2rem">
         <Box
           component="form"
           onSubmit={form.onSubmit((values) => {
-            setAccountFilter(values);
+            setAccountFilter({ ...values });
             refetch();
           })}
         >
@@ -166,16 +174,20 @@ export default function SearchAccountForm() {
             <Select
               label="Role"
               placeholder="Pick role"
-              data={[
-                { value: "1", label: "Barista" },
-                { value: "2", label: "Cashier" },
-                { value: "3", label: "Chef" },
-                { value: "4", label: "Waiter" },
-              ]}
-              {...form.getInputProps("roleId")}
+              data={["Cashier", "Waiter", "Chef"]}
+              {...form.getInputProps("role")}
               my="1rem"
             />
           )}
+
+          <TextInput
+            label="Date of Birth"
+            type="date"
+            placeholder="dd-mm-yyyy (eg. 01-01-1999)"
+            size="md"
+            {...form.getInputProps("dob")}
+            my="1rem"
+          />
 
           <Button type="submit" my="1rem" w="100%">
             Search Account
@@ -184,7 +196,7 @@ export default function SearchAccountForm() {
       </Container>
       {isLoading && <div>Loading...</div>}
       {isError && <div>Something went wrong ...</div>}
-      {isSuccess && <TanstackTable {...{ data, columns }} />}
+      {isSuccess && <AccountsTable />}
     </>
   );
 }

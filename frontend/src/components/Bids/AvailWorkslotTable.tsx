@@ -1,17 +1,23 @@
 import React from "react";
-import ReactTable from "../ReactTable";
-import { useQuery } from "@tanstack/react-query";
+import authHeader from "../../services/auth-header";
 import axios from "axios";
+import { useQuery } from "@tanstack/react-query";
+import ReactTable from "../ReactTable";
 
-export default function BidsTable() {
-  const { data, status, isFetching } = useQuery({
-    queryKey: ["retrievemngrbids"],
+export function AvailWorkslotTable() {
+  const retrieveAvailWorkslots = useQuery({
+    queryKey: ["retrieveAvailWorkslots"],
     queryFn: async () => {
       const { data } = await axios.get(
-        "http://localhost:3000/mngrbids/retrieve"
+        "http://localhost:3000/mngrbids/availws",
+        {
+          headers: authHeader(),
+        }
       );
       return data;
     },
+    refetchOnMount: true,
+    refetchOnWindowFocus: true,
   });
 
   const columns = [
@@ -59,13 +65,22 @@ export default function BidsTable() {
     },
   ];
 
-  if (isFetching) {
-    return <div>Loading...</div>;
-  }
+  const { data, status, isFetching } = retrieveAvailWorkslots;
+
+  type Info = {
+    getValue: () => string;
+    row: any;
+  };
+
   if (status === "error") {
-    return <div>Error fetching data</div>;
+    return <div>An error occured ...</div>;
   }
+
+  if (isFetching) {
+    return <div>Fetching data ...</div>;
+  }
+
   if (status === "success") {
-    return <ReactTable columns={columns} data={data} />;
+    return <ReactTable data={data} columns={columns} />;
   }
 }
