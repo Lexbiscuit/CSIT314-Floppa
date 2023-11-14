@@ -12,7 +12,7 @@ export default class StffRtrvAvailWrksltCtlr {
     try {
       const workslots = new Workslots(this.prisma);
       const response = await workslots.staffRtrvAvailWS();
-      
+
       this.res.status(200).json(response);
     } catch ({ message }) {
       console.log(message);

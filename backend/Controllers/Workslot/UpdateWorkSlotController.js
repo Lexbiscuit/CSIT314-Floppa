@@ -19,7 +19,7 @@ export default class UpdateWorkslotController {
       if (startTime > endTime) {
         return this.res.status(500).send({
           message: "Start time must be before end time. Workslot not updated.",
-          
+
         });
       }
 
@@ -37,7 +37,6 @@ export default class UpdateWorkslotController {
       this.res.status(200).json(response);
     } catch ({ message }) {
       // 500 INTERNAL SERVER ERROR
-      console.log(message);
       this.res.status(500).send({ message });
     }
   }

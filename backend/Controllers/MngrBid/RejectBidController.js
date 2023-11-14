@@ -14,17 +14,10 @@ export default class RejectBidController {
       const response = await bids.rejectBid(bidId, reason);
 
       // 201 Created
-      this.res.status(201).json(response); 
+      this.res.status(201).json(response);
     } catch ({ message }) {
-
-      /* if (err instanceof Prisma.PrismaClientKnownRequestError) {
-        if (err.code === "P2002")
-          this.res.status(500).send({ message: err.message });
-      } else { */
-
-        // 500 INTERNAL SERVER ERROR
-        this.res.status(500).send({ message });
-      //}
+      // 500 INTERNAL SERVER ERROR
+      this.res.status(500).send({ message });
     }
   }
 }

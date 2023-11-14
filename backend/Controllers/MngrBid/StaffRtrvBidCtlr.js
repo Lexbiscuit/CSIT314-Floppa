@@ -15,22 +15,11 @@ export default class StaffRtrvBidCtlr {
 
       const staff = await bids.viewStaffBid(accountId);
 
-/*       const staff = await this.prisma.Bids.findMany({
-        where: {
-          accountId: accountId,
-        },
-        include: {
-          accounts: true,
-        },
-      });
- */
       // 200 OK.
       this.res.status(200).json({
         staff: staff,
       });
     } catch (err) {
-      console.error(err);
-
       // 500 INTERNAL SERVER ERROR
       this.res.status(500).send({ message: "Internal Server Error." });
     }

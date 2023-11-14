@@ -16,7 +16,6 @@ export default class MngrRtrvAvailStaffCtlr {
 
       this.res.status(200).json(response);
     } catch (message) {
-      console.log(message);
       this.res.status(500).send({ message });
     }
   }

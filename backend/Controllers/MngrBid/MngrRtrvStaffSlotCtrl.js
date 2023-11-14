@@ -11,12 +11,11 @@ export default class MngrRtrvStaffSlotCtrl {
 
   async retrieveStaffSlot() {
     try {
-      const accounts = new Accounts(this.prisma);  
+      const accounts = new Accounts(this.prisma);
       const response = await accounts.retrieveStaffSlot();
 
       this.res.status(200).json(response);
     } catch ({ message }) {
-      console.log(message);
       // 500 INTERNAL SERVER ERROR
       this.res.status(500).send({ message });
     }

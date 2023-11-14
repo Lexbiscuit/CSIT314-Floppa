@@ -15,7 +15,6 @@ export default class StaffSrchBidCtlr {
         // 201 Created
         this.res.status(201).json(response);
     } catch (message) {
-        console.log(message);
         this.res.status(500).send({ message });
     }
 }
