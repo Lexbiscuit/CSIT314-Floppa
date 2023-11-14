@@ -1,5 +1,4 @@
 import { Prisma } from "@prisma/client";
-import * as bcrypt from "bcrypt";
 import Bids from "../../Entity/Bids.mjs";
 import jwt from "jsonwebtoken";
 

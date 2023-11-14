@@ -1,3 +1,5 @@
+import { DateTime } from "luxon";
+
 export default class Workslots {
   constructor(prisma) {
     this.prisma = prisma;
@@ -50,134 +52,16 @@ export default class Workslots {
     return response;
   }
 
-  // async filterAvailWS() {
-  //   const workslots = await this.prisma.Workslots.findMany({
-  //     select: {
-  //       workslotId: true,
-  //         select: {
-  //           cashiers: true,
-  //           chefs: true,
-  //           waiters: true,
-  //         },
-  //       bids: {
-  //         select: {
-  //           accounts: {
-  //             select: {
-  //               accountId: true,
-  //             },
-  //           },
-  //         },
-  //       },
-  //     },
-  //   });
-
-  //   const response = workslots.map((workslot) => {
-  //     if (workslot.bids == 0) {
-  //       return workslot;
-  //     }
-
-  //     const bidMap = new Map();
-  //     workslot.bids.map((bid) => {
-  //       if (bidMap.get(bid.accounts.roleId)) {
-  //         bidMap.set(bid.accounts.roleId, bidMap.get(bid.accounts.roleId) + 1);
-  //       } else {
-  //         bidMap.set(bid.accounts.roleId, 1);
-  //       }
-  //     });
-
-  //     let isAvailable = true;
-  //     workslot.workslots_roles.every((workslot_role) => {
-  //       if (bidMap.get(workslot_role.roleId) < workslot_role.count) {
-  //         isAvailable = false;
-  //         return false;
-  //       }
-  //     });
-
-  //     if (!isAvailable) {
-  //       const { bids, ...workslotDetails } = workslot;
-  //       workslotDetails["current_Bids"] = Array.from(bidMap, ([roleId, count]) => ({
-  //         roleId,
-  //         count,
-  //       }));
-  //       return workslotDetails;
-  //     }
-  //   });
-
-  //   return response.filter((ws) => {
-  //     return ws != null;
-  //   });
-  // }
-
-  // async filterAvailWS() {
-  //   const workslots = await this.prisma.Workslots.findMany({
-  //     select: {
-  //       workslotId: true,
-  //       startTime: true,
-  //       endTime: true,
-  //       weekNumber: true,
-  //       cashiers: true,
-  //       chefs: true,
-  //       waiters: true,
-  //       bids: {
-  //         select: {
-  //           accounts: {
-  //             select: {
-  //               accountId: true,
-  //               role: true, 
-  //             },
-  //           },
-  //         },
-  //       },
-  //     },
-  //   });
-
-  //   const response = workslots.map((workslot) => {
-  //     if (workslot.bids.length === 0) {
-  //       return workslot;
-  //     }
-
-  //     const bidMap = new Map();
-  //     workslot.bids.forEach((bid) => {
-  //       const role = bid.accounts.role;
-  //       if (bidMap.has(role)) {
-  //         bidMap.set(role, bidMap.get(role) + 1);
-  //       } else {
-  //         bidMap.set(role, 1);
-  //       }
-  //     });
-
-  //     let isAvailable = true;
-  //     ['cashiers', 'chefs', 'waiters'].every((role) => {
-  //       const requiredCount = workslot[role];
-  //       const actualCount = bidMap.get(role) || 0;
-  //       if (actualCount < requiredCount) {
-  //         isAvailable = false;
-  //         return false;
-  //       }
-  //     });
-
-  //     if (!isAvailable) {
-  //       const { bids, ...workslotDetails } = workslot;
-  //       workslotDetails['current_Bids'] = Array.from(bidMap, ([role, count]) => ({ role, count }));
-  //       return workslotDetails;
-  //     }
-  //   });
-
-  //   return response.filter((ws) => ws != null);
-  // }
-
   async filterAvailWS() {
+    const currentWeekNumber = DateTime.local().weekNumber;
     const workslots = await this.prisma.Workslots.findMany({
-      select: {
-        workslotId: true,
-        startTime: true,
-        endTime: true,
-        weekNumber: true,
-        cashiers: true,
-        chefs: true,
-        waiters: true,
+      where: {
+        weekNumber: currentWeekNumber,
+      },
+      include: {
         bids: {
           select: {
+            bidId: true,
             accounts: {
               select: {
                 accountId: true,
@@ -188,78 +72,91 @@ export default class Workslots {
         },
       },
     });
-  
+
     const response = workslots
       .map((workslot) => {
         const bidMap = new Map();
         workslot.bids.forEach((bid) => {
-          const role = bid.accounts.role;
-          bidMap.set(role, (bidMap.get(role) || 0) + 1);
+          const { accountId, role } = bid.accounts;
+          bidMap.set(accountId, { role, count: (bidMap.get(accountId)?.count || 0) + 1 });
         });
-  
+
         let isAvailable = true;
         ['cashiers', 'chefs', 'waiters'].every((role) => {
           const requiredCount = workslot[role];
-          const actualCount = bidMap.get(role) <= 0;
+          const actualCount = bidMap.get(role)?.count || 0;
           if (actualCount < requiredCount) {
             isAvailable = false;
             return false;
           }
         });
-  
+
         if (!isAvailable) {
           const { bids, ...workslotDetails } = workslot;
-          workslotDetails['current_Bids'] = Array.from(bidMap, ([role, count]) => ({ role, count }));
+          workslotDetails['currentBids'] = Array.from(bidMap.values());
           return workslotDetails;
         }
       })
       .filter((ws) => ws != null)
       .sort((a, b) => {
-        (a.current_Bids[0]?.count || 0) - (b.current_Bids[0]?.count || 0); 
-        console.log(a.current_Bids);
-        console.log(a);
-        console.log(b.current_Bids);
-        console.log(b);
+        const totalBidCountA = a.currentBids.reduce((acc, cur) => acc + cur.count, 0);
+        const totalBidCountB = b.currentBids.reduce((acc, cur) => acc + cur.count, 0);
+        return totalBidCountA - totalBidCountB;
       });
 
     return response;
   }
-  
 
-  // Retrieve datas from tables Workslots -> Workslots-roles -> Roles
-  // Datas: [workslotId, workslots_roles{count}, roles{name}]
+
   async staffRtrvAvailWS() {
-    const response = await this.prisma.Workslots.findMany({
-      //1st where, condition for Workslots
+    const currentWeekNumber = DateTime.local().weekNumber;
+
+    const workslots = await this.prisma.Workslots.findMany({
       where: {
-        workslots_roles: {
-          some: {
-            NOT: {
-              count: 0,
-            },
-          },
-        },
+        weekNumber: currentWeekNumber,
       },
-      //2nd where, condition for workslots_roles
-      select: {
-        workslotId: true,
-        workslots_roles: {
-          where: {
-            NOT: {
-              count: 0,
-            },
-          },
+      include: {
+        bids: {
           select: {
-            count: true,
-            roles: {
+            bidId: true,
+            accounts: {
               select: {
-                name: true,
+                accountId: true,
+                role: true,
               },
             },
           },
         },
       },
     });
+
+    const response = workslots
+      .map((workslot) => {
+        const bidMap = new Map();
+        workslot.bids.forEach((bid) => {
+          const { accountId, role } = bid.accounts;
+          bidMap.set(accountId, { role, count: (bidMap.get(accountId)?.count || 0) + 1 });
+        });
+
+        let isAvailable = true;
+        ['cashiers', 'chefs', 'waiters'].every((role) => {
+          const requiredCount = workslot[role];
+          const actualCount = bidMap.get(role)?.count || 0;
+          if (actualCount < requiredCount) {
+            isAvailable = false;
+            return false;
+          }
+        });
+
+        if (!isAvailable) {
+          const { bids, ...workslotDetails } = workslot;
+          workslotDetails['totalBidCount'] = Array.from(bidMap.values()).reduce((acc, cur) => acc + cur.count, 0);
+          return workslotDetails;
+        }
+      })
+      .filter((ws) => ws != null)
+      .sort((a, b) => a.totalBidCount - b.totalBidCount);
+
     return response;
   }
 }
