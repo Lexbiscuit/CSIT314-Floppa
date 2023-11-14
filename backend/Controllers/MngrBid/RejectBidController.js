@@ -10,6 +10,13 @@ export default class RejectBidController {
 
   async rejectBid(bidId, reason) {
     try {
+      if (reason.trim() == "") {
+        // 400 BAD REQUEST
+        this.res
+          .status(400)
+          .send({ message: "Reason is required. Bid status not modified." });
+        return;
+      }
       const bids = new Bids(this.prisma);
       const response = await bids.rejectBid(bidId, reason);
 

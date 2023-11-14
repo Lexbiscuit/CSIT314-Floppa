@@ -38,15 +38,16 @@ export default class Bids {
 
   // --------------------- THIS IS MANAGER APPROVE BIDS ENTITY--------------------- //
   async approveBid(bidId) {
-    const response = await this.prisma.Bids.update({
+    await this.prisma.Bids.update({
       where: {
         bidId: bidId,
       },
       data: {
-        status: "Approve",
+        status: "approved",
       },
     });
-    return response;
+
+    return { message: "Bid approved successfully." };
   }
 
   // --------------------- THIS IS MANAGER RETRIEVE STAFF ENTITY---------------------//
@@ -71,24 +72,23 @@ export default class Bids {
 
   // --------------------- THIS IS MANAGER REJECT BIDS ENTITY--------------------- //
   async rejectBid(bidId, reason) {
-    const response = await this.prisma.Bids.update({
+    await this.prisma.Bids.update({
       where: {
         bidId: bidId,
       },
       data: {
-        status: "Reject",
+        status: "rejected",
         reason: reason,
       },
     });
-    return response;
+    return { message: "Bid rejected successfully." };
   }
-
 
   // --------------------- THIS IS MANAGER RETRIEVE APPROVED STAFF--------------------- //
   async retrieveStaffSlot() {
     const response = await this.prisma.Bids.findMany({
       where: {
-        status: "Approve",
+        status: "approved",
       },
       include: {
         accounts: true,
