@@ -97,7 +97,7 @@ export default class Workslots {
           ? null
           : {
             ...workslot,
-            bids: workslot.bids.map(({ accounts }) => ({ accounts })),
+            bids: workslot.bids.map(({ accounts }) => ({ accounts })),weekNumber: undefined
           };
       })
       .filter(Boolean)
