@@ -9,52 +9,55 @@ import StaffRtrvAvailWrkslotCtlr from "../Controllers/StaffBid/StffRtrvAvailWrks
 import StffRtrvBidsRsltCtlr from "../Controllers/StaffBid/StffRtrvBidsRslt.js";
 import { authJwt } from "../middleware/authJwt.js";
 
-
 const StaffbidRoutes = Router();
 const prisma = new PrismaClient();
 //staffbidroutes
 StaffbidRoutes.post("/create", async (req, res) => {
-    const staffbid = req.body;
+  const staffbid = req.body;
 
-    const StaffcreateBidController = new StaffBidSlotCtlr(prisma, req, res);
-    await StaffcreateBidController.createBid(staffbid);
+  const StaffcreateBidController = new StaffBidSlotCtlr(prisma, req, res);
+  await StaffcreateBidController.createBid(staffbid);
 });
 
-StaffbidRoutes.get("/retrieve", async (req, res) => {
-    const staffRtrvBidCtlr = new StaffRtrvBidCtlr(prisma, req, res);
-    await staffRtrvBidCtlr.retrieveBids();
-})
+StaffbidRoutes.get("/retrieve", [authJwt.verifyToken], async (req, res) => {
+  const staffRtrvBidCtlr = new StaffRtrvBidCtlr(prisma, req, res);
+  await staffRtrvBidCtlr.retrieveBids();
+});
 
 StaffbidRoutes.get("/result", [authJwt.verifyToken], async (req, res) => {
-// StaffbidRoutes.get("/result", async (req, res) => {
-    const staffRtrvBidResultCtlr = new StffRtrvBidsRsltCtlr(prisma, req, res);
-    await staffRtrvBidResultCtlr.retrieveResults();
-})
+  // StaffbidRoutes.get("/result", async (req, res) => {
+  const staffRtrvBidResultCtlr = new StffRtrvBidsRsltCtlr(prisma, req, res);
+  await staffRtrvBidResultCtlr.retrieveResults();
+});
 
 StaffbidRoutes.put("/update", async (req, res) => {
-    const staffbid = req.body;
+  const staffbid = req.body;
 
-    const staffUpdBidCtlr = new StaffUpdBidCtlr(prisma, req, res);
-    await staffUpdBidCtlr.updateBid(staffbid);
+  const staffUpdBidCtlr = new StaffUpdBidCtlr(prisma, req, res);
+  await staffUpdBidCtlr.updateBid(staffbid);
 });
 
 StaffbidRoutes.delete("/delete", async (req, res) => {
-    const { bidId } = req.body;
+  const { bidId } = req.body;
 
-    const staffDltBidSlotCtlr = new StaffDltBidSlotCtlr(prisma, req, res);
-    await staffDltBidSlotCtlr.deleteBidSlot(bidId);
+  const staffDltBidSlotCtlr = new StaffDltBidSlotCtlr(prisma, req, res);
+  await staffDltBidSlotCtlr.deleteBidSlot(bidId);
 });
 
 StaffbidRoutes.post("/search", async (req, res) => {
-    const bid = req.body;
+  const bid = req.body;
 
-    const staffSrchBidCtlr = new StaffSrchBidCtlr(prisma, req, res);
-    await staffSrchBidCtlr.searchStaffBid(bid);
+  const staffSrchBidCtlr = new StaffSrchBidCtlr(prisma, req, res);
+  await staffSrchBidCtlr.searchStaffBid(bid);
 });
 
 StaffbidRoutes.get("/availws", async (req, res) => {
-    const staffRtrvAvailWrkslotCtlr = new StaffRtrvAvailWrkslotCtlr(prisma, req, res);
-    await staffRtrvAvailWrkslotCtlr.staffRtrvAvailWS();
+  const staffRtrvAvailWrkslotCtlr = new StaffRtrvAvailWrkslotCtlr(
+    prisma,
+    req,
+    res
+  );
+  await staffRtrvAvailWrkslotCtlr.staffRtrvAvailWS();
 });
 
 export default StaffbidRoutes;

@@ -137,8 +137,21 @@ export default class Bids {
     return { message: "Your bid have been submitted" };
   }
 
-  async retrieveBidsStaff() {
+  async retrieveBidsStaff(decoded) {
+    let newMap = new Map(Object.entries(decoded));
+    let name = newMap.get("name");
+
+    const acctData = await this.prisma.Accounts.findFirst({
+      where: { name: name },
+    });
+
+    newMap = new Map(Object.entries(acctData));
+    const accountId = newMap.get("accountId");
+
     const response = await this.prisma.Bids.findMany({
+      where: {
+        accountId: accountId,
+      },
       orderBy: [
         {
           bidId: "asc",
