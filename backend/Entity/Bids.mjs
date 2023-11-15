@@ -61,12 +61,23 @@ export default class Bids {
           },
         },
       },
+      select: {
+        accountId: true,
+        profileId: true,
+        name: true,
+        email: true,
+        role: true,
+        suspended: true,
+        bids: true,
+        _count: true,
+      },
       orderBy: {
         bids: {
           _count: "asc",
         },
       },
     });
+  
     return response;
   }
 

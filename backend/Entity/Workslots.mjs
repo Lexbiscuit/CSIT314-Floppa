@@ -134,7 +134,7 @@ export default class Workslots {
           bidMap.set(role, { count: (bidMap.get(role)?.count || 0) + 1 });
         });
         const isAvailable = ['cashiers', 'chefs', 'waiters'].every(role => (bidMap.get(role)?.count || 0) >= workslot[role]);
-        return isAvailable ? null : { ...workslot };
+        return isAvailable ? null : { ...workslot, weekNumber: undefined };
       })
       .filter(Boolean)
       .sort((a, b) => {
@@ -146,6 +146,4 @@ export default class Workslots {
 
     return response;
   }
-
-  
 }
