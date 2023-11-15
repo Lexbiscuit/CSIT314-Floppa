@@ -3,9 +3,10 @@ import { Modal, TextInput, Button, Box, Select } from "@mantine/core";
 import { useForm, isNotEmpty } from "@mantine/form";
 import axios from "axios";
 import authHeader from "../../services/auth-header";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 export default function CreateWorkslotForm() {
+  const queryClient = useQueryClient();
   const { mutate: createWorkslot } = useMutation({
     mutationFn: async (data: any) => {
       return axios.post(
@@ -18,11 +19,12 @@ export default function CreateWorkslotForm() {
         }
       );
     },
-    onSuccess: (res) => {
-      alert(res.data.message);
+    onSuccess: ({ data }) => {
+      queryClient.invalidateQueries({ queryKey: ["retrieveWorkslots"] });
+      alert(data.message);
     },
-    onError: (err) => {
-      alert(err.response.data.message);
+    onError: ({ response }) => {
+      alert(response.data.message);
     },
   });
 

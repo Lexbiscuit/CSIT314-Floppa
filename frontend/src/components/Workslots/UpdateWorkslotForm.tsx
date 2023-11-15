@@ -9,37 +9,46 @@ import { IconEdit } from "@tabler/icons-react";
 
 export default function UpdateWorkslotForm(props: { data: any }) {
   const [opened, { open, close }] = useDisclosure(false);
-  const { startTime, endTime, ...workslots } = props.data;
+  const { workslotId, startTime, endTime, cashiers, chefs, waiters } =
+    props.data;
 
   const queryClient = useQueryClient();
-  const updateWorkslot = useMutation({
+  const { mutate: updateWorkslot } = useMutation({
     mutationFn: (values: any) => {
       return axios.put("http://localhost:3000/workslots/update", values, {
         headers: authHeader(),
       });
     },
-    onSuccess: (res) => {
-      alert(res.data.message);
+    onSuccess: ({ data }) => {
+      alert(data.message);
       queryClient.invalidateQueries({ queryKey: ["retrieveWorkslots"] });
     },
-    onError: (err) => {
-      alert(err.response.data.message);
+    onError: ({ response }) => {
+      alert(response.data.message);
     },
   });
 
   const form = useForm({
     initialValues: {
-      startTime: new Date(startTime).toLocaleString(),
-      endTime: new Date(endTime).toLocaleString(),
-      ...workslots,
+      workslotId: workslotId,
+      startTime: startTime.slice(0, 16),
+      endTime: endTime.slice(0, 16),
+      cashiers: cashiers,
+      chefs: chefs,
+      waiters: waiters,
     },
 
     validate: {
+      workslotId: isNotEmpty("Workslot ID cannot be empty."),
       startTime: isNotEmpty("Start time cannot be empty."),
       endTime: isNotEmpty("Start time cannot be empty."),
+      cashiers: isNotEmpty("Cashiers cannot be empty."),
+      chefs: isNotEmpty("Chefs cannot be empty."),
+      waiters: isNotEmpty("Waiters cannot be empty."),
     },
 
     transformValues: (values) => ({
+      workslotId: Number(values.workslotId),
       startTime: new Date(values.startTime).toISOString(),
       endTime: new Date(values.endTime).toISOString(),
       chefs: Number(values.chefs),
@@ -54,7 +63,7 @@ export default function UpdateWorkslotForm(props: { data: any }) {
         <Box
           component="form"
           onSubmit={form.onSubmit((values) => {
-            updateWorkslot.mutate(values);
+            updateWorkslot(values);
             close();
           })}
         >
