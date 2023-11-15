@@ -96,9 +96,9 @@ export default class Workslots {
         return isAvailable
           ? null
           : {
-              ...workslot,
-              bids: workslot.bids.map(({ accounts }) => ({ accounts })),
-            };
+            ...workslot,
+            bids: workslot.bids.map(({ accounts }) => ({ accounts })),
+          };
       })
       .filter(Boolean)
       .sort((a, b) => {
@@ -117,8 +117,8 @@ export default class Workslots {
       where: {
         weekNumber: { in: [currentWeekNumber, currentWeekNumber + 1] },
         startTime: {
-          gte: DateTime.local().startOf("week").toJSDate(),
-          lt: DateTime.local().startOf("week").plus({ weeks: 2 }).toJSDate(),
+          gte: DateTime.local().startOf('week').toJSDate(),
+          lt: DateTime.local().startOf('week').plus({ weeks: 2 }).toJSDate(),
         },
       },
       include: {
@@ -133,9 +133,7 @@ export default class Workslots {
           const { role } = bid;
           bidMap.set(role, { count: (bidMap.get(role)?.count || 0) + 1 });
         });
-        const isAvailable = ["cashiers", "chefs", "waiters"].every(
-          (role) => (bidMap.get(role)?.count || 0) >= workslot[role]
-        );
+        const isAvailable = ['cashiers', 'chefs', 'waiters'].every(role => (bidMap.get(role)?.count || 0) >= workslot[role]);
         return isAvailable ? null : { ...workslot };
       })
       .filter(Boolean)
@@ -149,49 +147,5 @@ export default class Workslots {
     return response;
   }
 
-  async staffRtrvAvailWS(accountId, role) {
-    const currentWeekNumber = DateTime.local().weekNumber;
-
-    const workslots = await this.prisma.Workslots.findMany({
-      where: {
-        weekNumber: currentWeekNumber,
-        bids: {
-          none: {
-            accounts: {
-              accountId: Number(accountId),
-            },
-          },
-        },
-      },
-      select: {
-        workslotId: true,
-        startTime: true,
-        endTime: true,
-        cashiers: true,
-        chefs: true,
-        waiters: true,
-        bids: {
-          select: { accounts: true },
-        },
-      },
-    });
-
-    const response = workslots.map((ws) => {
-      const targetCount = ws[`${role}s`];
-      const actualCount = ws.bids.filter(
-        (bid) => bid.accounts.role == role
-      ).length;
-
-      if (actualCount < targetCount) {
-        return {
-          workslotId: ws.workslotId,
-          startTime: ws.startTime,
-          endTime: ws.endTime,
-          vacancies: targetCount - actualCount,
-        };
-      }
-    });
-
-    return response;
-  }
+  
 }
