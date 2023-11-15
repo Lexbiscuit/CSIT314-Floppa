@@ -46,55 +46,57 @@ export default function BidsTable() {
         reason,
       });
     },
-    onSuccess: (data) => {
-      alert(data.data.message);
+    onSuccess: ({ data }) => {
+      alert(data.message);
       queryClient.invalidateQueries({ queryKey: ["retrievemngrbids"] });
     },
-    onError: (error) => {
-      alert(error.response.data.message);
+    onError: ({ response }) => {
+      alert(response.data.message);
     },
   });
 
   const columns = [
     {
       label: "ID",
-      renderCell: (item) => item.workslotId,
+      renderCell: (item: { workslotId: any }) => item.workslotId,
       sort: { sortKey: "WORKSLOTID" },
       resize: true,
     },
     {
       label: "Week",
-      renderCell: (item) => item.weekNumber,
+      renderCell: (item: { weekNumber: any }) => item.weekNumber,
       sort: { sortKey: "WEEKNUMBER" },
       resize: true,
     },
     {
       label: "Start Date",
-      renderCell: (item) => new Date(item.startTime).toLocaleString(),
+      renderCell: (item: { startTime: string | number | Date }) =>
+        new Date(item.startTime).toLocaleString(),
       sort: { sortKey: "STARTTIME" },
       resize: true,
     },
     {
       label: "End Date",
-      renderCell: (item) => new Date(item.endTime).toLocaleString(),
+      renderCell: (item: { endTime: string | number | Date }) =>
+        new Date(item.endTime).toLocaleString(),
       sort: { sortKey: "ENDTIME" },
       resize: true,
     },
     {
       label: "Cashiers",
-      renderCell: (item) => item.cashiers,
+      renderCell: (item: { cashiers: any }) => item.cashiers,
       sort: { sortKey: "CASHIERS" },
       resize: true,
     },
     {
       label: "Chefs",
-      renderCell: (item) => item.chefs,
+      renderCell: (item: { chefs: any }) => item.chefs,
       sort: { sortKey: "CHEFS" },
       resize: true,
     },
     {
       label: "Waiters",
-      renderCell: (item) => item.waiters,
+      renderCell: (item: { waiters: any }) => item.waiters,
       sort: { sortKey: "WAITERS" },
       resize: true,
     },
@@ -118,11 +120,11 @@ export default function BidsTable() {
     }
   );
 
-  function onSortChange(action, state) {
+  function onSortChange(action: any, state: any) {
     console.log(action, state);
   }
 
-  const handleExpand = (item) => {
+  const handleExpand = (item: { workslotId: ConcatArray<never> }) => {
     if (ids.includes(item.workslotId)) {
       setIds(ids.filter((id) => id != item.workslotId));
     } else {
@@ -135,64 +137,124 @@ export default function BidsTable() {
   };
 
   const ROW_OPTIONS = {
-    renderAfterRow: (item) => (
+    renderAfterRow: (item: { workslotId: any; bids: any[] }) => (
       <>
         {ids.includes(item.workslotId) &&
           item.bids &&
-          item.bids.map((bid) => {
-            return (
-              <tr
-                style={{ display: "flex", gridColumn: "1 / -1" }}
-                key={bid.bidId}
-              >
-                <td style={{ flex: "1" }}>
-                  <ul
-                    style={{
-                      margin: "0",
-                      padding: "0",
-                      backgroundColor: "#e0e0e0",
-                    }}
+          item.bids.map(
+            (bid: {
+              bidId:
+                | boolean
+                | React.Key
+                | React.ReactElement<
+                    any,
+                    string | React.JSXElementConstructor<any>
                   >
-                    <li style={{ wordWrap: "break-word" }}>
-                      <strong>Bid ID:</strong> {bid.bidId}
-                    </li>
-                    <li>
-                      <strong>Account ID:</strong> {bid.accountId}
-                    </li>
-                    <li>
-                      <strong>Workslot ID:</strong> {bid.workslotId}
-                    </li>
-                    <li>
-                      <strong>Status:</strong> {bid.status}
-                    </li>
-                    {bid.status == "rejected" && (
-                      <li>
-                        <strong>Reason:</strong> {bid.reason}
+                | Iterable<React.ReactNode>
+                | null
+                | undefined;
+              accountId:
+                | string
+                | number
+                | boolean
+                | React.ReactElement<
+                    any,
+                    string | React.JSXElementConstructor<any>
+                  >
+                | Iterable<React.ReactNode>
+                | React.ReactPortal
+                | null
+                | undefined;
+              workslotId:
+                | string
+                | number
+                | boolean
+                | React.ReactElement<
+                    any,
+                    string | React.JSXElementConstructor<any>
+                  >
+                | Iterable<React.ReactNode>
+                | React.ReactPortal
+                | null
+                | undefined;
+              status:
+                | string
+                | number
+                | boolean
+                | React.ReactElement<
+                    any,
+                    string | React.JSXElementConstructor<any>
+                  >
+                | Iterable<React.ReactNode>
+                | null
+                | undefined;
+              reason:
+                | string
+                | number
+                | boolean
+                | React.ReactElement<
+                    any,
+                    string | React.JSXElementConstructor<any>
+                  >
+                | Iterable<React.ReactNode>
+                | React.ReactPortal
+                | null
+                | undefined;
+            }) => {
+              return (
+                <tr
+                  style={{ display: "flex", gridColumn: "1 / -1" }}
+                  key={bid.bidId}
+                >
+                  <td style={{ flex: "1" }}>
+                    <ul
+                      style={{
+                        margin: "0",
+                        padding: "0",
+                        backgroundColor: "#e0e0e0",
+                      }}
+                    >
+                      <li style={{ wordWrap: "break-word" }}>
+                        <strong>Bid ID:</strong> {bid.bidId}
                       </li>
-                    )}
-                    <li>
-                      {bid.status == "pending" ? (
-                        <SimpleGrid cols={2}>
-                          <Button
-                            variant="filled"
-                            onClick={() => approveBid(bid.bidId)}
-                          >
-                            Approve
-                          </Button>
-                          <Button
-                            variant="filled"
-                            onClick={() => rejectBid(bid.bidId)}
-                          >
-                            Reject
-                          </Button>
-                        </SimpleGrid>
-                      ) : null}
-                    </li>
-                  </ul>
-                </td>
-              </tr>
-            );
-          })}
+                      <li>
+                        <strong>Account ID:</strong> {bid.accountId}
+                      </li>
+                      <li>
+                        <strong>Workslot ID:</strong> {bid.workslotId}
+                      </li>
+                      <li>
+                        <strong>Status:</strong> {bid.status}
+                      </li>
+                      {bid.status == "rejected" && (
+                        <li>
+                          <strong>Reason:</strong> {bid.reason}
+                        </li>
+                      )}
+                      <li>
+                        {bid.status == "pending" ? (
+                          <SimpleGrid cols={2}>
+                            <Button
+                              variant="filled"
+                              onClick={() => approveBid(bid.bidId)}
+                            >
+                              Approve
+                            </Button>
+                            <Button
+                              variant="filled"
+                              onClick={() => rejectBid(bid.bidId)}
+                            >
+                              Reject
+                            </Button>
+                          </SimpleGrid>
+                        ) : null}
+                      </li>
+                    </ul>
+                  </td>
+                </tr>
+              );
+            }
+          )}
       </>
     ),
   };

@@ -13,13 +13,13 @@ const StaffbidRoutes = Router();
 const prisma = new PrismaClient();
 //staffbidroutes
 StaffbidRoutes.post("/create", async (req, res) => {
-  const staffbid = req.body;
+  const { workslotId } = req.body;
 
   const StaffcreateBidController = new StaffBidSlotCtlr(prisma, req, res);
-  await StaffcreateBidController.createBid(staffbid);
+  await StaffcreateBidController.createBid(workslotId);
 });
 
-StaffbidRoutes.get("/retrieve", [authJwt.verifyToken], async (req, res) => {
+StaffbidRoutes.get("/retrieve", async (req, res) => {
   const staffRtrvBidCtlr = new StaffRtrvBidCtlr(prisma, req, res);
   await staffRtrvBidCtlr.retrieveBids();
 });

@@ -103,7 +103,11 @@ export default function CreateAccountForm() {
         <Select
           label="Role"
           placeholder="Pick role"
-          data={["Cashier", "Waiter", "Chef"]}
+          data={[
+            { label: "Cashier", value: "cashier" },
+            { label: "Waiter", value: "waiter" },
+            { label: "Chef", value: "chef" },
+          ]}
           {...form.getInputProps("role")}
           my="1rem"
         />

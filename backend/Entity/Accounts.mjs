@@ -87,9 +87,12 @@ export default class Accounts {
       where: {
         profileId: { equals: 4 },
       },
-      include: {
+      select: {
+        accountId: true,
+        name: true,
+        email: true,
+        role: true,
         profiles: true,
-        bids: true,
         _count: {
           select: {
             bids: true,

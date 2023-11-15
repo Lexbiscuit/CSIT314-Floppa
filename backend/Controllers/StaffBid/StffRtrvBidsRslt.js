@@ -15,6 +15,10 @@ export default class StffRtrvBidsRsltCtlr {
       const token = this.req.headers["x-access-token"];
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
+      //For testing purpose:(change 'name' value as per your db data)
+      // const token = jwt.sign({name: "Constantin Hacaud", password: "password"}, "Floppa-Secret");
+      // const decoded = jwt.verify(token, "Floppa-Secret");
+
       const response = await bids.retrieveResults(decoded);
 
       // 200 OK.

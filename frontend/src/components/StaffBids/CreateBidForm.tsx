@@ -1,22 +1,40 @@
-import React, { useState, useEffect } from "react";
-import {
-  useQuery,
-  useQueryClient,
-  QueryClient,
-  QueryClientProvider,
-} from "@tanstack/react-query";
-import authHeader from "../../services/auth-header";
+import { Modal, Text, Group, Button } from "@mantine/core";
+import { useDisclosure } from "@mantine/hooks";
 import axios from "axios";
-import CreateBidBtn from "./CreateBidForm";
+import authHeader from "../../services/auth-header";
+import { useMutation, useQueryClient, useQuery } from "@tanstack/react-query";
+import { IconCirclePlus } from "@tabler/icons-react";
 import TanstackTable from "../TanstackTable";
+
+function CreateBidBtn({ workslotId }) {
+  const { mutate: createBid } = useMutation({
+    mutationFn: async () => {
+      return axios.post(
+        "http://localhost:3000/staffbids/create",
+        {
+          workslotId,
+        },
+        {
+          headers: authHeader(),
+        }
+      );
+    },
+    onSuccess: ({ data }) => {
+      alert(data.message);
+    },
+    onError: ({ response }) => {
+      alert(response.data.message);
+    },
+  });
+  return <IconCirclePlus onClick={() => createBid(workslotId)} />;
+}
 
 const Options = (props: { row: any }) => {
   const { row } = props;
 
   return (
     <div style={{ display: "flex" }}>
-      <button>Update</button>
-      <button>Delete</button>
+      <CreateBidBtn workslotId={row.workslotId} />
     </div>
   );
 };
@@ -28,27 +46,21 @@ type Info = {
 
 const columns = [
   {
-    accessorKey: "workslots.startTime",
+    accessorKey: "startTime",
     header: "Start Time",
     cell: (info: Info) => new Date(info.getValue()).toLocaleString(),
     footer: (props: any) => props.column.id,
   },
   {
-    accessorKey: "workslots.endTime",
+    accessorKey: "endTime",
     header: "End Time",
     cell: (info: Info) => new Date(info.getValue()).toLocaleString(),
     footer: (props: any) => props.column.id,
   },
   {
-    accessorKey: "status",
-    header: "Status",
+    accessorKey: "vacancies",
+    header: "Vacancies",
     cell: (info: Info) => info.getValue(),
-    footer: (props: any) => props.column.id,
-  },
-  {
-    accessorKey: "reason",
-    header: "Reason",
-    cell: (info: Info) => <div>{info.getValue()}</div>,
     footer: (props: any) => props.column.id,
   },
   {
@@ -59,10 +71,10 @@ const columns = [
 
 function retrieveStaffBids() {
   return useQuery({
-    queryKey: ["retrieveStaffBids"],
+    queryKey: ["retrieveStaffAvailWS"],
     queryFn: async () => {
       const { data } = await axios.get(
-        "http://localhost:3000/staffbids/retrieve",
+        "http://localhost:3000/staffbids/availws",
         {
           headers: authHeader(),
         }
@@ -72,7 +84,7 @@ function retrieveStaffBids() {
   });
 }
 
-export default function StaffBidsTable() {
+export default function CreateBidForm() {
   const { isSuccess, data, isError, isLoading } = retrieveStaffBids();
 
   return (

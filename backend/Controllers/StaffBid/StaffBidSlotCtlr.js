@@ -1,5 +1,6 @@
 import { Prisma } from "@prisma/client";
 import Bids from "../../Entity/Bids.mjs";
+import jwt from "jsonwebtoken";
 
 export default class StaffBidSlotCtlr {
   constructor(prisma, req, res) {
@@ -8,25 +9,28 @@ export default class StaffBidSlotCtlr {
     this.res = res;
   }
 
-  async createBid(bid) {
+  async createBid(workslotId) {
     try {
       const staffBids = new Bids(this.prisma);
 
+      const token = this.req.headers["x-access-token"];
+      const { accountId } = jwt.verify(token, process.env.JWT_SECRET);
+
       // check if bid exists
       let bidExists = true;
-      bidExists = await staffBids.checkExists(bid.accountId, bid.workslotId);
+      bidExists = await staffBids.checkExists(accountId, workslotId);
+
       if (bidExists) {
         return this.res.status(500).send({
           message: "Bid already exists. Bid not created.",
         });
       }
 
-      const response = await staffBids.createBid(bid);
+      const response = await staffBids.createBid(accountId, workslotId);
 
       // 201 Created
       this.res.status(201).json(response);
-    } catch (message) {
-      console.log(message);
+    } catch ({ message }) {
       this.res.status(500).send({ message });
     }
   }

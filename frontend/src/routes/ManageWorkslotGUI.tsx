@@ -11,7 +11,7 @@ export default function ManageWorkslotGUI() {
   if (AuthService.getCurrentUser()) {
     return (
       <Appshell>
-        <Container size="md" my="1rem">
+        <Container size="xl" my="1rem">
           <Tabs defaultValue="create">
             <Tabs.List>
               <Tabs.Tab value="create">Create Workslot</Tabs.Tab>

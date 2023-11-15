@@ -12,12 +12,13 @@ import { useDisclosure } from "@mantine/hooks";
 import { AvailWorkslotTable } from "../components/Bids/AvailWorkslotTable";
 import { AvailStaffTable } from "../components/Bids/AvailStaffTable";
 import StaffSlotTable from "../components/Bids/StaffSlotTable";
+import SearchBidForm from "../components/Bids/SearchBidsForm";
 
 export default function ManageProfileGUI() {
   if (AuthService.getCurrentUser()) {
     return (
       <Appshell>
-        <Container size="md" my="1rem">
+        <Container size="xl" my="1rem">
           <Tabs defaultValue="viewbids" keepMounted={false}>
             <Tabs.List>
               <Tabs.Tab value="viewbids">View Bids</Tabs.Tab>
@@ -53,12 +54,7 @@ export default function ManageProfileGUI() {
 
             <Tabs.Panel value="searchbids">
               <h1>Search Cafe Staff bids</h1>
-              {/* <SearchBidsForm /> */}
-            </Tabs.Panel>
-
-            <Tabs.Panel value="searchstaff">
-              <h1>Search Cafe Staff</h1>
-              {/* <SearchStaffForm /> */}
+              <SearchBidForm />
             </Tabs.Panel>
           </Tabs>
         </Container>

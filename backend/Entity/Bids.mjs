@@ -122,6 +122,7 @@ export default class Bids {
         },
       },
     });
+
     if (!response) return false;
     return true;
   }
@@ -130,27 +131,27 @@ export default class Bids {
   //------------------------------------!!!!! STAFF CONTROLLERS STARTS FROM HERE !!!!!!------------------------------------
   //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-  async createBid(staffbid) {
+  async createBid(accountId, workslotId) {
     await this.prisma.Bids.create({
-      data: staffbid,
+      data: { accountId, workslotId, status: "pending" },
     });
     return { message: "Your bid have been submitted" };
   }
 
-  async retrieveBidsStaff(decoded) {
-    let newMap = new Map(Object.entries(decoded));
-    let name = newMap.get("name");
-
-    const acctData = await this.prisma.Accounts.findFirst({
-      where: { name: name },
-    });
-
-    newMap = new Map(Object.entries(acctData));
-    const accountId = newMap.get("accountId");
-
+  async retrieveBidsStaff(accountId) {
     const response = await this.prisma.Bids.findMany({
       where: {
-        accountId: accountId,
+        accountId,
+      },
+      select: {
+        status: true,
+        reason: true,
+        workslots: {
+          select: {
+            startTime: true,
+            endTime: true,
+          },
+        },
       },
       orderBy: [
         {
