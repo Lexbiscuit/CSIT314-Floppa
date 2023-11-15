@@ -1,7 +1,6 @@
 import { Prisma } from "@prisma/client";
 import jwt from "jsonwebtoken";
 import Bids from "../../Entity/Bids.mjs";
-import jwt from "jsonwebtoken";
 
 export default class StaffRtrvBidCtlr {
   constructor(prisma, req, res) {
