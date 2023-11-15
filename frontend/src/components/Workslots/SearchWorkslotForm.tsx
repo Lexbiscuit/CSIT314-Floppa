@@ -91,24 +91,19 @@ export default function SearchWorkslotForm() {
     initialValues: {
       startTime: "",
       endTime: "",
-      chefs: 1,
-      cashiers: 1,
-      waiters: 1,
     },
-
-    transformValues: (values) => ({
-      startTime:
-        values.startTime == ""
-          ? undefined
-          : new Date(values.startTime).toISOString(),
-      endTime:
-        values.endTime == ""
-          ? undefined
-          : new Date(values.endTime).toISOString(),
-      chefs: Number(values.chefs),
-      waiters: Number(values.waiters),
-      cashiers: Number(values.cashiers),
-    }),
+    validate: {
+      startTime: (value, values) => {
+        if (new Date(value) > new Date(values.endTime)) {
+          return "Start time must be before end time";
+        }
+      },
+      endTime: (value, values) => {
+        if (new Date(value) < new Date(values.startTime)) {
+          return "End time must be after start time";
+        }
+      },
+    },
   });
 
   const { isSuccess, data, isError, isLoading, refetch } =
@@ -121,47 +116,32 @@ export default function SearchWorkslotForm() {
         <Box
           component="form"
           onSubmit={form.onSubmit((values) => {
-            setWorkslotFilter(values);
+            const filter = {
+              startTime: {
+                gte: new Date(`${values.startTime}T00:00:00.000Z`),
+              },
+              endTime: {
+                lte: new Date(`${values.endTime}T23:59:59.000Z`),
+              },
+            };
+            console.log();
+            setWorkslotFilter(filter);
             refetch();
           })}
         >
           <TextInput
-            label="Start Time"
+            label="Starting Date Range"
             size="md"
-            type="dateTime-local"
+            type="date"
             {...form.getInputProps("startTime")}
             my="1rem"
           />
 
           <TextInput
-            label="End Time"
+            label="Ending Date Range"
             size="md"
-            type="dateTime-local"
+            type="date"
             {...form.getInputProps("endTime")}
-            my="1rem"
-          />
-
-          <TextInput
-            label="Chefs"
-            size="md"
-            type="number"
-            {...form.getInputProps("chefs")}
-            my="1rem"
-          />
-
-          <TextInput
-            label="Waiters"
-            size="md"
-            type="number"
-            {...form.getInputProps("waiters")}
-            my="1rem"
-          />
-
-          <TextInput
-            label="Cashiers"
-            size="md"
-            type="number"
-            {...form.getInputProps("cashiers")}
             my="1rem"
           />
 
@@ -169,11 +149,11 @@ export default function SearchWorkslotForm() {
             Search Workslot
           </Button>
         </Box>
-      </Container>
 
-      {isLoading && <div>Loading...</div>}
-      {isError && <div>Something went wrong ...</div>}
-      {isSuccess && <WorkslotsTable />}
+        {isLoading && <div>Loading...</div>}
+        {isError && <div>Something went wrong ...</div>}
+        {isSuccess && <WorkslotsTable />}
+      </Container>
     </>
   );
 }
