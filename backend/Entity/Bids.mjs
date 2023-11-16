@@ -1,3 +1,4 @@
+import { DateTime } from "luxon";
 export default class Bids {
   constructor(prisma) {
     this.prisma = prisma;
@@ -77,7 +78,7 @@ export default class Bids {
         },
       },
     });
-  
+
     return response;
   }
 
@@ -152,13 +153,16 @@ export default class Bids {
   async retrieveBidsStaff(accountId) {
     const response = await this.prisma.Bids.findMany({
       where: {
-        accountId,
+        accountId: accountId,
+        status: "pending",
       },
       select: {
+        bidId: true,
         status: true,
         reason: true,
         workslots: {
           select: {
+            workslotId: true,
             startTime: true,
             endTime: true,
           },
@@ -173,38 +177,43 @@ export default class Bids {
     return response;
   }
 
-  async retrieveResults(decoded) {
-    let newMap = new Map(Object.entries(decoded));
-    let name = newMap.get("name");
-
-    const acctData = await this.prisma.Accounts.findFirst({
-      where: { name: name },
-    });
-
-    newMap = new Map(Object.entries(acctData));
-    const accountId = newMap.get("accountId");
-
+  async retrieveResults(accountId) {
+    const currentWeek = DateTime.now().weekNumber;
     const response = await this.prisma.Bids.findMany({
       where: {
+        workslots: {
+          weekNumber: { in: [currentWeek, currentWeek + 1] },
+        },
         AND: {
-          accountId: accountId,
+          accountId,
           status: {
             not: "pending",
           },
         },
+      },
+      select: {
+        status: true,
+        reason: true,
+        workslots: { select: { startTime: true, endTime: true } },
       },
     });
 
     return response;
   }
 
-  async updateBidStaff(bid) {
-    const { bidId, ...updateData } = bid;
-    const response = await this.prisma.Bids.update({
+  async updateBidStaff(bidId, accountId, newWorkslotId) {
+    await this.prisma.Bids.create({
+      data: {
+        accountId: accountId,
+        workslotId: newWorkslotId,
+        status: "pending",
+      },
+    });
+
+    await this.prisma.Bids.delete({
       where: {
         bidId: bidId,
       },
-      data: updateData,
     });
 
     return { message: "Bid update successfully." };

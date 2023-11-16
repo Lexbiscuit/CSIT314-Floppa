@@ -42,6 +42,18 @@ export default class Profiles {
         suspended: true,
       },
     });
+
+    await this.prisma.Accounts.update({
+      where: {
+        profiles: {
+          profileId: profileId,
+        },
+      },
+      data: {
+        suspended: true,
+      },
+    });
+
     return { message: "Profile suspended successfully." };
   }
 

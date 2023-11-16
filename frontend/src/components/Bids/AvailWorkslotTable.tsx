@@ -25,7 +25,7 @@ export function AvailWorkslotTable() {
 
   const columns = [
     {
-      label: "ID",
+      label: "Account ID",
       renderCell: (item: any) => item.workslotId,
       sort: { sortKey: "WORKSLOTID" },
       resize: true,

@@ -7,6 +7,7 @@ import { IconCirclePlus } from "@tabler/icons-react";
 import TanstackTable from "../TanstackTable";
 
 function CreateBidBtn({ workslotId }) {
+  const queryClient = useQueryClient();
   const { mutate: createBid } = useMutation({
     mutationFn: async () => {
       return axios.post(
@@ -20,6 +21,7 @@ function CreateBidBtn({ workslotId }) {
       );
     },
     onSuccess: ({ data }) => {
+      queryClient.invalidateQueries({ queryKey: ["retrieveStaffAvailWS"] });
       alert(data.message);
     },
     onError: ({ response }) => {
@@ -46,6 +48,12 @@ type Info = {
 
 const columns = [
   {
+    accessorKey: "workslotId",
+    header: "Workslot ID",
+    cell: (info: Info) => info.getValue(),
+    footer: (props: any) => props.column.id,
+  },
+  {
     accessorKey: "startTime",
     header: "Start Time",
     cell: (info: Info) => new Date(info.getValue()).toLocaleString(),
@@ -69,7 +77,7 @@ const columns = [
   },
 ];
 
-function retrieveStaffBids() {
+function retrieveAvailWS() {
   return useQuery({
     queryKey: ["retrieveStaffAvailWS"],
     queryFn: async () => {
@@ -85,7 +93,7 @@ function retrieveStaffBids() {
 }
 
 export default function CreateBidForm() {
-  const { isSuccess, data, isError, isLoading } = retrieveStaffBids();
+  const { isSuccess, data, isError, isLoading } = retrieveAvailWS();
 
   return (
     <>

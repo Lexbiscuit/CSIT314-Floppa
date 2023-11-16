@@ -18,7 +18,7 @@ export default function StaffSlotTable() {
 
   const columns = [
     {
-      label: "ID",
+      label: "Account ID",
       renderCell: (item) => item.accountId,
       sort: { sortKey: "ACCOUNTID" },
       resize: true,

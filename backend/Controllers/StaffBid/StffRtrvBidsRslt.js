@@ -13,21 +13,18 @@ export default class StffRtrvBidsRsltCtlr {
     try {
       const bids = new Bids(this.prisma);
       const token = this.req.headers["x-access-token"];
-      const decoded = jwt.verify(token, process.env.JWT_SECRET);
+      const { accountId } = jwt.verify(token, process.env.JWT_SECRET);
 
       //For testing purpose:(change 'name' value as per your db data)
       // const token = jwt.sign({name: "Constantin Hacaud", password: "password"}, "Floppa-Secret");
       // const decoded = jwt.verify(token, "Floppa-Secret");
 
-      const response = await bids.retrieveResults(decoded);
+      const response = await bids.retrieveResults(accountId);
 
       // 200 OK.
-      this.res.status(200).json({
-        bids: response,
-      });
-    } catch (message) {
+      this.res.status(200).json(response);
+    } catch ({ message }) {
       // 500 INTERNAL SERVER ERROR
-      console.log(message);
       this.res.status(500).send({ message });
     }
   }

@@ -31,10 +31,10 @@ StaffbidRoutes.get("/result", [authJwt.verifyToken], async (req, res) => {
 });
 
 StaffbidRoutes.put("/update", async (req, res) => {
-  const staffbid = req.body;
+  const { bidId, newWorkslotId } = req.body;
 
   const staffUpdBidCtlr = new StaffUpdBidCtlr(prisma, req, res);
-  await staffUpdBidCtlr.updateBid(staffbid);
+  await staffUpdBidCtlr.updateBid(bidId, newWorkslotId);
 });
 
 StaffbidRoutes.delete("/delete", async (req, res) => {

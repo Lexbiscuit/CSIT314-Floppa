@@ -5,6 +5,8 @@ import AuthService from "../services/auth.service";
 import { Tabs } from "@mantine/core";
 import StaffBidsTable from "../components/StaffBids/StaffBidsTable";
 import CreateBidForm from "../components/StaffBids/CreateBidForm";
+import StaffBidsResult from "../components/StaffBids/StaffBidsResultTable";
+import SearchStaffBidsForm from "../components/StaffBids/SearchStaffBidsForm";
 
 export default function StaffBidsGUI() {
   if (AuthService.getCurrentUser()) {
@@ -16,6 +18,7 @@ export default function StaffBidsGUI() {
               <Tabs.Tab value="create">Create bid</Tabs.Tab>
               <Tabs.Tab value="view">View bid</Tabs.Tab>
               <Tabs.Tab value="result">Bid Result </Tabs.Tab>
+              <Tabs.Tab value="search">Search Bids</Tabs.Tab>
             </Tabs.List>
 
             <Tabs.Panel value="create">
@@ -31,6 +34,12 @@ export default function StaffBidsGUI() {
 
             <Tabs.Panel value="result">
               <h1>Bid Result</h1>
+              <StaffBidsResult />
+            </Tabs.Panel>
+
+            <Tabs.Panel value="search">
+              <h1>Search Bids</h1>
+              <SearchStaffBidsForm />
             </Tabs.Panel>
           </Tabs>
         </Container>

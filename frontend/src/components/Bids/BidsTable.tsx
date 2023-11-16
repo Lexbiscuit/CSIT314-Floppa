@@ -57,7 +57,7 @@ export default function BidsTable() {
 
   const columns = [
     {
-      label: "ID",
+      label: "Account ID",
       renderCell: (item: { workslotId: any }) => item.workslotId,
       sort: { sortKey: "WORKSLOTID" },
       resize: true,
