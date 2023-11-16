@@ -134,7 +134,7 @@ export default class Bids {
     await this.prisma.Bids.create({
       data: { accountId, workslotId, status: "pending" },
     });
-    return { message: "Your bid have been submitted" };
+    return { message: "Your bid has been submitted" };
   }
 
   async retrieveBidsStaff(accountId) {
@@ -203,7 +203,7 @@ export default class Bids {
       },
     });
 
-    return { message: "Bid update successfully." };
+    return { message: "Bid updated successfully." };
   }
 
   async deleteBidSlot(bidId) {
@@ -213,12 +213,23 @@ export default class Bids {
       },
     });
 
-    return { message: "Bid delete successfully." };
+    return { message: "Bid deleted successfully." };
   }
 
-  async searchStaffBid(bid) {
+  async searchStaffBid(bidFilter) {
     const response = await this.prisma.Bids.findMany({
-      where: bid,
+      where: bidFilter,
+      select: {
+        status: true,
+        reason: true,
+        workslots: {
+          select: {
+            workslotId: true,
+            startTime: true,
+            endTime: true,
+          },
+        },
+      },
     });
 
     return response;

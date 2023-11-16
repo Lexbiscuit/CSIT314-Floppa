@@ -42,6 +42,18 @@ const columns = [
     footer: (props: any) => props.column.id,
   },
   {
+    accessorKey: "status",
+    header: "Status",
+    cell: (info: Info) => info.getValue(),
+    footer: (props: any) => props.column.id,
+  },
+  {
+    accessorKey: "reason",
+    header: "Reason",
+    cell: (info: Info) => info.getValue(),
+    footer: (props: any) => props.column.id,
+  },
+  {
     id: "edit",
     cell: (info: Info) => <Options row={info.row.original} />,
   },
@@ -87,9 +99,9 @@ export default function SearchStaffBidsForm() {
   });
 
   const { isSuccess, data, isError, isLoading, refetch } =
-    searchWorkslots(workslotFilter);
+    searchStaffBids(bidsFilter);
 
-  const WorkslotsTable = () => <TanstackTable {...{ data, columns }} />;
+  const StaffBidsTable = () => <TanstackTable {...{ data, columns }} />;
   return (
     <>
       <Container mb="2rem">
@@ -97,15 +109,16 @@ export default function SearchStaffBidsForm() {
           component="form"
           onSubmit={form.onSubmit((values) => {
             const filter = {
-              startTime: {
-                gte: new Date(`${values.startTime}T00:00:00.000Z`),
-              },
-              endTime: {
-                lte: new Date(`${values.endTime}T23:59:59.000Z`),
+              workslots: {
+                startTime: {
+                  gte: new Date(`${values.startTime}T00:00:00.000Z`),
+                },
+                endTime: {
+                  lte: new Date(`${values.endTime}T23:59:59.000Z`),
+                },
               },
             };
-            console.log();
-            setWorkslotFilter(filter);
+            setBidsFilter(filter);
             refetch();
           })}
         >
@@ -126,13 +139,13 @@ export default function SearchStaffBidsForm() {
           />
 
           <Button type="submit" my="1rem" w="100%">
-            Search Workslot
+            Search Bids
           </Button>
         </Box>
 
         {isLoading && <div>Loading...</div>}
         {isError && <div>Something went wrong ...</div>}
-        {isSuccess && <WorkslotsTable />}
+        {isSuccess && <StaffBidsTable />}
       </Container>
     </>
   );

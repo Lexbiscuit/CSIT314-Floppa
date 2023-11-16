@@ -43,11 +43,9 @@ export default class Profiles {
       },
     });
 
-    await this.prisma.Accounts.update({
+    await this.prisma.Accounts.updateMany({
       where: {
-        profiles: {
-          profileId: profileId,
-        },
+        profileId: profileId,
       },
       data: {
         suspended: true,
@@ -66,6 +64,16 @@ export default class Profiles {
         suspended: false,
       },
     });
+
+    await this.prisma.Accounts.updateMany({
+      where: {
+        profileId: profileId,
+      },
+      data: {
+        suspended: false,
+      },
+    });
+
     return { message: "Profile unsuspended successfully." };
   }
 

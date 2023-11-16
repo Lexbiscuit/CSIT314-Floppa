@@ -25,17 +25,12 @@ export function AvailWorkslotTable() {
 
   const columns = [
     {
-      label: "Account ID",
+      label: "Workslot ID",
       renderCell: (item: any) => item.workslotId,
       sort: { sortKey: "WORKSLOTID" },
       resize: true,
     },
-    {
-      label: "Week",
-      renderCell: (item: any) => item.weekNumber,
-      sort: { sortKey: "WEEKNUMBER" },
-      resize: true,
-    },
+
     {
       label: "Start Date",
       renderCell: (item: any) => new Date(item.startTime).toLocaleString(),
@@ -118,7 +113,7 @@ export function AvailWorkslotTable() {
             return (
               <tr
                 style={{ display: "flex", gridColumn: "1 / -1" }}
-                key={bid.bidId}
+                key={bid.name}
               >
                 <td style={{ flex: "1" }}>
                   <ul
