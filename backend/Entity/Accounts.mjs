@@ -131,7 +131,6 @@ export default class Accounts {
                 workslotId: true,
                 startTime: true,
                 endTime: true,
-                weekNumber: true,
               },
             },
           }, //2nd where, condition for Bids

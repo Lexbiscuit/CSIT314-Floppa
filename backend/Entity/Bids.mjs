@@ -112,19 +112,6 @@ export default class Bids {
     return response;
   }
 
-  // --------------------- THIS IS MANAGER RETRIEVE STAFF BIDS ENTITY--------------------- //
-  async viewStaffBid(accountId) {
-    const response = await this.prisma.Bids.findMany({
-      where: {
-        accountId: accountId,
-      },
-      include: {
-        accounts: true,
-      },
-    });
-    return response;
-  }
-
   async checkExists(accountId, workslotId) {
     const response = await this.prisma.Bids.findFirst({
       where: {

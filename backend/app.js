@@ -4,7 +4,7 @@ import accountRoutes from "./Routes/accountRoutes.js";
 import profileRoutes from "./Routes/profileRoutes.js";
 import workslotRoutes from "./Routes/workslotRoutes.js";
 import mngrbidRoutes from "./Routes/mngrbidRoutes.js";
-import staffbidRoutes from "./Routes/staffbidRoutes.js";
+import staffbidRoutes from "./Routes/StaffbidRoutes.js";
 import authRoutes from "./Routes/authRoutes.js";
 
 
