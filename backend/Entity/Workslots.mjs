@@ -56,7 +56,7 @@ export default class Workslots {
     const currentWeekNumber = DateTime.local().weekNumber;
     const workslots = await this.prisma.Workslots.findMany({
       where: {
-        weekNumber: { in: [currentWeekNumber, currentWeekNumber + 1] },
+        weekNumber: { in: [currentWeekNumber + 1] },
         startTime: {
           gte: DateTime.local().startOf("week").toJSDate(),
           lt: DateTime.local().startOf("week").plus({ weeks: 2 }).toJSDate(),
@@ -119,7 +119,7 @@ export default class Workslots {
     const currentWeekNumber = DateTime.now().weekNumber;
     const workslots = await this.prisma.Workslots.findMany({
       where: {
-        weekNumber: { in: [currentWeekNumber, currentWeekNumber + 1] },
+        weekNumber: { in: [ currentWeekNumber + 1] },
         startTime: {
           gte: DateTime.local().startOf("week").toJSDate(),
           lt: DateTime.local().startOf("week").plus({ weeks: 2 }).toJSDate(),
