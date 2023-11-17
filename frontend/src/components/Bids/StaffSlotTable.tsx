@@ -122,6 +122,13 @@ export default function StaffSlotTable() {
                       <strong>End Time:</strong>{" "}
                       {new Date(bid.workslots.endTime).toLocaleString()}
                     </li>
+                    <li>
+                      <UpdateBidForm
+                        bidId={bid.bidId}
+                        accountId={item.accountId}
+                        role={item.role}
+                      />
+                    </li>
                   </ul>
                 </td>
               </tr>

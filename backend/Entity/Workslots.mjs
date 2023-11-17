@@ -177,9 +177,14 @@ export default class Workslots {
     return response;
   }
 
-  async checkAvail(workslotId, role) {
+  async checkAvail(newWorkslotId, role) {
     const workslot = await this.prisma.Workslots.findUnique({
-      where: { workslotId: Number(workslotId) },
+      where: { workslotId: Number(newWorkslotId) },
+      include: {
+        bids: {
+          include: { accounts: true },
+        },
+      },
     });
 
     const currentCount = workslot.bids.reduce((accumulator, bid) => {

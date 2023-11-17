@@ -7,7 +7,7 @@ import { Button, TextInput, Modal, Box } from "@mantine/core";
 import { IconEdit } from "@tabler/icons-react";
 import { isNotEmpty, useForm } from "@mantine/form";
 
-export default function UpdateBidForm({ bidId, accountId }) {
+export default function UpdateBidForm({ bidId, accountId, role }) {
   const [opened, { open, close }] = useDisclosure(false);
 
   const form = useForm({
@@ -15,6 +15,7 @@ export default function UpdateBidForm({ bidId, accountId }) {
       bidId: Number(bidId),
       accountId: Number(accountId),
       newWorkslotId: "",
+      role: role,
     },
 
     validate: {
@@ -27,18 +28,20 @@ export default function UpdateBidForm({ bidId, accountId }) {
       bidId: Number(values.bidId),
       accountId: Number(values.accountId),
       newWorkslotId: Number(values.newWorkslotId),
+      role: values.role,
     }),
   });
 
   const queryClient = useQueryClient();
   const { mutate: updateBid } = useMutation({
-    mutationFn: async ({ bidId, accountId, newWorkslotId }) => {
+    mutationFn: async ({ bidId, accountId, newWorkslotId, role }) => {
       return axios.put(
         "http://localhost:3000/mngrbids/update",
         {
           bidId,
           accountId,
           newWorkslotId,
+          role,
         },
         {
           headers: authHeader(),
@@ -61,6 +64,10 @@ export default function UpdateBidForm({ bidId, accountId }) {
         <Box
           component="form"
           onSubmit={form.onSubmit((values) => {
+            console.log(
+              "🚀 ~ file: UpdateBidForm.tsx:64 ~ onSubmit={form.onSubmit ~ values:",
+              values
+            );
             updateBid(values);
           })}
         >
@@ -69,6 +76,7 @@ export default function UpdateBidForm({ bidId, accountId }) {
             size="md"
             {...form.getInputProps("bidId")}
             my="1rem"
+            disabled
           />
 
           <TextInput
@@ -76,21 +84,29 @@ export default function UpdateBidForm({ bidId, accountId }) {
             size="md"
             {...form.getInputProps("accountId")}
             my="1rem"
+            disabled
           />
 
           <TextInput
             label="Workslot ID"
             size="md"
-            {...form.getInputProps("workslotId")}
+            {...form.getInputProps("newWorkslotId")}
             my="1rem"
           />
 
-          <Button variant="filled" type="submit">
-            Update
-          </Button>
+          <Button type="submit">Update</Button>
         </Box>
       </Modal>
-      <IconEdit onClick={open} />
+      <div
+        onClick={open}
+        style={{
+          display: "flex",
+          justifyContent: "flex-start",
+          alignItems: "center",
+        }}
+      >
+        <IconEdit /> Update
+      </div>
     </>
   );
 }
