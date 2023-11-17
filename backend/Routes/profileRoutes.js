@@ -4,7 +4,6 @@ import CreateProfileController from "../Controllers/Profile/CreateProfileControl
 import RetrieveProfileController from "../Controllers/Profile/RetrieveProfileController.js";
 import UpdateProfileController from "../Controllers/Profile/UpdateProfileController.js";
 import SuspendProfileController from "../Controllers/Profile/SuspendProfileController.js";
-import UnsuspendProfileController from "../Controllers/Profile/UnsuspendProfileController.js";
 import SearchProfileController from "../Controllers/Profile/SearchProfileController.js";
 import { authJwt } from "../middleware/authJwt.js";
 

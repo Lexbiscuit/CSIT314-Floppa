@@ -4,7 +4,6 @@ import CreateAccountController from "../Controllers/Account/CreateAccountControl
 import RetrieveAccountController from "../Controllers/Account/RetrieveAccountController.js";
 import UpdateAccountController from "../Controllers/Account/UpdateAccountController.js";
 import SuspendAccountController from "../Controllers/Account/SuspendAccountController.js";
-import UnsuspendAccountController from "../Controllers/Account/UnsuspendAccountController.js";
 import SearchAccountController from "../Controllers/Account/SearchAccountController.js";
 import { authJwt } from "../middleware/authJwt.js";
 
