@@ -48,17 +48,6 @@ profileRoutes.post("/suspend", async (req, res) => {
   await suspendProfileController.suspendProfile(profileId);
 });
 
-profileRoutes.post("/unsuspend", async (req, res) => {
-  const { profileId } = req.body;
-
-  const unsuspendProfileController = new UnsuspendProfileController(
-    prisma,
-    req,
-    res,
-  );
-  await unsuspendProfileController.unsuspendProfile(profileId);
-});
-
 // profileRoutes.get("/search", [authJwt.verifyToken], async (req, res) => {
 profileRoutes.post("/search", async (req, res) => {
   const profileFilter = req.body;

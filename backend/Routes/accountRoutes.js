@@ -48,18 +48,6 @@ accountRoutes.post("/suspend", async (req, res) => {
   await suspendAccountController.suspendAccount(accountId);
 });
 
-// accountRoutes.post("/unsuspend", [authJwt.verifyToken], async (req, res) => {
-accountRoutes.post("/unsuspend", async (req, res) => {
-  const { accountId } = req.body;
-
-  const unsuspendAccountController = new UnsuspendAccountController(
-    prisma,
-    req,
-    res
-  );
-  await unsuspendAccountController.unsuspendAccount(accountId);
-});
-
 // accountRoutes.get("/search", [authJwt.verifyToken], async (req, res) => {
 accountRoutes.post("/search", async (req, res) => {
   const accountFilter = req.body;
