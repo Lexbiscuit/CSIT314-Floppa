@@ -46,7 +46,7 @@ const columns = [
   {
     accessorKey: "suspended",
     header: "Suspended",
-    cell: (info: Info) => (Number(info.getValue()) == 1 ? "Yes" : "No"),
+    cell: (info: Info) => info.getValue(),
     footer: (props: any) => props.column.id,
   },
   {
