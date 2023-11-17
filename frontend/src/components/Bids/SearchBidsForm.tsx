@@ -88,7 +88,7 @@ export default function SearchBidForm() {
       workslotId:
         Number(values.workslotId) == 0
           ? undefined
-          : { contains: values.workslotId },
+          : { equals: Number(values.workslotId) },
       status: values.status == "" ? undefined : { equals: values.status },
       reason: values.reason == "" ? undefined : { contains: values.reason },
     }),
