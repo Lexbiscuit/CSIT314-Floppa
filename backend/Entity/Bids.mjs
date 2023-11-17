@@ -18,13 +18,15 @@ export default class Bids {
   }
 
   // --------------------- THIS IS MANAGER UPDATE BIDS ENTITY--------------------- //
-  async updateBidMngr(bid) {
-    const { bidId, ...updatedData } = bid;
+  async updateBidMngr(bidId, accountId, workslotId) {
     await this.prisma.Bids.update({
       where: {
         bidId: Number(bidId),
       },
-      data: updatedData,
+      data: {
+        accountId: Number(accountId),
+        workslotId: Number(workslotId),
+      },
     });
     return { message: "Bid updated successfully." };
   }

@@ -8,20 +8,21 @@ import { useSort } from "@table-library/react-table-library/sort";
 
 export function AvailWorkslotTable() {
   const [ids, setIds] = React.useState([]);
-  const retrieveAvailWorkslots = useQuery({
-    queryKey: ["retrieveAvailWorkslots"],
-    queryFn: async () => {
-      const { data } = await axios.get(
-        "http://localhost:3000/mngrbids/availws",
-        {
-          headers: authHeader(),
-        }
-      );
-      return data;
-    },
-    refetchOnMount: true,
-    refetchOnWindowFocus: true,
-  });
+
+  function retrieveAvailWorkslots() {
+    return useQuery({
+      queryKey: ["retrieveAvailWorkslots"],
+      queryFn: async () => {
+        const { data } = await axios.get(
+          "http://localhost:3000/mngrbids/availws",
+          {
+            headers: authHeader(),
+          }
+        );
+        return data;
+      },
+    });
+  }
 
   const columns = [
     {
@@ -63,7 +64,7 @@ export function AvailWorkslotTable() {
     },
   ];
 
-  const { data, status, isFetching } = retrieveAvailWorkslots;
+  const { data, status, isFetching } = retrieveAvailWorkslots();
 
   type Info = {
     getValue: () => string;

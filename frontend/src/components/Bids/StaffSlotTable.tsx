@@ -2,19 +2,24 @@ import React from "react";
 import ReactTable from "../ReactTable";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
+import UpdateBidForm from "./UpdateBidForm";
 import { CompactTable } from "@table-library/react-table-library/compact";
 import { useSort } from "@table-library/react-table-library/sort";
 
 export default function StaffSlotTable() {
-  const { data, status, isFetching } = useQuery({
-    queryKey: ["fetchStaffSlots"],
-    queryFn: async () => {
-      const { data } = await axios.get(
-        "http://localhost:3000/mngrbids/staffslots"
-      );
-      return data;
-    },
-  });
+  function fetchStaffSlots() {
+    return useQuery({
+      queryKey: ["fetchStaffSlots"],
+      queryFn: async () => {
+        const { data } = await axios.get(
+          "http://localhost:3000/mngrbids/staffslots"
+        );
+        return data;
+      },
+    });
+  }
+
+  const { data, status, isFetching } = fetchStaffSlots();
 
   const columns = [
     {
@@ -116,9 +121,6 @@ export default function StaffSlotTable() {
                     <li>
                       <strong>End Time:</strong>{" "}
                       {new Date(bid.workslots.endTime).toLocaleString()}
-                    </li>
-                    <li>
-                      <strong>Week Number:</strong> {bid.workslots.weekNumber}
                     </li>
                   </ul>
                 </td>

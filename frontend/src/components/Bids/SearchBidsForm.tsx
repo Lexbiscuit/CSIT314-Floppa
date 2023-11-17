@@ -98,6 +98,7 @@ export default function SearchBidForm() {
     searchBids(bidFilter);
 
   const BidsTable = () => <TanstackTable {...{ data, columns }} />;
+
   return (
     <>
       <Container mb="2rem">

@@ -8,56 +8,75 @@ import { useSort } from "@table-library/react-table-library/sort";
 export default function BidsTable() {
   const [ids, setIds] = React.useState([]);
 
-  const { data, status, isFetching } = useQuery({
-    queryKey: ["retrievemngrbids"],
-    queryFn: async () => {
-      const { data } = await axios.get(
-        "http://localhost:3000/mngrbids/retrieve"
-      );
-      return data;
-    },
-  });
+  function retrieveBids() {
+    return useQuery({
+      queryKey: ["retrievemngrbids"],
+      queryFn: async () => {
+        const { data } = await axios.get(
+          "http://localhost:3000/mngrbids/retrieve"
+        );
+        return data;
+      },
+    });
+  }
+
+  // sends GET request to controller
+  const { data, status, isFetching } = retrieveBids();
 
   const queryClient = useQueryClient();
-  const { mutate: approveBid } = useMutation({
-    mutationFn: async (bidId) => {
-      return axios.put("http://localhost:3000/mngrbids/approve", {
-        bidId: Number(bidId),
-      });
-    },
-    onSuccess: (data) => {
-      alert(data.data.message);
-      queryClient.invalidateQueries({ queryKey: ["retrievemngrbids"] });
-    },
-    onError: (error) => {
-      alert(error.response.data.message);
-    },
-  });
 
-  const { mutate: rejectBid } = useMutation({
-    mutationFn: async (bidId) => {
-      const reason = prompt("Please enter a reason for rejection");
-      if (reason == null) return;
-      if (reason.trim() == "")
-        return alert("Please enter a reason for rejection");
+  function ApproveBidBtn({ bidId }) {
+    const { mutate: approveBid } = useMutation({
+      mutationFn: async (bidId) => {
+        return axios.put("http://localhost:3000/mngrbids/approve", {
+          bidId: Number(bidId),
+        });
+      },
+      onSuccess: (data) => {
+        alert(data.data.message);
+        queryClient.invalidateQueries({ queryKey: ["retrievemngrbids"] });
+      },
+      onError: (error) => {
+        alert(error.response.data.message);
+      },
+    });
+    return (
+      <Button variant="filled" onClick={() => approveBid(bidId)}>
+        Approve
+      </Button>
+    );
+  }
 
-      return axios.put("http://localhost:3000/mngrbids/reject", {
-        bidId: Number(bidId),
-        reason,
-      });
-    },
-    onSuccess: ({ data }) => {
-      alert(data.message);
-      queryClient.invalidateQueries({ queryKey: ["retrievemngrbids"] });
-    },
-    onError: ({ response }) => {
-      alert(response.data.message);
-    },
-  });
+  function RejectBidBtn({ bidId }) {
+    const { mutate: rejectBid } = useMutation({
+      mutationFn: async (bidId) => {
+        const reason = prompt("Please enter a reason for rejection");
+        if (reason == null) return;
+        if (reason.trim() == "")
+          return alert("Please enter a reason for rejection");
 
+        return axios.put("http://localhost:3000/mngrbids/reject", {
+          bidId: Number(bidId),
+          reason,
+        });
+      },
+      onSuccess: ({ data }) => {
+        alert(data.message);
+        queryClient.invalidateQueries({ queryKey: ["retrievemngrbids"] });
+      },
+      onError: ({ response }) => {
+        alert(response.data.message);
+      },
+    });
+    return (
+      <Button variant="filled" onClick={() => rejectBid(bidId)}>
+        Reject
+      </Button>
+    );
+  }
   const columns = [
     {
-      label: "Account ID",
+      label: "Workslot ID",
       renderCell: (item: { workslotId: any }) => item.workslotId,
       sort: { sortKey: "WORKSLOTID" },
       resize: true,
@@ -234,18 +253,8 @@ export default function BidsTable() {
                       <li>
                         {bid.status == "pending" ? (
                           <SimpleGrid cols={2}>
-                            <Button
-                              variant="filled"
-                              onClick={() => approveBid(bid.bidId)}
-                            >
-                              Approve
-                            </Button>
-                            <Button
-                              variant="filled"
-                              onClick={() => rejectBid(bid.bidId)}
-                            >
-                              Reject
-                            </Button>
+                            <ApproveBidBtn bidId={bid.bidId} />
+                            <RejectBidBtn bidId={bid.bidId} />
                           </SimpleGrid>
                         ) : null}
                       </li>

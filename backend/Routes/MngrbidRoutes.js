@@ -31,7 +31,7 @@ bidRoutes.put("/update", async (req, res) => {
 bidRoutes.post("/search", async (req, res) => {
   const bidFilter = req.body;
   const searchBidController = new SearchBidController(prisma, req, res);
-  await searchBidController.searchBid(bidFilter);
+  await searchBidController.searchBids(bidFilter);
 });
 
 // --------------------- BID/STAFF FILTERS --------------------- //

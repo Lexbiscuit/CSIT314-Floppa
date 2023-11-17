@@ -5,20 +5,22 @@ import axios from "axios";
 import { useQuery } from "@tanstack/react-query";
 
 export function AvailStaffTable() {
-  const retrieveAvailStaff = useQuery({
-    queryKey: ["retrieveAvailStaff"],
-    queryFn: async () => {
-      const { data } = await axios.get(
-        "http://localhost:3000/mngrbids/availstaff",
-        {
-          headers: authHeader(),
-        }
-      );
-      return data;
-    },
-  });
+  function retrieveAvailStaff() {
+    return useQuery({
+      queryKey: ["retrieveAvailStaff"],
+      queryFn: async () => {
+        const { data } = await axios.get(
+          "http://localhost:3000/mngrbids/availstaff",
+          {
+            headers: authHeader(),
+          }
+        );
+        return data;
+      },
+    });
+  }
 
-  const { data, status, isFetching } = retrieveAvailStaff;
+  const { data, status, isFetching } = retrieveAvailStaff();
 
   type Info = {
     getValue: () => string;

@@ -92,7 +92,7 @@ function retrieveAvailWS() {
   });
 }
 
-export default function CreateBidForm() {
+export default function AvailWorkslotTable() {
   const { isSuccess, data, isError, isLoading } = retrieveAvailWS();
 
   return (

@@ -176,4 +176,22 @@ export default class Workslots {
 
     return response;
   }
+
+  async checkAvail(workslotId, role) {
+    const workslot = await this.prisma.Workslots.findUnique({
+      where: { workslotId: Number(workslotId) },
+    });
+
+    const currentCount = workslot.bids.reduce((accumulator, bid) => {
+      if (bid.accounts.role == role) {
+        accumulator++;
+      }
+      return accumulator;
+    }, 0);
+
+    if (workslot[`${role}s`] > currentCount) {
+      return true;
+    }
+    return false;
+  }
 }

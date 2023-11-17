@@ -8,7 +8,7 @@ export default class SearchBidController {
     this.res = res;
   }
 
-  async searchBid(bidFilter) {
+  async searchBids(bidFilter) {
     try {
       const bids = new Bids(this.prisma);
       const response = await bids.searchBidMngr(bidFilter);

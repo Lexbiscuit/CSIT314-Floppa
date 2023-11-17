@@ -3,7 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import authHeader from "../../services/auth-header";
 import axios from "axios";
 import TanstackTable from "../TanstackTable";
-import { TextInput, Button, Box, Container, Select } from "@mantine/core";
+import { TextInput, Button, Box, Container } from "@mantine/core";
 import { useForm } from "@mantine/form";
 
 const Options = (props: { row: any }) => {
