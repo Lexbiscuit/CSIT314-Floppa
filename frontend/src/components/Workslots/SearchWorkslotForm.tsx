@@ -124,7 +124,6 @@ export default function SearchWorkslotForm() {
                 lte: new Date(`${values.endTime}T23:59:59.000Z`),
               },
             };
-            console.log();
             setWorkslotFilter(filter);
             refetch();
           })}

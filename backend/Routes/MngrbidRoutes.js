@@ -22,9 +22,9 @@ bidRoutes.get("/retrieve", async (req, res) => {
 
 // bidRoutes.put("/update", [authJwt.verifyToken], async (req, res) => {
 bidRoutes.put("/update", async (req, res) => {
-  const { bidId, accountId, newWorkslotId, role } = req.body;
+  const { bidId, newWorkslotId, role } = req.body;
   const mngrUpdBidCtlr = new MngrUpdBidCtlr(prisma, req, res);
-  await mngrUpdBidCtlr.updateBid(bidId, accountId, newWorkslotId, role);
+  await mngrUpdBidCtlr.updateBid(bidId, newWorkslotId, role);
 });
 
 // bidRoutes.get("/search", [authJwt.verifyToken], async (req, res) => {

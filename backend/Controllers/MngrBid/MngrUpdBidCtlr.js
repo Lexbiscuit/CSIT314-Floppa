@@ -9,22 +9,19 @@ export default class MngrUpdBidCtlr {
     this.res = res;
   }
 
-  async updateBid(bidId, accountId, newWorkslotId, role) {
+  async updateBid(bidId, newWorkslotId, role) {
     try {
       const bids = new Bids(this.prisma);
       const workslots = new Workslots(this.prisma);
 
       const isAvail = await workslots.checkAvail(newWorkslotId, role);
-      console.log(
-        "🚀 ~ file: MngrUpdBidCtlr.js:18 ~ MngrUpdBidCtlr ~ updateBid ~ isAvail:",
-        isAvail
-      );
       let response;
       if (isAvail) {
-        response = await bids.updateBidMngr(bidId, accountId, newWorkslotId);
+        response = await bids.updateBidMngr(bidId, newWorkslotId);
+        // 200 OK.
+        this.res.status(200).json(response);
       }
-      // 200 OK.
-      this.res.status(200).json(response);
+      response = { message: "Workslot is not available." };
     } catch ({ message }) {
       this.res.status(500).send({ message });
     }
