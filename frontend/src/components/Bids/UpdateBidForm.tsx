@@ -34,7 +34,7 @@ export default function UpdateBidForm({ bidId, accountId, role }) {
 
   const queryClient = useQueryClient();
   const { mutate: updateBid } = useMutation({
-    mutationFn: async ({ bidId, accountId, newWorkslotId, role }) => {
+    mutationFn: async ({ bidId, newWorkslotId, role }) => {
       return axios.put(
         "http://localhost:3000/mngrbids/update",
         {
