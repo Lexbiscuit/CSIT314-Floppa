@@ -52,14 +52,6 @@ export default class Accounts {
     return { message: "Account suspended successfully" };
   }
 
-  async unsuspendAccount(accountId) {
-    await this.prisma.Accounts.update({
-      where: { accountId: Number(accountId) },
-      data: { suspended: false },
-    });
-
-    return { message: "Account unsuspended successfully" };
-  }
 
   async searchAccounts(accountFilter) {
     const response = await this.prisma.Accounts.findMany({

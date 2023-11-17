@@ -55,27 +55,6 @@ export default class Profiles {
     return { message: "Profile suspended successfully." };
   }
 
-  async unsuspendProfile(profileId) {
-    await this.prisma.Profiles.update({
-      where: {
-        profileId: Number(profileId),
-      },
-      data: {
-        suspended: false,
-      },
-    });
-
-    await this.prisma.Accounts.updateMany({
-      where: {
-        profileId: profileId,
-      },
-      data: {
-        suspended: false,
-      },
-    });
-
-    return { message: "Profile unsuspended successfully." };
-  }
 
   async searchProfile(profileFilter) {
     const response = await this.prisma.Profiles.findMany({
